@@ -30,7 +30,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        AudioManager.Instance.Play(7, "hurt", false);
+        //AudioManager.Instance.Play(7, "hurt", false);
 
         // Make sure the health value never drops below 0
         currentHealth = Mathf.Max(currentHealth, 0);
@@ -45,7 +45,7 @@ public class PlayerHealth : MonoBehaviour
             GameObject effect = Instantiate(hitPlayerEffectPrefab, transform.position, Quaternion.identity);
             Destroy(effect, effect.GetComponent<ParticleSystem>().main.duration); 
         }
-
+            /*
         gradeSystem.CounterTakeHit();
 
         if (currentHealth <= 0)
@@ -53,7 +53,7 @@ public class PlayerHealth : MonoBehaviour
             Die();
 
         }
-
+            */
         
         Debug.Log("Player Health Decreased by: " + damage);
     }

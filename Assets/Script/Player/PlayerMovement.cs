@@ -37,11 +37,13 @@ public class PlayerMovement : MonoBehaviour
             ChangeSprite(lastDirection);
         }
 
+        /*
         // 射击逻辑
         if (Input.GetKeyDown(KeyCode.Space))
         {
             shootingController.HandleShooting();
         }
+        */
 
         GameObject nearestEnemy = FindNearestEnemy();
         if (nearestEnemy != null && Vector2.Distance(transform.position, nearestEnemy.transform.position) <= 2.0f)
