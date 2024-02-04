@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
 
     public GameObject hitEffect;
 
-    public float lifetime = 5f;
+    public float lifetime = 0.5f;
 
     public void SetDamage(int newDamage)
     {
@@ -16,10 +16,17 @@ public class Bullet : MonoBehaviour
     }
     void Start()
     {
+        StartCoroutine(DeathDelay());
         Destroy(gameObject, lifetime);
     }
 
+    IEnumerator DeathDelay()
+    {
+        yield return new WaitForSeconds(lifetime);
+        Destroy(gameObject);
+    }
 
+    
     void OnTriggerEnter2D(Collider2D other)
     {
 
@@ -42,4 +49,5 @@ public class Bullet : MonoBehaviour
         // 销毁子弹
         Destroy(gameObject);
     }
+    
 }
