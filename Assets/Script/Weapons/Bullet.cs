@@ -30,13 +30,15 @@ public class Bullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
 
-        GameObject effect = Instantiate(hitEffect, transform.position, Quaternion.identity);
+        
         // 处理撞击逻辑，例如对敌人造成伤害
         // 示例：如果撞击的对象有生命值组件
         Health health = other.gameObject.GetComponent<Health>();
         if (health != null)
         {
             health.TakeDamage(damage);
+            GameObject effect = Instantiate(hitEffect, transform.position, Quaternion.identity);
+            Destroy(effect, 1f);
         }
 
         if (other.gameObject.CompareTag("Wall"))
@@ -44,7 +46,7 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject); // 销毁子弹
         }
 
-        Destroy(effect, 1f);
+        
 
         // 销毁子弹
         Destroy(gameObject);
