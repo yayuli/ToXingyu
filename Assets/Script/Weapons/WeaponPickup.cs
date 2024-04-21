@@ -4,20 +4,15 @@ using UnityEngine;
 
 public class WeaponPickup : MonoBehaviour
 {
-    public Weapon weaponPrefab; // 在Unity编辑器中设置
+    public GameObject weaponToGive;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.tag == "Player")
         {
-            PlayerController player = other.GetComponent<PlayerController>();
-            if (player != null)
-            {
-                // 传递Weapon类型的实例，而不是GameObject
-                player.ChangeWeapon(weaponPrefab);
-                Destroy(gameObject); // 拾取后销毁武器拾取物体
-            }
+            other.gameObject.GetComponent<WeaponSwap>().UpdateWeapon(weaponToGive);
+            Destroy(GameObject.FindGameObjectWithTag("Weapon"));
+            Destroy(gameObject);
         }
     }
-
 }

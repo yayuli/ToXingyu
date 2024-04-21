@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Weapon currentWeapon;
+    //private Weapon currentWeapon;
 
     public Transform firePoint; // 你可能仍然需要这个引用来确定武器攻击的发起位置
     public GameObject bulletPrefab;
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
         // 使用当前武器
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            currentWeapon?.Use();
+           // currentWeapon?.Use();
         }
 
         // 拾取炸弹
@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 更换武器
+    /*
     public void ChangeWeapon(Weapon newWeaponPrefab)
     {
         if (currentWeapon != null)
@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
         }
         currentWeapon = Instantiate(newWeaponPrefab, firePoint.position, Quaternion.identity, transform);
     }
-
+    */
     // 增加炸弹数量
     public void AddBomb(int amount)
     {
