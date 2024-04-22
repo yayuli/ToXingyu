@@ -85,7 +85,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.26415092, g: 0.242969, b: 0.242969, a: 1}
   m_FlipX: 0
@@ -233,7 +233,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 212325040074416147}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.102, y: 2.82, z: 0}
+  m_LocalPosition: {x: -0.107, y: 3.26, z: 0}
   m_LocalScale: {x: 0.23422454, y: 7.22774, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -498,7 +498,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1237339956621373128}
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 3.4000075, y: 0.45355585, z: 0}
+  m_LocalPosition: {x: 3.52, y: 0.45355585, z: 0}
   m_LocalScale: {x: 8.003971, y: 0.24185784, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1194,7 +1194,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.26415092, g: 0.242969, b: 0.242969, a: 1}
   m_FlipX: 0
@@ -1887,7 +1887,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4408785504343936445}
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 3.4000075, y: -0.12883785, z: 0}
+  m_LocalPosition: {x: 3.75, y: -0.12883785, z: 0}
   m_LocalScale: {x: 8.003971, y: 0.24185784, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2349,7 +2349,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6286415855055735527}
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 3.1118667, y: 0.5677127, z: 0}
+  m_LocalPosition: {x: 3.67, y: 0.575, z: 0}
   m_LocalScale: {x: 8.003971, y: 0.24185784, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2714,7 +2714,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6866199905070308211}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.105869494, y: 3.0905826, z: 0}
+  m_LocalPosition: {x: 0.105869494, y: 3.18, z: 0}
   m_LocalScale: {x: 0.23422454, y: 7.22774, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2980,7 +2980,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7375137884758279789}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.2098652, y: 3.206225, z: 0}
+  m_LocalPosition: {x: 0.212, y: 3.39, z: 0}
   m_LocalScale: {x: 0.23422454, y: 7.22774, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3078,7 +3078,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7420749506171822417}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.007897609, y: 3.0044367, z: 0}
+  m_LocalPosition: {x: 0.007897609, y: 3.27, z: 0}
   m_LocalScale: {x: 0.23422454, y: 7.22774, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3623,7 +3623,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7732119404637414239}
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 3.1118667, y: 0.21750258, z: 0}
+  m_LocalPosition: {x: 4.09, y: 0.21750258, z: 0}
   m_LocalScale: {x: 8.003971, y: 0.24185784, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3763,7 +3763,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.26415092, g: 0.242969, b: 0.242969, a: 1}
   m_FlipX: 0
@@ -4162,7 +4162,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.26415092, g: 0.242969, b: 0.242969, a: 1}
   m_FlipX: 0

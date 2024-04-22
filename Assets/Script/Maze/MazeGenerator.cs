@@ -25,18 +25,10 @@ public class MazeGenerator : MonoBehaviour
     [Tooltip("If you want to disable the main sprite so the cell has no background, set to TRUE. This will create a maze with only walls.")]
     public bool disableCellSprite;
 
-    // Boss prefab
-    [SerializeField]
-    private GameObject bossPrefab; 
-    [SerializeField]
-    private int numberOfBosses = 4; // bosses number
-    private List<Vector2> availablePositions = new List<Vector2>();
+    public static MazeGenerator Instance { get; private set; }//Singleton
 
-    //obstacle prefab
-    [SerializeField]
-    private GameObject obstaclePrefab;
-    [SerializeField]
-    private int numberOfObstacles = 10;
+
+    public List<Vector2> availablePositions = new List<Vector2>();
 
     //Weapon prefabs
     [SerializeField]
@@ -71,17 +63,22 @@ public class MazeGenerator : MonoBehaviour
     private GameObject mazeParent;
     #endregion
 
-    /* This Start run is an example, you can delete this when 
-     * you want to start calling the maze generator manually. 
-     * To generate a maze is really easy, just call the GenerateMaze() function
-     * pass a rows value and columns value as parameters and the generator will
-     * do the rest for you. Enjoy!
-     */
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
     private void Start()
     {
         GenerateMaze(mazeRows, mazeColumns);
-        PlaceBossesRandomly();
-        PlaceWeaponsRandomly();
 
     }
 
@@ -93,7 +90,7 @@ public class MazeGenerator : MonoBehaviour
         mazeColumns = columns;
         CreateLayout();
 
-        PlaceObstaclesRandomly();
+      
     }
 
 
@@ -326,48 +323,6 @@ public class MazeGenerator : MonoBehaviour
         mazeParent.name = "Maze";
     }
 
-    //bosses randomly generated method
-    void PlaceBossesRandomly()
-    {
-        for (int i = 0; i < numberOfBosses; i++)
-        {
-            if (availablePositions.Count > 0)
-            {
-                int randomIndex = Random.Range(0, availablePositions.Count);
-                Vector2 bossPosition = availablePositions[randomIndex];
-                Instantiate(bossPrefab, bossPosition, Quaternion.identity);
-                availablePositions.RemoveAt(randomIndex); 
-            }
-        }
-    }
-
-    //weapons randomly generated method
-    void PlaceWeaponsRandomly()
-    {
-        for (int i = 0; i < numberOfWeapons; i++)
-        {
-            if (availablePositions.Count > 0)
-            {
-                int randomIndex = Random.Range(0, availablePositions.Count);
-                Vector2 weaponPosition = availablePositions[randomIndex];
-                GameObject weaponPrefab = weaponPrefabs[Random.Range(0, weaponPrefabs.Length)];
-                Instantiate(weaponPrefab, weaponPosition, Quaternion.identity);
-                availablePositions.RemoveAt(randomIndex);
-            }
-        }
-    }
-
-    //obstacles randomly generated method
-    void PlaceObstaclesRandomly()
-    {
-        for(int i = 0; i<numberOfObstacles; i++)
-        {
-            int randomIndex = Random.Range(0, availablePositions.Count);
-            Vector2 obstaclePosition = availablePositions[randomIndex];
-            Instantiate(obstaclePrefab, obstaclePosition, Quaternion.identity);
-            availablePositions.RemoveAt(randomIndex);
-        }
-    }
 
     public bool IsOdd(int value)
     {
