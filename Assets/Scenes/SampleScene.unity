@@ -133,6 +133,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6014351}
   - component: {fileID: 6014352}
+  - component: {fileID: 6014353}
+  - component: {fileID: 6014355}
+  - component: {fileID: 6014354}
   m_Layer: 0
   m_Name: Maze
   m_TagString: Untagged
@@ -171,13 +174,54 @@ MonoBehaviour:
   mazeColumns: 10
   cellPrefab: {fileID: 1888358115106478186, guid: d534dc90b6f5142bc80af6e80ee5783a, type: 3}
   disableCellSprite: 1
-  bossPrefab: {fileID: 9091025378485230310, guid: a9dc362d4d5234c50821cce30901b397, type: 3}
-  numberOfBosses: 3
-  weaponPrefabs:
-  - {fileID: 6367864450650162099, guid: 9dea55369cb8b4e099d79d733f0bd851, type: 3}
-  - {fileID: 4592992577239405603, guid: d3d46191fc89d416ca6215f1a7efe884, type: 3}
-  - {fileID: 4944371848908449444, guid: bf53dff079aef4297b69e87392c51948, type: 3}
+  availablePositions: []
+  weaponPrefabs: []
   numberOfWeapons: 3
+--- !u!114 &6014353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6014349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a24f8d5f1d3ad4f428be49f0256f2b60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obstaclePrefab: {fileID: 4592058807568847700, guid: 329c8e9ead69dd64c85e368015fbad70, type: 3}
+  numberOfObstacles: 10
+--- !u!114 &6014354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6014349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8c9b2250b78626428c5e6312c57c342, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemysPrefab: {fileID: 9091025378485230310, guid: a9dc362d4d5234c50821cce30901b397, type: 3}
+  numberOfEnemys: 4
+--- !u!114 &6014355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6014349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37805e8af21df0b49b2c3ffba8bb16b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponPrefabs:
+  - {fileID: 4592992577239405603, guid: d3d46191fc89d416ca6215f1a7efe884, type: 3}
+  - {fileID: 6367864450650162099, guid: 9dea55369cb8b4e099d79d733f0bd851, type: 3}
+  - {fileID: 4944371848908449444, guid: bf53dff079aef4297b69e87392c51948, type: 3}
+  numberOfWeapons: 5
 --- !u!1 &23530612
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,7 +990,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1665547812
 Transform:
   m_ObjectHideFlags: 0
@@ -1041,6 +1085,54 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!1 &1729835094
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1729835096}
+  - component: {fileID: 1729835095}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1729835095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729835094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ddfeeaceeaa4ac43a1d1fe7156ac93b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mazeGenerator: {fileID: 6014352}
+  obstaclesGenerator: {fileID: 6014353}
+  weaponsGenerator: {fileID: 6014355}
+  enemysGenerator: {fileID: 6014354}
+--- !u!4 &1729835096
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729835094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.6418881, y: -1.9792758, z: -0.1054634}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1753961582
 GameObject:
   m_ObjectHideFlags: 0

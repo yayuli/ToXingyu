@@ -4,28 +4,21 @@ using UnityEngine;
 
 public class ObstaclesGenerate : MonoBehaviour
 {
-   
-    //obstacle prefab
-    [SerializeField]
-    private GameObject obstaclePrefab;
-    [SerializeField]
-    private int numberOfObstacles = 10;
+    [SerializeField] private GameObject obstaclePrefab;
+    [SerializeField] private int numberOfObstacles = 10;
 
-    private List<Vector2> availablePositions = new List<Vector2>();
+    private MazeGenerator mazeGenerator;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Initialize(MazeGenerator mazeGenerator)
     {
-        if(MazeGenerator.Instance!=null)
-        {
-            availablePositions = new List<Vector2>(MazeGenerator.Instance.availablePositions);  // Copy positions from MazeGenerator
-            PlaceObstaclesRandomly();
-        }
+        this.mazeGenerator = mazeGenerator;
+        PlaceObstaclesRandomly();
     }
 
-    void PlaceObstaclesRandomly()
+    private void PlaceObstaclesRandomly()
     {
-        for (int i = 0; i < numberOfObstacles; i++)
+        List<Vector2> availablePositions = new List<Vector2>(mazeGenerator.availablePositions);
+        for (int i = 0; i < numberOfObstacles && availablePositions.Count > 0; i++)
         {
             int randomIndex = Random.Range(0, availablePositions.Count);
             Vector2 obstaclePosition = availablePositions[randomIndex];
@@ -34,3 +27,4 @@ public class ObstaclesGenerate : MonoBehaviour
         }
     }
 }
+

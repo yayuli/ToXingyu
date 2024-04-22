@@ -2,8 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WallDirection
+{
+    Left = 1,
+    Right = 2,
+    Up = 3,
+    Down = 4
+}
+
 public class MazeGenerator : MonoBehaviour
 {
+
 
     #region Variables:
     
@@ -24,9 +33,6 @@ public class MazeGenerator : MonoBehaviour
 
     [Tooltip("If you want to disable the main sprite so the cell has no background, set to TRUE. This will create a maze with only walls.")]
     public bool disableCellSprite;
-
-    public static MazeGenerator Instance { get; private set; }//Singleton
-
 
     public List<Vector2> availablePositions = new List<Vector2>();
 
@@ -63,26 +69,13 @@ public class MazeGenerator : MonoBehaviour
     private GameObject mazeParent;
     #endregion
 
-
-    void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
-
     private void Start()
     {
         GenerateMaze(mazeRows, mazeColumns);
 
     }
 
-    private void GenerateMaze(int rows, int columns)
+    public void GenerateMaze(int rows, int columns)
     {
         if (mazeParent != null) DeleteMaze();
 
@@ -163,6 +156,7 @@ public class MazeGenerator : MonoBehaviour
 
         foreach (KeyValuePair<Vector2, Cell> cell in allCells)
         {
+            // Check if the cell is on the edge of the maze
             if (cell.Key.x == 0 || cell.Key.x == mazeColumns || cell.Key.y == 0 || cell.Key.y == mazeRows)
             {
                 edgeCells.Add(cell.Value);
@@ -172,16 +166,32 @@ public class MazeGenerator : MonoBehaviour
         // Get edge cell randomly from list.
         Cell newCell = edgeCells[Random.Range(0, edgeCells.Count)];
 
-        // Remove appropriate wall for chosen edge cell.
-        if (newCell.gridPos.x == 0) RemoveWall(newCell.cScript, 1);
-        else if (newCell.gridPos.x == mazeColumns) RemoveWall(newCell.cScript, 2);
-        else if (newCell.gridPos.y == mazeRows) RemoveWall(newCell.cScript, 3);
-        else RemoveWall(newCell.cScript, 4);
+        // Determine which wall to remove based on the cell's edge position
+        WallDirection wallToRemove;
+        if (newCell.gridPos.x == 0)
+        {
+            wallToRemove = WallDirection.Left;
+        }
+        else if (newCell.gridPos.x == mazeColumns)
+        {
+            wallToRemove = WallDirection.Right;
+        }
+        else if (newCell.gridPos.y == mazeRows)
+        {
+            wallToRemove = WallDirection.Up;
+        }
+        else
+        {
+            wallToRemove = WallDirection.Down;
+        }
 
-        Debug.Log("Maze generation finished.");
+        // Remove the determined wall
+        RemoveWall(newCell.cScript, wallToRemove);
+
+        Debug.Log("Maze generation finished. Exit created.");
     }
 
-    
+
 
     public List<Cell> GetUnvisitedNeighbours(Cell curCell)
     {
@@ -208,75 +218,91 @@ public class MazeGenerator : MonoBehaviour
     // Compare neighbour with current and remove appropriate walls.
     public void CompareWalls(Cell cCell, Cell nCell)
     {
-        // If neighbour is left of current.
         if (nCell.gridPos.x < cCell.gridPos.x)
         {
-            RemoveWall(nCell.cScript, 2);
-            RemoveWall(cCell.cScript, 1);
+            RemoveWall(nCell.cScript, WallDirection.Right);
+            RemoveWall(cCell.cScript, WallDirection.Left);
         }
-        // Else if neighbour is right of current.
         else if (nCell.gridPos.x > cCell.gridPos.x)
         {
-            RemoveWall(nCell.cScript, 1);
-            RemoveWall(cCell.cScript, 2);
+            RemoveWall(nCell.cScript, WallDirection.Left);
+            RemoveWall(cCell.cScript, WallDirection.Right);
         }
-        // Else if neighbour is above current.
         else if (nCell.gridPos.y > cCell.gridPos.y)
         {
-            RemoveWall(nCell.cScript, 4);
-            RemoveWall(cCell.cScript, 3);
+            RemoveWall(nCell.cScript, WallDirection.Down);
+            RemoveWall(cCell.cScript, WallDirection.Up);
         }
-        // Else if neighbour is below current.
         else if (nCell.gridPos.y < cCell.gridPos.y)
         {
-            RemoveWall(nCell.cScript, 3);
-            RemoveWall(cCell.cScript, 4);
+            RemoveWall(nCell.cScript, WallDirection.Up);
+            RemoveWall(cCell.cScript, WallDirection.Down);
         }
     }
 
+
     // Function disables wall of your choosing, pass it the script attached to the desired cell
-    // and an 'ID', where the ID = the wall. 1 = left, 2 = right, 3 = up, 4 = down.
-    public void RemoveWall(CellScript cScript, int wallID)
+    // and a direction, where the direction is the enum value.
+    public void RemoveWall(CellScript cScript, WallDirection wallID)
     {
-        if (wallID == 1) cScript.wallL.SetActive(false);
-        else if (wallID == 2) cScript.wallR.SetActive(false);
-        else if (wallID == 3) cScript.wallU.SetActive(false);
-        else if (wallID == 4) cScript.wallD.SetActive(false);
+        switch (wallID)
+        {
+            case WallDirection.Left:
+                cScript.wallL.SetActive(false);
+                break;
+            case WallDirection.Right:
+                cScript.wallR.SetActive(false);
+                break;
+            case WallDirection.Up:
+                cScript.wallU.SetActive(false);
+                break;
+            case WallDirection.Down:
+                cScript.wallD.SetActive(false);
+                break;
+        }
     }
+
 
     public void CreateCentre()
     {
-        // Get the 4 centre cells using the rows and columns variables.
-        // Remove the required walls for each.
-        centreCells[0] = allCells[new Vector2((mazeColumns / 2), (mazeRows / 2) + 1)];
-        RemoveWall(centreCells[0].cScript, 4);
-        RemoveWall(centreCells[0].cScript, 2);
-        centreCells[1] = allCells[new Vector2((mazeColumns / 2) + 1, (mazeRows / 2) + 1)];
-        RemoveWall(centreCells[1].cScript, 4);
-        RemoveWall(centreCells[1].cScript, 1);
-        centreCells[2] = allCells[new Vector2((mazeColumns / 2), (mazeRows / 2))];
-        RemoveWall(centreCells[2].cScript, 3);
-        RemoveWall(centreCells[2].cScript, 2);
-        centreCells[3] = allCells[new Vector2((mazeColumns / 2) + 1, (mazeRows / 2))];
-        RemoveWall(centreCells[3].cScript, 3);
-        RemoveWall(centreCells[3].cScript, 1);
+        // Initialize the center cells based on the maze dimensions
+        centreCells[0] = allCells[new Vector2(mazeColumns / 2, mazeRows / 2 + 1)];
+        centreCells[1] = allCells[new Vector2(mazeColumns / 2 + 1, mazeRows / 2 + 1)];
+        centreCells[2] = allCells[new Vector2(mazeColumns / 2, mazeRows / 2)];
+        centreCells[3] = allCells[new Vector2(mazeColumns / 2 + 1, mazeRows / 2)];
 
-        // Create a List of ints, using this, select one at random and remove it.
-        // We then use the remaining 3 ints to remove 3 of the centre cells from the 'unvisited' list.
-        // This ensures that one of the centre cells will connect to the maze but the other three won't.
-        // This way, the centre room will only have 1 entry / exit point.
+        // Remove walls to create a single room. Using enum for clarity.
+        RemoveWall(centreCells[0].cScript, WallDirection.Down);
+        RemoveWall(centreCells[0].cScript, WallDirection.Right);
+        RemoveWall(centreCells[1].cScript, WallDirection.Down);
+        RemoveWall(centreCells[1].cScript, WallDirection.Left);
+        RemoveWall(centreCells[2].cScript, WallDirection.Up);
+        RemoveWall(centreCells[2].cScript, WallDirection.Right);
+        RemoveWall(centreCells[3].cScript, WallDirection.Up);
+        RemoveWall(centreCells[3].cScript, WallDirection.Left);
+
+        // Randomly select one of the center cells to be the entrance/exit.
         List<int> rndList = new List<int> { 0, 1, 2, 3 };
-        int startCell = rndList[Random.Range(0, rndList.Count)];
-        rndList.Remove(startCell);
-        currentCell = centreCells[startCell];
-        foreach (int c in rndList)
+        int startCellIndex = Random.Range(0, rndList.Count);
+        currentCell = centreCells[rndList[startCellIndex]];
+        rndList.RemoveAt(startCellIndex);
+
+        // Ensure the other center cells do not connect to the maze.
+        foreach (int index in rndList)
         {
-            unvisited.Remove(centreCells[c]);
+            unvisited.Remove(centreCells[index]);
         }
     }
 
     public void GenerateCell(Vector2 pos, Vector2 keyPos)
     {
+        //behaves correctly even if the prefab isn't set
+        if (cellPrefab==null)
+        {
+            Debug.LogError("Cell prefab is not assigned in the inspector");
+            return;
+        }
+
         // Create new Cell object.
         Cell newCell = new Cell();
 
