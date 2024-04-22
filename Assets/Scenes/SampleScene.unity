@@ -1115,9 +1115,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mazeGenerator: {fileID: 6014352}
-  obstaclesGenerator: {fileID: 6014353}
-  weaponsGenerator: {fileID: 6014355}
-  enemysGenerator: {fileID: 6014354}
 --- !u!4 &1729835096
 Transform:
   m_ObjectHideFlags: 0
