@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum WallDirection
 {
@@ -12,7 +13,6 @@ public enum WallDirection
 
 public class MazeGenerator : MonoBehaviour
 {
-
 
     #region Variables:
     
@@ -36,11 +36,6 @@ public class MazeGenerator : MonoBehaviour
 
     public List<Vector2> availablePositions = new List<Vector2>();
 
-    //Weapon prefabs
-    [SerializeField]
-    private GameObject[] weaponPrefabs;
-    [SerializeField]
-    private int numberOfWeapons = 3;
 
     // Variable to store size of centre room. Hard coded to be 2.
     //private int centreSize = 2;
@@ -67,6 +62,7 @@ public class MazeGenerator : MonoBehaviour
     private float cellSize;
 
     private GameObject mazeParent;
+    private List<Vector2> positions;
     #endregion
 
     private void Start()
@@ -92,6 +88,9 @@ public class MazeGenerator : MonoBehaviour
     {
         InitValues();
 
+        // Initialize the positions list to ensure it's not null
+        positions = new List<Vector2>();
+
         // Set starting point, set spawn point to start.
         Vector2 startPos = new Vector2(-(cellSize * (mazeColumns / 2)) + (cellSize / 2), -(cellSize * (mazeRows / 2)) + (cellSize / 2));
         Vector2 spawnPos = startPos;
@@ -101,6 +100,9 @@ public class MazeGenerator : MonoBehaviour
             for (int y = 1; y <= mazeRows; y++)
             {
                 GenerateCell(spawnPos, new Vector2(x, y));
+
+                // Store the position for use in other parts of the game
+                positions.Add(spawnPos);
 
                 // Increase spawnPos y.
                 spawnPos.y += cellSize;
@@ -114,6 +116,16 @@ public class MazeGenerator : MonoBehaviour
         CreateCentre();
         RunAlgorithm();
         MakeExit();
+
+        // Now initialize PositionManager with the filled positions list
+        if (PositionManager.Instance != null)
+        {
+            PositionManager.Instance.Initialize(positions);
+        }
+        else
+        {
+            Debug.LogError("PositionManager instance is not found or not initialized correctly.");
+        }
     }
 
     // This is where the fun stuff happens.
