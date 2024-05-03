@@ -4,46 +4,39 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-    [SerializeField] GameObject weaponPrefab;
+    [SerializeField] private GameObject weaponPrefab;
+    [SerializeField] private float radius = 1f; // Distance from the player
+    [SerializeField] private int maxWeapons = 6; // Maximum number of weapons
 
-    Transform player;
-    List<Vector2> weaponPositions = new List<Vector2>();
+    private Transform player;
+    private List<GameObject> weapons = new List<GameObject>();
 
-    int spawnedWeapons = 0;
-
-    // Start is called before the first frame update
-    private void Start()
+    void Start()
     {
         player = GameObject.Find("Player").transform;
-
-        weaponPositions.Add(new Vector2(-1.2f, 1f));
-        weaponPositions.Add(new Vector2(1.2f, 1f));
-
-        weaponPositions.Add(new Vector2(-1.4f, -0.2f));
-        weaponPositions.Add(new Vector2(1.4f, -0.2f));
-
-        weaponPositions.Add(new Vector2(-1f, -0.5f));
-        weaponPositions.Add(new Vector2(1f, -0.5f));
-
-        AddWeapon();
-        AddWeapon();
+        AddWeapon();//start with one weapon
     }
 
-    private void Update()
+    void Update()
     {
-        //for testing
-        if (Input.GetKeyDown(KeyCode.G)) AddWeapon();
+        if (Input.GetKeyDown(KeyCode.G) && weapons.Count < maxWeapons)
+        {
+            AddWeapon();
+        }
     }
-
+    
 
     void AddWeapon()
     {
-        var pos = weaponPositions[spawnedWeapons];
+        if (weapons.Count >= maxWeapons)
+            return;//prevent adding more than the maxiunm number of weapons
 
-        var newWeapon = Instantiate(weaponPrefab, pos, Quaternion.identity);
+        float angle = 360f / maxWeapons * weapons.Count;
+        Vector2 positionOffset = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * radius;
+        Vector2 spawnPosition = (Vector2)player.position + positionOffset;
 
-        newWeapon.GetComponent<Weapon>().SetOffset(pos);
-
-        spawnedWeapons++;
+        GameObject newWeapon = Instantiate(weaponPrefab, spawnPosition, Quaternion.identity, transform);
+        weapons.Add(newWeapon);
+        newWeapon.GetComponent<Weapon>().SetOffset(positionOffset);
     }
 }

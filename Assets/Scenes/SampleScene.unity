@@ -336,6 +336,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 497172759839379476, guid: e5fc7a24ac8734a24b4f334ba5310f5e, type: 3}
+      propertyPath: bombPrefab
+      value: 
+      objectReference: {fileID: 4625768342483030173, guid: c212f1c647a0444f08d8e20eedc30070, type: 3}
+    - target: {fileID: 497172759839379476, guid: e5fc7a24ac8734a24b4f334ba5310f5e, type: 3}
       propertyPath: projectilePrefab
       value: 
       objectReference: {fileID: 2802411436068020762, guid: db4b355f79b2441b2a75b04ee34781ac, type: 3}
@@ -1062,6 +1066,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponPrefab: {fileID: 438060947978296620, guid: 3ba38b8f0a54a484f95f8f539146a504, type: 3}
+  radius: 1
+  maxWeapons: 6
 --- !u!1 &1729835094
 GameObject:
   m_ObjectHideFlags: 0

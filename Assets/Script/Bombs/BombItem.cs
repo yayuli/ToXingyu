@@ -11,7 +11,7 @@ public class BombItem : MonoBehaviour
             PlayerController player = other.GetComponent<PlayerController>();
             if (player != null)
             {
-                //player.AddBomb(bombsToAdd);
+                player.AddItem(bombsToAdd);
                 Destroy(gameObject);
             }
         }

@@ -18,6 +18,11 @@ public class PlayerController : MonoBehaviour
     //private GameObject nearestEnemy;
     private Vector2 movement;
 
+    [Header ("Bomb item")]
+    [SerializeField] private int bombCount = 0;//tracks the number of bombs
+    [SerializeField] private GameObject bombPrefab;//for the bomb to drop
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -49,6 +54,8 @@ public class PlayerController : MonoBehaviour
         {
             AimAtEnemy(nearestEnemy);
         }
+
+        HandleBombDrop();
     }
 
 
@@ -111,8 +118,29 @@ public class PlayerController : MonoBehaviour
         return nearest;
     }
 
-    
+    public void AddItem(int count)
+    {
+        bombCount += count;
 
+        //here can update ui or other logic
+    }
+
+    void HandleBombDrop()
+    {
+        if(Input.GetKeyDown(KeyCode.Q)&& bombCount > 0)
+        {
+            DropBomb();
+        }
+    }
+
+    void DropBomb()
+    {
+        if(bombPrefab!= null)
+        {
+            Instantiate(bombPrefab, transform.transform.position, Quaternion.identity);
+            bombCount--;
+        }
+    }
 }
 
 
