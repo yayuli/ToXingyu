@@ -12,9 +12,7 @@ GameObject:
   - component: {fileID: 497172759839379477}
   - component: {fileID: 497172759839379479}
   - component: {fileID: 497172759839379497}
-  - component: {fileID: 3176830384746885565}
   - component: {fileID: 497172759839379476}
-  - component: {fileID: 497172759839379496}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -137,7 +135,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.52798265, y: 0.6095009}
   m_EdgeRadius: 0
---- !u!114 &3176830384746885565
+--- !u!114 &497172759839379476
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,29 +144,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 497172759839379475}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02c0dcca73459425698c953a4c5a7463, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  firePoint: {fileID: 0}
-  bulletPrefab: {fileID: 0}
-  bulletSpeed: 10
-  fireDelay: 0
-  moveSpeed: 5
-  bombItemInRange: {fileID: 0}
-  bombPrefab: {fileID: 0}
---- !u!114 &497172759839379476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 497172759839379475}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a00b03ecc3c234b39ade409ae41b00b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootingController: {fileID: 0}
   moveSpeed: 5
   followRange: 10
   spriteRenderer: {fileID: 497172759839379477}
@@ -176,22 +154,6 @@ MonoBehaviour:
   downSprite: {fileID: 21300000, guid: 266fa67cf453844ac91cedf09d2d88ca, type: 3}
   leftSprite: {fileID: 21300000, guid: 1cc673bb39fd04e828fe524e37ea1e91, type: 3}
   rightSprite: {fileID: 21300000, guid: b313be48b40074049bbb2aa11fc926fd, type: 3}
---- !u!114 &497172759839379496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 497172759839379475}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a46ffd3e8942d4e648501a59c6054ef4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 0}
-  projectileSpeed: 10
-  shootDistance: 4
-  spriteRenderer: {fileID: 0}
 --- !u!1 &4711276758413913436
 GameObject:
   m_ObjectHideFlags: 0
