@@ -1,23 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //private Weapon currentWeapon;
+    public float moveSpeed = 5.0f;
+    public float followRange = 10.0f;
+    public SpriteRenderer spriteRenderer; // 精灵渲染器
+    public Sprite upSprite;    // 向上移动时的精灵
+    public Sprite downSprite;  // 向下移动时的精灵
+    public Sprite leftSprite;  // 向左移动时的精灵
+    public Sprite rightSprite; // 向右移动时的精灵
 
-    public Transform firePoint; // 你可能仍然需要这个引用来确定武器攻击的发起位置
-    public GameObject bulletPrefab;
-    public float bulletSpeed= 10f;
-    private float lastFire;
-    public float fireDelay;
     private Vector2 lastDirection = Vector2.right;
-    private Vector2 shootDirection;
 
     private Rigidbody2D rb;
-    public float moveSpeed = 5.0f;
-
-    public BombItem bombItemInRange; // 在玩家范围内的炸弹道具
-    public GameObject bombPrefab; // 炸弹Prefab
-    private int bombCount = 0; // 玩家拥有的炸弹数量
+    //private GameObject nearestEnemy;
+    private Vector2 movement;
 
     void Start()
     {
@@ -26,78 +25,95 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Handle player movement
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveY = Input.GetAxisRaw("Vertical");
-        Vector2 movement = new Vector2(moveX, moveY).normalized;
-        rb.velocity = movement * moveSpeed;
+        movement.x = Input.GetAxis("Horizontal");
+        movement.y = Input.GetAxis("Vertical");
 
+        // 根据移动输入更换精灵
         if (movement != Vector2.zero)
         {
-            shootDirection = movement;
+            lastDirection = movement.normalized;
+            ChangeSprite(lastDirection);
         }
 
-        // 射击
+        /*
+        // 射击逻辑
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Shoot(shootDirection);
+            shootingController.HandleShooting();
         }
+        */
 
-        // 使用当前武器
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-           // currentWeapon?.Use();
-        }
 
-        // 拾取炸弹
-        if (Input.GetKeyDown(KeyCode.Z) && bombItemInRange != null)
+        GameObject nearestEnemy = FindNearestEnemy();
+        if (nearestEnemy != null && Vector2.Distance(transform.position, nearestEnemy.transform.position) <= 2.0f)
         {
-            AddBomb(1);
-            Destroy(bombItemInRange.gameObject);
-            bombItemInRange = null;
-        }
-
-        // 放置炸弹
-        if (Input.GetKeyDown(KeyCode.X) && bombCount > 0)
-        {
-            PlaceBomb();
+            AimAtEnemy(nearestEnemy);
         }
     }
 
-    void Shoot(Vector2 direction)
+
+    void FixedUpdate()
     {
-        if (bulletPrefab && firePoint)
-        {
-            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-            Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>();
-            rbBullet.velocity = direction * bulletSpeed;
+        // 根据玩家的输入移动角色
+        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
 
-            // 设置子弹旋转以面向射击方向
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
+    }
+
+    void AimAtEnemy(GameObject enemy)
+    {
+        Vector2 directionToEnemy = enemy.transform.position - transform.position;
+        Vector2 direction;
+
+        if (Mathf.Abs(directionToEnemy.x) > Mathf.Abs(directionToEnemy.y))
+        {
+            // 敌人在水平方向
+            direction = directionToEnemy.x > 0 ? Vector2.right : Vector2.left;
+        }
+        else
+        {
+            // 敌人在垂直方向
+            direction = directionToEnemy.y > 0 ? Vector2.up : Vector2.down;
+        }
+
+        ChangeSprite(direction); // 更换为对应方向的精灵
+    }
+
+
+
+    void ChangeSprite(Vector2 direction)
+    {
+        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+        {
+            spriteRenderer.sprite = (direction.x > 0) ? rightSprite : leftSprite;
+        }
+        else
+        {
+            spriteRenderer.sprite = (direction.y > 0) ? upSprite : downSprite;
         }
     }
 
-    /*
-    public void ChangeWeapon(Weapon newWeaponPrefab)
+    GameObject FindNearestEnemy()
     {
-        if (currentWeapon != null)
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject nearest = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (GameObject enemy in enemies)
         {
-            Destroy(currentWeapon.gameObject);
+            float distance = Vector2.Distance(transform.position, enemy.transform.position);
+            if (distance < minDistance)
+            {
+                nearest = enemy;
+                minDistance = distance;
+            }
         }
-        currentWeapon = Instantiate(newWeaponPrefab, firePoint.position, Quaternion.identity, transform);
-    }
-    */
-    // 增加炸弹数量
-    public void AddBomb(int amount)
-    {
-        bombCount += amount;
+
+        return nearest;
     }
 
-    // 放置炸弹
-    private void PlaceBomb()
-    {
-        Instantiate(bombPrefab, transform.position, Quaternion.identity);
-        bombCount--;
-    }
+    
+
 }
+
+
+

@@ -38,4 +38,9 @@ public class PositionManager : MonoBehaviour
     {
         availablePositions = new List<Vector2>(positions);
     }
+
+    internal void Initialize(object positions)
+    {
+        throw new System.NotImplementedException();
+    }
 }

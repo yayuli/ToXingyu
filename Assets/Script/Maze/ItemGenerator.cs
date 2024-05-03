@@ -10,7 +10,8 @@ public class ItemGenerator : MonoBehaviour, IGenerator
     public struct ItemConfig
     {
         public GameObject[] prefabs; // Allow multiple prefabs per item type
-        public int count;
+        public int count;// generator's number
+        public float spawnDelay;//spawn delay time
     }
 
     [SerializeField]
@@ -22,6 +23,17 @@ public class ItemGenerator : MonoBehaviour, IGenerator
     public void Initialize(MazeGenerator mazeGenerator)
     {
         this.mazeGenerator = mazeGenerator;
+        StartCoroutine(GenerateItemsWithDelay());
+    }
+
+    //generate items with delay
+    private IEnumerator GenerateItemsWithDelay()
+    {
+        foreach (var item in itemsToGenerate)
+        {
+            yield return new WaitForSeconds(item.spawnDelay);
+            PlaceItemsRandomly(item.prefabs, item.count);
+        }
     }
 
     // Generates all items as per the configuration

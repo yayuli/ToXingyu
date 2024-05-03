@@ -58,6 +58,10 @@ public class MazeGenerator : MonoBehaviour
     // Array of all possible neighbour positions.
     private Vector2[] neighbourPositions = new Vector2[] { new Vector2(-1, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(0, -1) };
 
+    public Vector2 exitPosition;  // Public so you can access it from other scripts if needed.
+    [SerializeField]
+    private GameObject exitPrefab;  // Reference to the exit prefab
+
     // Size of the cells, used to determine how far apart to place cells during generation.
     private float cellSize;
 
@@ -162,46 +166,40 @@ public class MazeGenerator : MonoBehaviour
     }
 
     public void MakeExit()
+{
+    List<Cell> edgeCells = new List<Cell>();
+    foreach (KeyValuePair<Vector2, Cell> cell in allCells)
     {
-        // Create and populate list of all possible edge cells.
-        List<Cell> edgeCells = new List<Cell>();
-
-        foreach (KeyValuePair<Vector2, Cell> cell in allCells)
+        if (cell.Key.x == 0 || cell.Key.x == mazeColumns || cell.Key.y == 0 || cell.Key.y == mazeRows)
         {
-            // Check if the cell is on the edge of the maze
-            if (cell.Key.x == 0 || cell.Key.x == mazeColumns || cell.Key.y == 0 || cell.Key.y == mazeRows)
-            {
-                edgeCells.Add(cell.Value);
-            }
+            edgeCells.Add(cell.Value);
         }
-
-        // Get edge cell randomly from list.
-        Cell newCell = edgeCells[Random.Range(0, edgeCells.Count)];
-
-        // Determine which wall to remove based on the cell's edge position
-        WallDirection wallToRemove;
-        if (newCell.gridPos.x == 0)
-        {
-            wallToRemove = WallDirection.Left;
-        }
-        else if (newCell.gridPos.x == mazeColumns)
-        {
-            wallToRemove = WallDirection.Right;
-        }
-        else if (newCell.gridPos.y == mazeRows)
-        {
-            wallToRemove = WallDirection.Up;
-        }
-        else
-        {
-            wallToRemove = WallDirection.Down;
-        }
-
-        // Remove the determined wall
-        RemoveWall(newCell.cScript, wallToRemove);
-
-        Debug.Log("Maze generation finished. Exit created.");
     }
+
+    Cell exitCell = edgeCells[Random.Range(0, edgeCells.Count)];
+    exitPosition = exitCell.gridPos;  // Store the exit position.
+    exitCell.isExit = true;  // Mark this cell as the exit
+
+    WallDirection wallToRemove;
+    if (exitCell.gridPos.x == 0) { wallToRemove = WallDirection.Left; }
+    else if (exitCell.gridPos.x == mazeColumns) { wallToRemove = WallDirection.Right; }
+    else if (exitCell.gridPos.y == mazeRows) { wallToRemove = WallDirection.Up; }
+    else { wallToRemove = WallDirection.Down; }
+
+    RemoveWall(exitCell.cScript, wallToRemove);
+
+        // Instantiate the exit prefab if needed and if assigned
+        if (exitPrefab != null && exitCell.isExit)
+        {
+            // Adjust the prefab position to match the maze grid positioning
+            Vector3 prefabPosition = new Vector3(exitCell.gridPos.x * cellSize, exitCell.gridPos.y * cellSize, 0);
+            prefabPosition -= new Vector3((mazeColumns * cellSize) / 2, (mazeRows * cellSize) / 2, 0); // Center the maze
+            Instantiate(exitPrefab, prefabPosition, Quaternion.identity, mazeParent.transform);  // Parent to maze for organization
+        }
+
+
+        Debug.Log("Maze generation finished. Exit created at: " + exitPosition);
+}
 
 
 
@@ -372,6 +370,7 @@ public class MazeGenerator : MonoBehaviour
         public Vector2 gridPos;
         public GameObject cellObject;
         public CellScript cScript;
+        public bool isExit = false; 
     }
 
     
