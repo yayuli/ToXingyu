@@ -4,59 +4,77 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private Transform target; // 玩家的Transform
-    [SerializeField] int maxhealth = 100;
-    [SerializeField] private float speed = 2f; // Boss移动速度
+    private Transform target; // player's Transform
+    [SerializeField] protected int maxHealth = 50;
+    [SerializeField] protected float speed = 2f; // enemy speed
 
-    private int currentHealth;
+    protected int currentHealth;
+    protected Animator anim;
 
-    Animator anim;
+    [SerializeField] private int damage = 1; // boss attack damage to player
 
-    public int damage = 1; // Boss对玩家的攻击伤害
+    private Rigidbody2D rb;
 
-    private Rigidbody2D rb; // Boss的Rigidbody2D组件
-
-    void Start()
+    protected virtual void Start()
     {
-        currentHealth = maxhealth;
+        currentHealth = maxHealth;
         target = GameObject.Find ("Player").transform;
         anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        if(target!= null)
-        {
-            Vector3 direction = target.position - transform.position;
-            direction.Normalize();
-
-            transform.position += direction * speed * Time.deltaTime;
-
-            var playerToTheRight = target.position.x > transform.position.x;
-            transform.localScale = new Vector2(playerToTheRight ? -1 : 1, 1);
-        }
-       
+        MoveTowardsTarget();
     }
 
-    public void Hit(int damage)
+    protected void MoveTowardsTarget()
+    {
+        if (target != null)
+        {
+            Vector2 direction = (target.position - transform.position).normalized;
+            rb.MovePosition(rb.position + direction * speed * Time.deltaTime); // 使用Rigidbody2D移动
+
+            bool playerToTheRight = target.position.x > transform.position.x;
+            transform.localScale = new Vector2(playerToTheRight ? 1 : -1, 1); // 根据玩家位置翻转敌人
+        }
+    }
+
+    public void TakeDamage(int damage)
     {
         anim.SetTrigger("Hit");
         currentHealth -= damage;
-        
-        
+
         if (currentHealth <= 0)
-            Destroy(gameObject);
+        {
+            Die();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
+            Player player = collision.GetComponent<Player>();
+            if (player != null)
             {
-                playerHealth.TakeDamage(damage);
+                player.TakeDamage(damage); 
             }
         }
     }
+
+   
+    IEnumerator DestroyAfterAnimation()
+    {
+        yield return new WaitForSeconds(1);
+        EnemyManager.Instance.DestroyEnemy(gameObject);
+    }
+
+    protected virtual void Die()
+    {
+        //anim.SetTrigger("Die");
+        // 可能需要等待死亡动画播放完成后再销毁
+        StartCoroutine(DestroyAfterAnimation());
+    }
+
 }
