@@ -43,15 +43,15 @@ public class ObjectPool : MonoBehaviour
 
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
-        if (!poolDictionary.ContainsKey(tag) || poolDictionary[tag].Count == 0)
+        if (!poolDictionary.ContainsKey(tag))
         {
             Debug.LogWarning("No object available in the pool and cannot expand: " + tag);
             return null;
         }
 
-        if (poolDictionary[tag].Count ==0)
+        if (poolDictionary[tag].Count == 0)
         {
-            Debug.Log("expanding pool for:" + tag);
+            Debug.Log("Expanding pool for: " + tag);
             ExpandPool(tag, pools.Find(p => p.tag == tag).expandBy);
         }
 
@@ -62,6 +62,7 @@ public class ObjectPool : MonoBehaviour
 
         return objectToSpawn;
     }
+
 
     private void ExpandPool(string tag, int additionalCount)
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private Transform target; // player's Transform
+    protected Transform target; // player's Transform
     [SerializeField] protected int maxHealth = 50;
     [SerializeField] protected float speed = 2f; // enemy speed
 
@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        anim.SetTrigger("Hit");
+        //anim.SetTrigger("Hit");
         currentHealth -= damage;
 
         if (currentHealth <= 0)
@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {

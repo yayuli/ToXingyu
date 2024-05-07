@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Floor
   - Weapon
+  - Enemy2
   layers:
   - Default
   - TransparentFX

@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6014351}
   - component: {fileID: 6014352}
-  - component: {fileID: 6014353}
   - component: {fileID: 6014354}
   m_Layer: 0
   m_Name: Maze
@@ -176,26 +175,6 @@ MonoBehaviour:
   availablePositions: []
   exitPosition: {x: 0, y: 0}
   exitPrefab: {fileID: 811092841773392260, guid: eea1cffccc8d847788734e948b0a2187, type: 3}
---- !u!114 &6014353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6014349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e61ada577e10d4344934eae66c290134, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mazeGenerator: {fileID: 6014352}
-  itemsToGenerate:
-  - prefab: {fileID: 5297416947712952181, guid: 1fcfe9121879e468caa6982712abc7ca, type: 3}
-    count: 10
-    spawnDelay: 0
-  - prefab: {fileID: 5297416947712952181, guid: 31b1dde79ad754d17abf60ce9015f843, type: 3}
-    count: 10
-    spawnDelay: 0
 --- !u!114 &6014354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -863,8 +842,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f02699c274d84f11b751ac33b55b757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBetweenSpawns: 0.5
-  maxEnemies: 20
+  enemyTypes:
+  - tag: Enemy
+    spawnDelay: 0.5
+    maxCount: 30
+    spawnProbability: 0.8
+  - tag: Enemy2
+    spawnDelay: 2
+    maxCount: 10
+    spawnProbability: 0.3
+  maxEnemies: 50
 --- !u!1 &589173550
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,6 +928,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 589173550}
   m_CullTransparentMesh: 1
+--- !u!1 &634390883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 634390884}
+  - component: {fileID: 634390885}
+  m_Layer: 0
+  m_Name: Inventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &634390884
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634390883}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.792142, y: 7.1403074, z: -0.15722246}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1729835096}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &634390885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634390883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45721b4e400cf4d81b86755b64f31026, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items:
+  - {fileID: 5297416947712952181, guid: 1fcfe9121879e468caa6982712abc7ca, type: 3}
 --- !u!4 &662146451 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2897264974449801842, guid: e5fc7a24ac8734a24b4f334ba5310f5e, type: 3}
@@ -1276,6 +1309,10 @@ MonoBehaviour:
   pools:
   - tag: Enemy
     prefab: {fileID: 9091025378485230310, guid: a9dc362d4d5234c50821cce30901b397, type: 3}
+    size: 100
+    expandBy: 20
+  - tag: Enemy2
+    prefab: {fileID: 8051119775355204741, guid: 918e753cbfb9542aab148d38576ac566, type: 3}
     size: 100
     expandBy: 20
 --- !u!4 &1462131142
@@ -1665,7 +1702,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1729835096}
   - component: {fileID: 1729835095}
-  - component: {fileID: 1729835097}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1700,23 +1736,11 @@ Transform:
   m_Children:
   - {fileID: 1719082625}
   - {fileID: 574095323}
+  - {fileID: 2120521877}
+  - {fileID: 634390884}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1729835097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1729835094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45721b4e400cf4d81b86755b64f31026, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  items:
-  - {fileID: 5297416947712952181, guid: 1fcfe9121879e468caa6982712abc7ca, type: 3}
 --- !u!1 &1753961582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1833,7 +1857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b9f497f907684572818fa8a69905855, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInventory: {fileID: 1729835097}
+  playerInventory: {fileID: 0}
   inventoryPanel: {fileID: 2143951922}
   inventoryItemPrefab: {fileID: 1718244990}
 --- !u!1 &1763258402
@@ -2116,6 +2140,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2083897566}
   m_CullTransparentMesh: 1
+--- !u!1 &2120521876
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2120521877}
+  - component: {fileID: 2120521878}
+  m_Layer: 0
+  m_Name: ItemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2120521877
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120521876}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.792142, y: 7.1403074, z: -0.15722246}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1729835096}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2120521878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120521876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e61ada577e10d4344934eae66c290134, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mazeGenerator: {fileID: 6014352}
+  itemsToGenerate:
+  - prefab: {fileID: 5297416947712952181, guid: 1fcfe9121879e468caa6982712abc7ca, type: 3}
+    count: 10
+    spawnDelay: 0
+  - prefab: {fileID: 5297416947712952181, guid: 31b1dde79ad754d17abf60ce9015f843, type: 3}
+    count: 10
+    spawnDelay: 0
 --- !u!1 &2143951922
 GameObject:
   m_ObjectHideFlags: 0

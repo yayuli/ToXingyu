@@ -173,12 +173,6 @@ public class Player : MonoBehaviour
         Debug.Log("Health updated to: " + attributes.Health);
     }
 
-    private void ModifyHealth(int amount)
-    {
-        // Logic to modify player's health
-        Debug.Log("Health changed by: " + amount);
-    }
-
     public void TakeDamage(int damage)
     {
         attributes.ModifyHealth(-damage); //call ModifyHealth and pass ina negative munber to represent damage
