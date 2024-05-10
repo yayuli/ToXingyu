@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    protected Transform target; // player's Transform
+    [SerializeField] protected EnemyAbility ability;
+
+    [SerializeField] protected Transform target; // player's Transform
     [SerializeField] protected int maxHealth = 50;
     [SerializeField] protected float speed = 2f; // enemy speed
+
+
+    [SerializeField] private float shootingRange = 10f;
+    [SerializeField] private float shootingCooldown = 2f;
+    private float lastShootTime = 0;
+
 
     protected int currentHealth;
     protected Animator anim;
@@ -26,6 +34,9 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         MoveTowardsTarget();
+
+        AbilityShoot();
+        
     }
 
     protected void MoveTowardsTarget()
@@ -40,6 +51,20 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void PerformAbility()
+    {
+        ability.Execute(gameObject);
+    }
+
+    protected void AbilityShoot()
+    {
+        float distanceToPlayer = Vector3.Distance(transform.position, target.position);
+        if (distanceToPlayer < shootingRange && Time.time > lastShootTime + shootingCooldown)
+        {
+            PerformAbility();
+            lastShootTime = Time.time;  // Update last shoot time
+        }
+    }
     public void TakeDamage(int damage)
     {
         //anim.SetTrigger("Hit");

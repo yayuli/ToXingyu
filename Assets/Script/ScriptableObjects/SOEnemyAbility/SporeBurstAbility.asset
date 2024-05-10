@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33011f2dfca91ea40b66905e41ba4529, type: 3}
+  m_Name: SporeBurstAbility
+  m_EditorClassIdentifier: 
+  sporeCloudPrefab: {fileID: 6302389226827495237, guid: 5cb2f24ffae514de2b9472ed43727cc5, type: 3}
+  burstRadius: 3
+  cloudDuration: 5
+  burstDamage: 1

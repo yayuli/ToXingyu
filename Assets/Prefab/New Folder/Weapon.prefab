@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 4150301600743952756}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 438060946992618204}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 2.2, y: -0, z: 0}
   m_LocalScale: {x: 2.8913355, y: 3.6071181, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 438060947690871005}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &438060947690871006
 GameObject:
@@ -55,6 +55,7 @@ Transform:
   m_PrefabInstance: {fileID: 4150301600743952756}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 438060947690871006}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.09, y: 0.4103, z: -0.47575855}
   m_LocalScale: {x: 0.27722955, y: 0.34586087, z: 1}
@@ -62,7 +63,6 @@ Transform:
   m_Children:
   - {fileID: 438060946992618147}
   m_Father: {fileID: 438060947978296626}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &438060947690871004
 SpriteRenderer:
@@ -140,6 +140,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 438060947978296620}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.1, y: 0.71, z: 0.47575855}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -147,7 +148,6 @@ Transform:
   m_Children:
   - {fileID: 438060947690871005}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &438060947978296627
 MonoBehaviour:
@@ -165,12 +165,13 @@ MonoBehaviour:
   muzzlePosition: {fileID: 438060946992618147}
   bullet: {fileID: 2802411436068020762, guid: db4b355f79b2441b2a75b04ee34781ac, type: 3}
   fireDistance: 10
-  fireRate: 0.5
+  fireRate: 1
 --- !u!1001 &4150301600743952756
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 438060947978296626}
     m_Modifications:
     - target: {fileID: 4579205677855132073, guid: b53ef548f012b4260b64fa8fb7e1d181, type: 3}
@@ -222,4 +223,7 @@ PrefabInstance:
       value: weapon
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b53ef548f012b4260b64fa8fb7e1d181, type: 3}

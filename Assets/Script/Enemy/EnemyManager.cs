@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Spawns and manages enemies
+/// </summary>
 public class EnemyManager : MonoBehaviour
 {
     [System.Serializable]
