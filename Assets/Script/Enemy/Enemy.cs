@@ -90,19 +90,20 @@ public class Enemy : MonoBehaviour
         }
     }
 
-
+    /*
     IEnumerator DestroyAfterAnimation()
     {
+        DropLoot();
         yield return new WaitForSeconds(1);
         EnemyManager.Instance.DestroyEnemy(gameObject);
     }
-
+    */
     protected virtual void Die()
     {
         DropLoot();
         //anim.SetTrigger("Die");
         // 可能需要等待死亡动画播放完成后再销毁
-        StartCoroutine(DestroyAfterAnimation());
+        EnemyManager.Instance.DestroyEnemy(gameObject);
 
     }
 
