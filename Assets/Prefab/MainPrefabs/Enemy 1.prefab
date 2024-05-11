@@ -261,7 +261,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.021448344}
@@ -285,6 +285,7 @@ MonoBehaviour:
   speed: 1
   shootingRange: 10
   shootingCooldown: 2
+  lootTable: {fileID: 11400000, guid: c4d9bf04318b3de439c37cbbe3a8acd6, type: 2}
   damage: 1
 --- !u!95 &5396839502405463362
 Animator:

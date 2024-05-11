@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float shootingCooldown = 2f;
     private float lastShootTime = 0;
 
+    [SerializeField] private LootTable lootTable;//reference to the loot Table
+
 
     protected int currentHealth;
     protected Animator anim;
@@ -26,7 +28,7 @@ public class Enemy : MonoBehaviour
     protected virtual void Start()
     {
         currentHealth = maxHealth;
-        target = GameObject.Find ("Player").transform;
+        target = GameObject.Find("Player").transform;
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -36,7 +38,7 @@ public class Enemy : MonoBehaviour
         MoveTowardsTarget();
 
         AbilityShoot();
-        
+
     }
 
     protected void MoveTowardsTarget()
@@ -83,12 +85,12 @@ public class Enemy : MonoBehaviour
             Player player = collision.GetComponent<Player>();
             if (player != null)
             {
-                player.TakeDamage(damage); 
+                player.TakeDamage(damage);
             }
         }
     }
 
-   
+
     IEnumerator DestroyAfterAnimation()
     {
         yield return new WaitForSeconds(1);
@@ -97,9 +99,21 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
+        DropLoot();
         //anim.SetTrigger("Die");
         // 可能需要等待死亡动画播放完成后再销毁
         StartCoroutine(DestroyAfterAnimation());
+
     }
 
+    private void DropLoot()
+    {
+        if (lootTable != null && lootTable.items.Length > 0)
+        {
+            int index = lootTable.GetRandomItemIndex();
+            LootItem droppedItem = lootTable.items[index];
+            GameObject lootPrefab = Instantiate(droppedItem.itemPrefab, transform.position, Quaternion.identity);
+            lootPrefab.GetComponent<Loot>().Initialize(droppedItem);
+        }
+    }
 }

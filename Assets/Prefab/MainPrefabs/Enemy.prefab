@@ -285,6 +285,7 @@ MonoBehaviour:
   speed: 1
   shootingRange: 10
   shootingCooldown: 2
+  lootTable: {fileID: 11400000, guid: c4d9bf04318b3de439c37cbbe3a8acd6, type: 2}
   damage: 1
 --- !u!95 &5396839502405463362
 Animator:
