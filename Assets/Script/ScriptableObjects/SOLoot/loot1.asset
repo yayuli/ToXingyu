@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945125862cd8d43f580092a82d6658e4, type: 3}
+  m_Name: loot1
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 1595536996621492708, guid: 288fdadc6f98c47538d3ae04daa71265, type: 3}
+  itemName: ya
+  itemIcon: {fileID: 21300000, guid: 5dfd30284b9ed44b79aa97776b27c68f, type: 3}
+  experienceValue: 6

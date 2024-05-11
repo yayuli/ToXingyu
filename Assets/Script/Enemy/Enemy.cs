@@ -10,11 +10,15 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected int maxHealth = 50;
     [SerializeField] protected float speed = 2f; // enemy speed
 
+<<<<<<< Updated upstream
 
     [SerializeField] private float shootingRange = 10f;
     [SerializeField] private float shootingCooldown = 2f;
     private float lastShootTime = 0;
 
+=======
+    [SerializeField] private LootTable lootTable;//reference to the loot Table
+>>>>>>> Stashed changes
 
     protected int currentHealth;
     protected Animator anim;
@@ -97,9 +101,21 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
+        DropLoot();
         //anim.SetTrigger("Die");
         // 可能需要等待死亡动画播放完成后再销毁
         StartCoroutine(DestroyAfterAnimation());
+
     }
 
+    private void DropLoot()
+    {
+        if (lootTable != null && lootTable.items.Length > 0)
+        {
+            int index = lootTable.GetRandomItemIndex();
+            LootItem droppedItem = lootTable.items[index];
+            GameObject lootPrefab = Instantiate(droppedItem.itemPrefab, transform.position, Quaternion.identity);
+            lootPrefab.GetComponent<Loot>().Initialize(droppedItem);
+        }
+    }
 }

@@ -134,8 +134,12 @@ MonoBehaviour:
   target: {fileID: 0}
   maxHealth: 10
   speed: 2
+<<<<<<< Updated upstream
   shootingRange: 10
   shootingCooldown: 2
+=======
+  lootTable: {fileID: 11400000, guid: 54d9ac65fceae47f297b3290d58b8436, type: 2}
+>>>>>>> Stashed changes
   damage: 1
   burstAbility: {fileID: 11400000, guid: f5480c60abf74d541a5df872216b7402, type: 2}
 --- !u!61 &-3170972256662623464

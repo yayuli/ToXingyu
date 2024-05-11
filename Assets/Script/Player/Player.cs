@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     public PlayerAttributes attributes; // Player attributes instance
 
     [Header("ItemData")]
-    public ItemData equippedItem;
+    public ItemData[] equippedItems;
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5.0f;
@@ -143,9 +143,13 @@ public class Player : MonoBehaviour
     #region Use items in game
     public void UseEquippedItem()
     {
-        if (equippedItem != null)
+        if (equippedItems != null)
         {
-            ApplyItemEffect(equippedItem);
+            foreach(ItemData item in equippedItems)
+                if(item!=null)
+                {
+                    ApplyItemEffect(item);
+                }
         }
     }
 
@@ -156,10 +160,10 @@ public class Player : MonoBehaviour
             case ItemData.ItemType.HealthPotion:
                 attributes.ModifyHealth(item.effectMagnitude);
                 Debug.Log("Used Health Potion: " + item.effectMagnitude);
-                UpdateHealthUI(); // update health UI
+                
                 break;
         }
-
+        UpdateHealthUI(); // update health UI
         Debug.Log("Used item: " + item.itemName);
     }
 
