@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public static Player instance;
+
     [System.Serializable]
     public class PlayerAttributes
     {
@@ -41,7 +43,7 @@ public class Player : MonoBehaviour
     public ItemData equippedItem;
 
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 5.0f;
+    public float moveSpeed = 5.0f;
     private Rigidbody2D rb;
     private Vector2 movement;
     private float lastHorizontalInput;
@@ -55,6 +57,9 @@ public class Player : MonoBehaviour
 
     [Header("Health Bar")]
     [SerializeField] private Slider healthBar;
+
+    [Header("PickUpLoot")]
+    public float pickupRange = 1.5f;
 
     void Start()
     {

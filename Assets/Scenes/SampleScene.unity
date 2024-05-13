@@ -271,6 +271,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &187236414
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 187236416}
+  - component: {fileID: 187236415}
+  m_Layer: 0
+  m_Name: ExpManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &187236415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187236414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 040e49f51cd719f42ae988ee02aa5230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentExperience: 0
+--- !u!4 &187236416
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187236414}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.64786994, y: -2.8255806, z: -10.005899}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &265894082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -319,6 +364,10 @@ PrefabInstance:
       propertyPath: bombPrefab
       value: 
       objectReference: {fileID: 4625768342483030173, guid: c212f1c647a0444f08d8e20eedc30070, type: 3}
+    - target: {fileID: 497172759839379476, guid: e5fc7a24ac8734a24b4f334ba5310f5e, type: 3}
+      propertyPath: pickupRange
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 497172759839379476, guid: e5fc7a24ac8734a24b4f334ba5310f5e, type: 3}
       propertyPath: equippedItem
       value: 
@@ -2067,13 +2116,13 @@ MonoBehaviour:
   mazeGenerator: {fileID: 6014352}
   itemsToGenerate:
   - prefab: {fileID: 5297416947712952181, guid: 1fcfe9121879e468caa6982712abc7ca, type: 3}
-    count: 10
+    count: 3
     spawnDelay: 0
   - prefab: {fileID: 5297416947712952181, guid: 31b1dde79ad754d17abf60ce9015f843, type: 3}
-    count: 10
+    count: 3
     spawnDelay: 0
   - prefab: {fileID: -3384492713699546813, guid: 7e1d62e67fe8c2c47a94c3ee77722101, type: 3}
-    count: 5
+    count: 2
     spawnDelay: 0
 --- !u!1 &2143951922 stripped
 GameObject:
@@ -2212,3 +2261,4 @@ SceneRoots:
   - {fileID: 1362308476}
   - {fileID: 1729835096}
   - {fileID: 1462131142}
+  - {fileID: 187236416}
