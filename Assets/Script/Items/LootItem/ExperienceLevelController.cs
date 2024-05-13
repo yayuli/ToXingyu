@@ -6,9 +6,10 @@ public class ExperienceLevelController : MonoBehaviour
 {
     public static ExperienceLevelController instance;
 
-    [SerializeField] private int experiencePerLevel = 20;//each level requires experience
     public int currentExperience = 0;
-    public int currentLevel = 1;
+    public int currentLevel = 1; 
+    public int levelCount=100;
+    public List<int> expLevels;
 
     private void Awake()
     {
@@ -18,20 +19,32 @@ public class ExperienceLevelController : MonoBehaviour
             Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        while (expLevels.Count<levelCount)
+        {
+            expLevels.Add(Mathf.CeilToInt(expLevels[expLevels.Count - 1] * 1.1f));
+        }
+    }
     public void AddExperience(int amount)
     {
         currentExperience += amount;
-        CheckLevelUp();
+        if (currentExperience >= expLevels[currentLevel])
+        {
+            LevelUp();
+        }
+
+        UIExp.instance.UpdateExperience(currentExperience, expLevels[currentLevel], currentLevel); ;
     }
 
-    private void CheckLevelUp()
+    private void LevelUp()
     {
+        currentExperience-= expLevels[currentLevel];
 
-        while (currentExperience >= experiencePerLevel * currentLevel)
+        currentLevel++;
+        if (currentLevel>= expLevels.Count)
         {
-            currentExperience -= experiencePerLevel * currentLevel;
-            currentLevel++;
-            Debug.Log("Level up! Current level: " + currentLevel);
+            currentLevel = expLevels.Count-1;
         }
     }
 

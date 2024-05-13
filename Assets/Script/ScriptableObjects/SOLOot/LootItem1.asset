@@ -15,4 +15,4 @@ MonoBehaviour:
   itemPrefab: {fileID: 9066507349277064626, guid: 01cfc260208ff194a807e02f733d51f8, type: 3}
   itemName: 
   itemIcon: {fileID: 21300000, guid: 5dfd30284b9ed44b79aa97776b27c68f, type: 3}
-  experienceValue: 2
+  experienceValue: 4
