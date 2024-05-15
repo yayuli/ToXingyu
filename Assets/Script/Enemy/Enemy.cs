@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] protected Transform target; // player's Transform
     [SerializeField] protected int maxHealth = 50;
-    [SerializeField] protected float speed = 2f; // enemy speed
+    [SerializeField] protected float speed = 5f; // enemy speed
 
 
     [SerializeField] private float shootingRange = 10f;

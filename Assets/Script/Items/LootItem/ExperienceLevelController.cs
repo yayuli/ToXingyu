@@ -34,7 +34,7 @@ public class ExperienceLevelController : MonoBehaviour
             LevelUp();
         }
 
-        UIExp.instance.UpdateExperience(currentExperience, expLevels[currentLevel], currentLevel); ;
+        UIManager.instance.UpdateExperience(currentExperience, expLevels[currentLevel], currentLevel); ;
     }
 
     private void LevelUp()
@@ -46,6 +46,11 @@ public class ExperienceLevelController : MonoBehaviour
         {
             currentLevel = expLevels.Count-1;
         }
+       
+        //升级UI界面
+        UIManager.instance.levelUpPanel.SetActive(true);
+        //暂停所有游戏活动
+        Time.timeScale = 0f;
     }
 
 }

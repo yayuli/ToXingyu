@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIExp : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    public static UIExp instance;
+    public static UIManager instance;
 
     public Slider expSlider;
     public TMP_Text expLevelText;
-    //public TMPro.TextMeshPro expLevelText;
+
+    public GameObject levelUpPanel;
 
     private void Awake()
     {

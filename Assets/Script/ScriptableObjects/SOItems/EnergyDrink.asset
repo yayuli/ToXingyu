@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnergyDrink
   m_EditorClassIdentifier: 
   itemName: EnergyDrink
-  description: 
+  description: ijhhnnji
   itemIcon: {fileID: 21300000, guid: e9096c8157fb04e3fa924a2ae9bc7f48, type: 3}
   effectMagnitude: 5
   duration: 10
