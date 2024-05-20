@@ -77,9 +77,19 @@ public class SelectionUI : MonoBehaviour
 
         ItemData itemData = itemScript.itemData;
 
-        // 应用物品效果
+        // apply item effect
         Player.instance.ApplyItemEffect(itemData);
+
+        //continue game
+        ContinueGame();
     }
 
+    private void ContinueGame()
+    {
+        //hide selection UI 
+        gameObject.SetActive(false);
 
+        //call the Experencerleve script's continue game method
+        ExperienceLevelController.instance.ResumeGame();
+    }
 }
