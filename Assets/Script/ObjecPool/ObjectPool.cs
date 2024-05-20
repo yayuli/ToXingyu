@@ -7,12 +7,11 @@ public class ObjectPool : MonoBehaviour
     [System.Serializable]
     public class Pool
     {
-        public string tag;//pool Gamejects Tag
-        public GameObject prefab;//pool gameObject
+        public GameObject prefab; // 池中物品的预制件
         public int size;//initial pool size
-        public int expandBy = 20;//pool expand size
+        
     }
-
+    public int expandBy = 20;//pool expand size
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
 
@@ -22,10 +21,13 @@ public class ObjectPool : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        InitializePools();
+    }
 
+    void InitializePools()
+    {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        //
         foreach (Pool pool in pools)
         {
             Queue<GameObject> objectQueue = new Queue<GameObject>();
@@ -37,25 +39,26 @@ public class ObjectPool : MonoBehaviour
                 objectQueue.Enqueue(obj);
             }
 
-            poolDictionary.Add(pool.tag, objectQueue);
+            poolDictionary.Add(pool.prefab.name, objectQueue);
         }
     }
 
-    public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
+
+    public GameObject SpawnFromPool(string prefabName, Vector3 position, Quaternion rotation)
     {
-        if (!poolDictionary.ContainsKey(tag))
+        if (!poolDictionary.ContainsKey(prefabName))
         {
-            Debug.LogWarning("No object available in the pool and cannot expand: " + tag);
+            Debug.LogWarning("No object available in the pool and cannot expand: " + prefabName);
             return null;
         }
 
-        if (poolDictionary[tag].Count == 0)
+        if (poolDictionary[prefabName].Count == 0)
         {
-            Debug.Log("Expanding pool for: " + tag);
-            ExpandPool(tag, pools.Find(p => p.tag == tag).expandBy);
+            Debug.Log("Expanding pool for: " + prefabName);
+            ExpandPool(prefabName, expandBy);
         }
 
-        GameObject objectToSpawn = poolDictionary[tag].Dequeue();
+        GameObject objectToSpawn = poolDictionary[prefabName].Dequeue();
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = rotation;
@@ -63,13 +66,12 @@ public class ObjectPool : MonoBehaviour
         return objectToSpawn;
     }
 
-
-    private void ExpandPool(string tag, int additionalCount)
+    private void ExpandPool(string prefabName, int additionalCount)
     {
-        Pool pool = pools.Find(p => p.tag == tag);
-        if(pool ==null)
+        var pool = pools.Find(p => p.prefab.name == prefabName);
+        if (pool == null)
         {
-            Debug.LogError("no pool configuration found for tag:" + tag);
+            Debug.LogError("No pool configuration found for prefab: " + prefabName);
             return;
         }
 
@@ -77,19 +79,20 @@ public class ObjectPool : MonoBehaviour
         {
             GameObject obj = Instantiate(pool.prefab);
             obj.SetActive(false);
-            poolDictionary[tag].Enqueue(obj);
+            poolDictionary[prefabName].Enqueue(obj);
         }
     }
-    public void ReturnToPool(string tag, GameObject objectToReturn)
+
+
+    public void ReturnToPool(string prefabName, GameObject objectToReturn)
     {
-        if (!poolDictionary.ContainsKey(tag))
+        if (!poolDictionary.ContainsKey(prefabName))
         {
-            Debug.LogError("Invalid pool tag specified");
+            Debug.LogError("Invalid pool prefab name specified");
             return;
         }
 
         objectToReturn.SetActive(false);
-        poolDictionary[tag].Enqueue(objectToReturn);
+        poolDictionary[prefabName].Enqueue(objectToReturn);
     }
-
 }

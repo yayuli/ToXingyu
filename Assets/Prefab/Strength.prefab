@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -7515076178579776879}
   - component: {fileID: 9181948122314780592}
   m_Layer: 0
-  m_Name: StrengthElixir
+  m_Name: Strength
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

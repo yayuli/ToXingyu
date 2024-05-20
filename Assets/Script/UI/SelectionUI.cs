@@ -9,9 +9,10 @@ public class SelectionUI : MonoBehaviour
     public TMP_Text[] upgradeDescTexts = new TMP_Text[3];
     public Image[] weaponIcons = new Image[3];
     public TMP_Text[] nameLevelTexts = new TMP_Text[3];
+    public Button[] purchaseButtons = new Button[3];
 
-    // 用于存储所有可能的ItemData对象
-    public List<ItemData> allItems;
+    // 用于存储所有可能的Item预制件
+    public List<GameObject> allItems;
 
     void Start()
     {
@@ -22,7 +23,6 @@ public class SelectionUI : MonoBehaviour
     // 更新所有三个选择框的显示
     private void UpdateAllDisplays()
     {
-        // 随机获取三个不同的ItemData，确保不重复
         HashSet<int> chosenIndices = new HashSet<int>();
         while (chosenIndices.Count < 3)
         {
@@ -38,12 +38,48 @@ public class SelectionUI : MonoBehaviour
     }
 
     // 更新指定选择框的显示
-    private void UpdateButtonDisplay(ItemData item, int displayIndex)
+    private void UpdateButtonDisplay(GameObject itemPrefab, int displayIndex)
     {
-        if (item == null || displayIndex < 0 || displayIndex >= 3) return;
+        if (itemPrefab == null || displayIndex < 0 || displayIndex >= 3) return;
 
-        upgradeDescTexts[displayIndex].text = item.description;
-        weaponIcons[displayIndex].sprite = item.itemIcon;
-        nameLevelTexts[displayIndex].text = $"{item.itemName} - Lvl";  // 根据实际等级系统调整
+        Item itemComponent = itemPrefab.GetComponent<Item>();
+        if (itemComponent == null || itemComponent.itemData == null)
+        {
+            Debug.LogError("Item prefab is missing Item component or ItemData");
+            return;
+        }
+
+        ItemData itemData = itemComponent.itemData;
+
+        upgradeDescTexts[displayIndex].text = itemData.description;
+        weaponIcons[displayIndex].sprite = itemData.itemIcon;
+        nameLevelTexts[displayIndex].text = $"{itemData.itemName} - Lvl";
+
+        // 按钮事件
+        purchaseButtons[displayIndex].onClick.RemoveAllListeners();
+        purchaseButtons[displayIndex].onClick.AddListener(() => PurchaseItem(itemPrefab));
     }
+
+    private void PurchaseItem(GameObject itemPrefab)
+    {
+        if (Player.instance == null)
+        {
+            Debug.LogError("Player.instance is null.");
+            return;
+        }
+
+        Item itemScript = itemPrefab.GetComponent<Item>();
+        if (itemScript == null || itemScript.itemData == null)
+        {
+            Debug.LogError("Item prefab is missing Item component or ItemData.");
+            return;
+        }
+
+        ItemData itemData = itemScript.itemData;
+
+        // 应用物品效果
+        Player.instance.ApplyItemEffect(itemData);
+    }
+
+
 }

@@ -61,6 +61,11 @@ public class Player : MonoBehaviour
     [Header("PickUpLoot")]
     public float pickupRange = 1.5f;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -134,9 +139,10 @@ public class Player : MonoBehaviour
             bombCount--;
         }
     }
-#endregion
+    #endregion
 
     #region public attributes apply to Item script
+
     public IEnumerator ApplyTempStatBoost(System.Action increaseEffect, System.Action decreaseEffect, float duration)
     {
         increaseEffect.Invoke();
@@ -146,26 +152,49 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Use items in game
-    public void UseEquippedItem()
-    {
-        if (equippedItem != null)
-        {
-            ApplyItemEffect(equippedItem);
-        }
-    }
 
-    private void ApplyItemEffect(ItemData item)
+    public void ApplyItemEffect(ItemData item)
     {
         switch (item.itemType)
         {
             case ItemData.ItemType.HealthPotion:
                 attributes.ModifyHealth(item.effectMagnitude);
-                Debug.Log("Used Health Potion: " + item.effectMagnitude);
-                UpdateHealthUI(); // update health UI
+                break;
+            case ItemData.ItemType.EnergyDrink:
+                attributes.Energy += item.effectMagnitude;
+                break;
+            case ItemData.ItemType.StrengthElixir:
+                StartCoroutine(ApplyTempStatBoost(() => attributes.Strength += item.effectMagnitude,
+                                                         () => attributes.Strength -= item.effectMagnitude,
+                                                         item.duration));
+                break;
+            case ItemData.ItemType.AgilityBoots:
+                attributes.Dexterity += item.effectMagnitude;
+                break;
+            case ItemData.ItemType.WisdomScroll:
+                attributes.Intelligence += item.effectMagnitude;
+                break;
+            case ItemData.ItemType.LuckCharm:
+                StartCoroutine(ApplyTempStatBoost(() => attributes.Luck += item.effectMagnitude,
+                                                         () => attributes.Luck -= item.effectMagnitude,
+                                                         item.duration));
+                break;
+            case ItemData.ItemType.MemoryCrystal:
+                attributes.MemoryPoints += item.effectMagnitude;
+                break;
+            case ItemData.ItemType.RegenerationAmulet:
+                StartCoroutine(ApplyTempStatBoost(() => attributes.RegenerationRate += item.effectMagnitude,
+                                                         () => attributes.RegenerationRate -= item.effectMagnitude,
+                                                         item.duration));
+                break;
+            case ItemData.ItemType.ShieldPotion:
+                StartCoroutine(ApplyTempStatBoost(() => attributes.Willpower += item.effectMagnitude,
+                                                         () => attributes.Willpower -= item.effectMagnitude,
+                                                         item.duration));
                 break;
         }
-
-        Debug.Log("Used item: " + item.itemName);
+      
+        UpdateHealthUI();
     }
 
     #endregion

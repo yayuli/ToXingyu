@@ -24,10 +24,14 @@ public class Inventory : MonoBehaviour
 
     public void UseItem(Item item, Player player)
     {
-        if (items.Contains(item))
+        if (item != null && items.Contains(item))
         {
-            item.UseItem(player);  // Directly call UseItem on the Item component
+            player.ApplyItemEffect(item.itemData);  // Apply the effect of the item
             RemoveItem(item);  // Optionally remove the item after use
+        }
+        else
+        {
+            Debug.LogError("Attempted to use an item not in the inventory or null.");
         }
     }
 

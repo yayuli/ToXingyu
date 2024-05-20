@@ -19,11 +19,10 @@ public class ItemBehaviour : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            // Check if the itemComponent is not null
-            if (itemComponent != null)
+            if (Player.instance != null && itemComponent != null && itemComponent.itemData != null)
             {
-                // Apply the item effect using the Item script's UseItem method
-                itemComponent.UseItem(other.GetComponent<Player>());
+                // Apply the item effect using the item data
+                Player.instance.ApplyItemEffect(itemComponent.itemData);
 
                 // Destroy the item GameObject after use
                 Destroy(gameObject);

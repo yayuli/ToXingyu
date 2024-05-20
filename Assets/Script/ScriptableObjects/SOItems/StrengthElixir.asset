@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: StrengthElixir
   description: hujmii
-  itemIcon: {fileID: 0}
-  effectMagnitude: 1
-  duration: 0
+  itemIcon: {fileID: -474914952, guid: 7b12e176afe7a4fff87f1e84c45cc6d0, type: 3}
+  effectMagnitude: 3
+  duration: 3
   itemType: 2
