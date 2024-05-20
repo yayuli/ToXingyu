@@ -23,21 +23,14 @@ public class Player : MonoBehaviour
         public float RegenerationRate;
         public int Willpower;
 
-        // Method to modify health
-        public void ModifyHealth(int amount)
-        {
-            Health += amount;
-            Health = Mathf.Clamp(Health, 0, MaxHealth); 
-            if (Health <= 0)
-            {
-                // Trigger death logic
-                Debug.Log("Player has died.");
-            }
-        }
     }
 
     [Header("Attributes")]
     public PlayerAttributes attributes; // Player attributes instance
+    public delegate void AttributeChanged();
+    public event AttributeChanged OnHealthChanged;
+    public event AttributeChanged OnStrengthChanged;
+    public event AttributeChanged OnEnergyChanged;
 
     [Header("ItemData")]
     public ItemData equippedItem;
@@ -83,6 +76,7 @@ public class Player : MonoBehaviour
         MoveCharacter();
     }
 
+    
     #region Movement
     void MoveCharacter()
     {
@@ -158,15 +152,13 @@ public class Player : MonoBehaviour
         switch (item.itemType)
         {
             case ItemData.ItemType.HealthPotion:
-                attributes.ModifyHealth(item.effectMagnitude);
+                ModifyHealth(item.effectMagnitude);
                 break;
             case ItemData.ItemType.EnergyDrink:
-                attributes.Energy += item.effectMagnitude;
+                ModifyEnergy(item.effectMagnitude);
                 break;
             case ItemData.ItemType.StrengthElixir:
-                StartCoroutine(ApplyTempStatBoost(() => attributes.Strength += item.effectMagnitude,
-                                                         () => attributes.Strength -= item.effectMagnitude,
-                                                         item.duration));
+                ModifyStrength(item.effectMagnitude);
                 break;
             case ItemData.ItemType.AgilityBoots:
                 attributes.Dexterity += item.effectMagnitude;
@@ -197,7 +189,31 @@ public class Player : MonoBehaviour
         UpdateHealthUI();
 
     }
+    public void ModifyHealth(int amount)
+    {
+        attributes.Health += amount;
+        attributes.Health = Mathf.Clamp(attributes.Health, 0, attributes.MaxHealth); // 确保健康值不会超出范围
 
+        // 触发健康改变事件
+        OnHealthChanged?.Invoke();
+
+        if (attributes.Health <= 0)
+        {
+            Debug.Log("Player has died.");  // 处理玩家死亡逻辑
+        }
+    }
+
+    public void ModifyStrength(int amount)
+    {
+        attributes.Strength += amount;
+        OnStrengthChanged?.Invoke();
+    }
+
+    public void ModifyEnergy(int amount)
+    {
+        attributes.Energy += amount;
+        OnEnergyChanged?.Invoke();
+    }
     #endregion
 
     #region UI
@@ -210,13 +226,7 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        attributes.ModifyHealth(-damage); //call ModifyHealth and pass ina negative munber to represent damage
-        UpdateHealthUI(); 
-        if (attributes.Health <= 0)
-        {
-            // 这里可以添加玩家死亡时的逻辑add the logic when the player dirs in the future
-            Debug.Log("Player died.");
-        }
+        ModifyHealth(-damage);
     }
 
     #endregion
