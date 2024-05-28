@@ -25,6 +25,8 @@ public class Enemy : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    public GameObject score;
+
     protected virtual void Start()
     {
         currentHealth = maxHealth;
@@ -100,6 +102,9 @@ public class Enemy : MonoBehaviour
     */
     protected virtual void Die()
     {
+        Vector3 scorePosition = transform.position + new Vector3(0, 1.5f, 0);
+        GameObject ScoreText = Instantiate(score,scorePosition,Quaternion.identity);
+        Destroy(ScoreText, 1f);
         DropLoot();
         //anim.SetTrigger("Die");
         // 可能需要等待死亡动画播放完成后再销毁

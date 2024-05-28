@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// 这个类继承自 WeaponBase，实现了远程武器的特定行为，如瞄准和射击。
+/// 这里是可以使用新的 ItemData 属性（如 attackPower, range, cooldown）
+/// </summary>
 public class RangedWeapon : WeaponBase
 {
     [Header("Prefabs")]
     public GameObject bulletPrefab;
     public Transform muzzlePosition;
     public GameObject muzzleEffectPrefab;
+    public ItemData weaponData;//ussed itemdata
 
     private Transform closestEnemy;
 
@@ -31,7 +35,7 @@ public class RangedWeapon : WeaponBase
         foreach (Enemy enemy in enemies)
         {
             float distance = Vector2.Distance(transform.position, enemy.transform.position);
-            if (distance < closestDistance && distance <= fireDistance)
+            if (distance < closestDistance && distance <= weaponData.range) // 使用 weaponData.range 替换 fireDistance
             {
                 closestDistance = distance;
                 closestEnemy = enemy.transform;
@@ -61,21 +65,23 @@ public class RangedWeapon : WeaponBase
             return;
 
         timeSinceLastShot += Time.deltaTime;
-        if (timeSinceLastShot >= fireRate)
+        if (timeSinceLastShot >= weaponData.cooldown)
         {
-            // 创建枪口特效
-            var muzzleGO = Instantiate(muzzleEffectPrefab, muzzlePosition.position, transform.rotation);
-            muzzleGO.transform.SetParent(transform);
-            Destroy(muzzleGO, 0.05f);  // 短时间后销毁特效
-
-            // 创建子弹
-            var bulletGo = Instantiate(bulletPrefab, muzzlePosition.position, transform.rotation);
-            Destroy(bulletGo, 3);  // 3秒后销毁子弹
-
-            // 重置时间，准备下一次射击
-            timeSinceLastShot = 0;
+            FireBullet();  // 从这个方法分离出射击的具体逻辑
+            timeSinceLastShot = 0;  // Reset the shooting timer
         }
     }
+
+    void FireBullet()
+    {
+        var muzzleGO = Instantiate(muzzleEffectPrefab, muzzlePosition.position, transform.rotation);
+        Destroy(muzzleGO, 0.05f);  // Destroy muzzle effect shortly after
+
+        var bulletGo = Instantiate(bulletPrefab, muzzlePosition.position, transform.rotation);
+        bulletGo.GetComponent<Bullet>().Initialize(weaponData.attackPower, weaponData.speed);  // Initialize bullet
+        Destroy(bulletGo, 3);  // Destroy the bullet after some time
+    }
+
 
 }
 

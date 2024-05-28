@@ -282,11 +282,12 @@ MonoBehaviour:
   ability: {fileID: 11400000, guid: 5265fabbc8944784db3d54974c0f349a, type: 2}
   target: {fileID: 0}
   maxHealth: 20
-  speed: 5
+  speed: 1
   shootingRange: 10
   shootingCooldown: 2
   lootTable: {fileID: 11400000, guid: c4d9bf04318b3de439c37cbbe3a8acd6, type: 2}
   damage: 1
+  score: {fileID: 7905193131117555943, guid: 156b99b4884dcc147a6e64383ec00083, type: 3}
 --- !u!95 &5396839502405463362
 Animator:
   serializedVersion: 5

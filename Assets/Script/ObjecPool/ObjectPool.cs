@@ -7,16 +7,15 @@ public class ObjectPool : MonoBehaviour
     [System.Serializable]
     public class Pool
     {
+        public string name; // 池的名称
         public GameObject prefab; // 池中物品的预制件
-        public int size;//initial pool size
-        
+        public int size; // 初始池大小
     }
-    public int expandBy = 20;//pool expand size
+
     public List<Pool> pools;
-    public Dictionary<string, Queue<GameObject>> poolDictionary;
+    private Dictionary<string, Queue<GameObject>> poolDictionary;
 
     public static ObjectPool Instance;
-
 
     void Awake()
     {
@@ -30,35 +29,46 @@ public class ObjectPool : MonoBehaviour
 
         foreach (Pool pool in pools)
         {
+            CreatePool(pool.name, pool.prefab, pool.size);
+        }
+    }
+
+    public void CreatePool(string poolName, GameObject prefab, int size)
+    {
+        if (!poolDictionary.ContainsKey(poolName))
+        {
             Queue<GameObject> objectQueue = new Queue<GameObject>();
 
-            for (int i = 0; i < pool.size; i++)
+            for (int i = 0; i < size; i++)
             {
-                GameObject obj = Instantiate(pool.prefab);
+                GameObject obj = Instantiate(prefab);
                 obj.SetActive(false);
                 objectQueue.Enqueue(obj);
             }
 
-            poolDictionary.Add(pool.prefab.name, objectQueue);
+            poolDictionary.Add(poolName, objectQueue);
+        }
+        else
+        {
+            Debug.LogWarning($"Pool with name {poolName} already exists.");
         }
     }
 
-
-    public GameObject SpawnFromPool(string prefabName, Vector3 position, Quaternion rotation)
+    public GameObject SpawnFromPool(string poolName, Vector3 position, Quaternion rotation)
     {
-        if (!poolDictionary.ContainsKey(prefabName))
+        if (!poolDictionary.ContainsKey(poolName))
         {
-            Debug.LogWarning("No object available in the pool and cannot expand: " + prefabName);
+            Debug.LogWarning("No pool with name: " + poolName);
             return null;
         }
 
-        if (poolDictionary[prefabName].Count == 0)
+        if (poolDictionary[poolName].Count == 0)
         {
-            Debug.Log("Expanding pool for: " + prefabName);
-            ExpandPool(prefabName, expandBy);
+            Debug.Log("Expanding pool for: " + poolName);
+            ExpandPool(poolName, 20);
         }
 
-        GameObject objectToSpawn = poolDictionary[prefabName].Dequeue();
+        GameObject objectToSpawn = poolDictionary[poolName].Dequeue();
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = rotation;
@@ -66,12 +76,12 @@ public class ObjectPool : MonoBehaviour
         return objectToSpawn;
     }
 
-    private void ExpandPool(string prefabName, int additionalCount)
+    private void ExpandPool(string poolName, int additionalCount)
     {
-        var pool = pools.Find(p => p.prefab.name == prefabName);
+        var pool = pools.Find(p => p.name == poolName);
         if (pool == null)
         {
-            Debug.LogError("No pool configuration found for prefab: " + prefabName);
+            Debug.LogError("No pool configuration found for prefab: " + poolName);
             return;
         }
 
@@ -79,20 +89,19 @@ public class ObjectPool : MonoBehaviour
         {
             GameObject obj = Instantiate(pool.prefab);
             obj.SetActive(false);
-            poolDictionary[prefabName].Enqueue(obj);
+            poolDictionary[poolName].Enqueue(obj);
         }
     }
 
-
-    public void ReturnToPool(string prefabName, GameObject objectToReturn)
+    public void ReturnToPool(string poolName, GameObject objectToReturn)
     {
-        if (!poolDictionary.ContainsKey(prefabName))
+        if (!poolDictionary.ContainsKey(poolName))
         {
             Debug.LogError("Invalid pool prefab name specified");
             return;
         }
 
         objectToReturn.SetActive(false);
-        poolDictionary[prefabName].Enqueue(objectToReturn);
+        poolDictionary[poolName].Enqueue(objectToReturn);
     }
 }

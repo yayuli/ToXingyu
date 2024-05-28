@@ -29,18 +29,11 @@ public class PositionManager : MonoBehaviour
             return null;
 
         int index = Random.Range(0, availablePositions.Count);
-        Vector2 position = availablePositions[index];
-        availablePositions.RemoveAt(index);
-        return position;
+        return availablePositions[index];
     }
 
     public void ResetPositions(List<Vector2> positions)
     {
         availablePositions = new List<Vector2>(positions);
-    }
-
-    internal void Initialize(object positions)
-    {
-        throw new System.NotImplementedException();
     }
 }

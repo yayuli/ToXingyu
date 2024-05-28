@@ -245,8 +245,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -5
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.7529412, g: 0.5203598, b: 0.3372549, a: 1}
+  m_Sprite: {fileID: 21300000, guid: bb934139f8098f940b8733f10ed103f2, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -265,8 +265,8 @@ Transform:
   m_GameObject: {fileID: 23530612}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.2618, y: -0.9059, z: 0}
-  m_LocalScale: {x: 58.578323, y: 45.225758, z: 1}
+  m_LocalPosition: {x: 2.1576, y: 0, z: 0}
+  m_LocalScale: {x: 12.45808, y: 14.558713, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -325,7 +325,7 @@ MonoBehaviour:
   currentExperience: 0
   currentLevel: 1
   levelCount: 100
-  expLevels: 000000000a0000003c0000005000000064000000
+  expLevels: 00000000640000003c0000005000000064000000
 --- !u!4 &187236416
 Transform:
   m_ObjectHideFlags: 0
@@ -1180,17 +1180,17 @@ MonoBehaviour:
   enemyTypes:
   - prefab: {fileID: 9091025378485230310, guid: a9dc362d4d5234c50821cce30901b397, type: 3}
     spawnDelay: 1
-    maxCount: 10
-    spawnProbability: 0.8
+    baseMaxCount: 200
+    baseSpawnProbability: 1
   - prefab: {fileID: 8051119775355204741, guid: 918e753cbfb9542aab148d38576ac566, type: 3}
     spawnDelay: 2
-    maxCount: 10
-    spawnProbability: 0.3
+    baseMaxCount: 10
+    baseSpawnProbability: 1
   - prefab: {fileID: 9091025378485230310, guid: 51b1c9e89e16e4145a2bf55503337184, type: 3}
     spawnDelay: 2
-    maxCount: 10
-    spawnProbability: 0.3
-  maxEnemies: 50
+    baseMaxCount: 100
+    baseSpawnProbability: 1
+  maxEnemies: 200
 --- !u!1 &589173550
 GameObject:
   m_ObjectHideFlags: 0
@@ -2032,7 +2032,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1442279930}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 382f73b19f0ab4c3381b1d0504a9de18, type: 3}
   m_Name: 
@@ -2068,14 +2068,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8a4b191fe8a4c2c9024be6068d55ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  expandBy: 20
   pools:
-  - prefab: {fileID: 9091025378485230310, guid: a9dc362d4d5234c50821cce30901b397, type: 3}
-    size: 100
-  - prefab: {fileID: 8051119775355204741, guid: 918e753cbfb9542aab148d38576ac566, type: 3}
-    size: 100
-  - prefab: {fileID: 9091025378485230310, guid: 51b1c9e89e16e4145a2bf55503337184, type: 3}
-    size: 10
+  - name: Enemy
+    prefab: {fileID: 9091025378485230310, guid: a9dc362d4d5234c50821cce30901b397, type: 3}
+    size: 200
+  - name: enemyToxic
+    prefab: {fileID: 8051119775355204741, guid: 918e753cbfb9542aab148d38576ac566, type: 3}
+    size: 50
+  - name: enemy1
+    prefab: {fileID: 9091025378485230310, guid: 51b1c9e89e16e4145a2bf55503337184, type: 3}
+    size: 200
 --- !u!4 &1462131142
 Transform:
   m_ObjectHideFlags: 0
@@ -2421,6 +2423,12 @@ MonoBehaviour:
   - {fileID: 8342914702767776932, guid: 1fcfe9121879e468caa6982712abc7ca, type: 3}
   - {fileID: 8342914702767776932, guid: 31b1dde79ad754d17abf60ce9015f843, type: 3}
   - {fileID: 7633592565986485619, guid: 7e1d62e67fe8c2c47a94c3ee77722101, type: 3}
+  rangedWeapons:
+  - {fileID: 438060947978296620, guid: 2e5a091306c584921a6abf180a00c659, type: 3}
+  - {fileID: 438060947978296620, guid: 2e5a091306c584921a6abf180a00c659, type: 3}
+  meleeWeapons:
+  - {fileID: 438060947978296620, guid: 2e5a091306c584921a6abf180a00c659, type: 3}
+  weaponManager: {fileID: 1719082626}
 --- !u!1 &1719082624
 GameObject:
   m_ObjectHideFlags: 0
@@ -2465,6 +2473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 165eba1c8d60146d992b3b40e3f4675d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialWeaponPrefab: {fileID: 438060947978296620, guid: 2e5a091306c584921a6abf180a00c659, type: 3}
   weaponPrefabs:
   - {fileID: 438060947978296620, guid: 2e5a091306c584921a6abf180a00c659, type: 3}
   - {fileID: 438060947978296620, guid: ee5b2e846f602457a96d332a37eb71e4, type: 3}

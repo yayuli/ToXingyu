@@ -10,6 +10,13 @@ public class ItemData : ScriptableObject
     public float duration; // Use 0 for permanent effects
     public ItemType itemType;
 
+    //weapon
+    public int attackPower;
+    public float range;
+    public int damage;
+    public float speed;
+    public float cooldown;
+
     public enum ItemType
     {
         HealthPotion,
@@ -20,6 +27,8 @@ public class ItemData : ScriptableObject
         LuckCharm,
         MemoryCrystal,
         RegenerationAmulet,
-        ShieldPotion
+        ShieldPotion,
+        RangedWeapon,
+        MeleeWeapon
     }
 }

@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// 负责管理玩家的武器选择和生成武器。这里是武器类型被选择和实例化的地方。
+/// </summary>
 public enum WeaponType
 {
     Ranged,
@@ -10,8 +12,7 @@ public enum WeaponType
 
 public class WeaponManager : MonoBehaviour
 {
-    public static WeaponType selectedWeaponType = WeaponType.Ranged;  // 默认选择远程武器
-
+    [SerializeField] private GameObject initialWeaponPrefab;  // 初始武器的预制体
     [SerializeField] private GameObject[] weaponPrefabs;
     [SerializeField] private float radius = 1f;
     [SerializeField] private int maxWeapons = 6;
@@ -22,42 +23,67 @@ public class WeaponManager : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player").transform;
-        AddWeapon(selectedWeaponType);  // 根据玩家选择的武器类型生成初始武器
+        AddInitialWeapon();  // 添加初始武器
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.G) && weapons.Count < maxWeapons)
         {
-            AddWeapon(WeaponType.Ranged);  // 按下G键并且武器数量未达到上限时增加一把远程武器
+            AddWeapon(WeaponType.Ranged);  // Optionally trigger this via UI instead
         }
     }
 
-    void AddWeapon(WeaponType weaponType)
+    // Handles adding the initial weapon
+    void AddInitialWeapon()
+    {
+        if (initialWeaponPrefab != null)
+        {
+            AddWeapon(initialWeaponPrefab);
+        }
+        else
+        {
+            Debug.LogError("Initial weapon prefab is not assigned.");
+        }
+    }
+
+    // Overload to handle weapon type
+    public void AddWeapon(WeaponType type)
+    {
+        GameObject weaponPrefab = GetWeaponPrefab(type);
+        if (weaponPrefab)
+        {
+            AddWeapon(weaponPrefab);
+        }
+    }
+
+    // Overload to handle direct GameObject instantiation
+    public void AddWeapon(GameObject weaponPrefab)
     {
         if (weapons.Count >= maxWeapons)
+        {
+            Debug.Log("Reached maximum number of weapons.");
             return;
+        }
 
         float angle = 360f / maxWeapons * weapons.Count;
         Vector2 positionOffset = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * radius;
         Vector2 spawnPosition = (Vector2)player.position + positionOffset;
 
-        GameObject weaponPrefab = GetWeaponPrefab(weaponType);
-        GameObject newWeapon = Instantiate(weaponPrefab, spawnPosition, Quaternion.identity, transform);
+        GameObject newWeapon = Instantiate(weaponPrefab, spawnPosition, Quaternion.identity, player);
         weapons.Add(newWeapon);
-        newWeapon.GetComponent<WeaponBase>().SetOffset(positionOffset);
-    }
 
+        // Ensure the weapon is correctly offset and initialized
+        newWeapon.GetComponent<WeaponBase>().SetOffset(positionOffset);
+        newWeapon.GetComponent<WeaponBase>().Initialize(weaponPrefab.GetComponent<Item>().itemData);
+    }
     GameObject GetWeaponPrefab(WeaponType weaponType)
     {
         switch (weaponType)
         {
-            case WeaponType.Ranged:
-                return weaponPrefabs[0];
-            case WeaponType.Melee:
-                return weaponPrefabs[1];
-            default:
-                return null;
+            case WeaponType.Ranged: return weaponPrefabs[0];
+            case WeaponType.Melee: return weaponPrefabs[1];
+            default: return null;
         }
     }
 }
