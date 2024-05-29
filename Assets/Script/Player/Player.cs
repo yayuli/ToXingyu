@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     public float moveSpeed = 5.0f;
     private Rigidbody2D rb;
     private Vector2 movement;
-    private float lastHorizontalInput;
+    private float stopX, stopY;
 
     [Header("Animation")]
     public Animator animator;
@@ -85,29 +85,29 @@ public class Player : MonoBehaviour
 
     void HandleInput()
     {
-        movement.x = Input.GetAxis("Horizontal");
-        movement.y = Input.GetAxis("Vertical");
 
-        //animator.SetFloat("Horizontal", movement.x);
-        //animator.SetFloat("Vertical", movement.y);
-        float speed = movement.magnitude * moveSpeed;
-        animator.SetFloat("Speed", speed);
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.y = Input.GetAxisRaw("Vertical");
+        Vector2 input = new Vector2(movement.x, movement.y).normalized;
+        rb.velocity = input * moveSpeed;
+        if(input!= Vector2.zero)
+        {
+            animator.SetBool("isMoving", true);
+            stopX = movement.x;
+            stopY = movement.y;
+        }
 
-        if (movement.x != lastHorizontalInput && movement.x != 0)
+        else
         {
-           // FlipCharacterBasedOnDirection(movement.x);
-            lastHorizontalInput = movement.x;
+            animator.SetBool("isMoving", false);
         }
+
+        animator.SetFloat("Horizontal", stopX);
+        animator.SetFloat("Vertical", stopY);
+        
     }
-    /*
-    void FlipCharacterBasedOnDirection(float horizontalInput)
-    {
-        if (horizontalInput != 0)
-        {
-            transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
-        }
-    }
-    */
+    
+    
 #endregion
 
     #region add bomb or can add other item which need pick up

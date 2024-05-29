@@ -58,12 +58,13 @@ public class ItemGenerator : MonoBehaviour, IGenerator
     {
         for (int i = 0; i < config.count; i++)
         {
-            Vector2? position = PositionManager.Instance.GetRandomPosition();
+            Vector2? position = PositionManager.Instance.GetRandomPosition(false);//dont not allow the reuse position
             if (position != null)
             {
                 Item newItem = Instantiate(config.prefab, position.Value, Quaternion.identity);
-               
+
             }
         }
     }
 }
+
