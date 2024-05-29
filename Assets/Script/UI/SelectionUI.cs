@@ -11,6 +11,7 @@ public class SelectionUI : MonoBehaviour
     public Image[] weaponIcons = new Image[3];
     public TMP_Text[] nameLevelTexts = new TMP_Text[3];
     public Button[] purchaseButtons = new Button[3];
+    public Button refreshButton;
 
     [Header("Item and Weapon Data")]
     public List<GameObject> allItems; // Store all item prefabs including weapons and other items
@@ -28,6 +29,28 @@ public class SelectionUI : MonoBehaviour
         if (weaponManager == null)
         {
         Debug.LogError("WeaponManager is not found in the scene.");
+        }
+
+        refreshButton.onClick.AddListener(RefreshDisplays);//refresh button event
+    }
+
+    private void RefreshDisplays()
+    {
+        Debug.Log("Refresh button clicked.");
+        int refreshCost = ExperienceLevelController.instance.CalculateRefreshCost();
+        Debug.Log("Calculated refresh cost: " + refreshCost);
+
+        if (ExperienceLevelController.instance.CanAfford(refreshCost))
+        {
+            Debug.Log("Can afford refresh.");
+            ExperienceLevelController.instance.SpendExperience(refreshCost);
+            ExperienceLevelController.instance.IncrementRefreshCount();
+            UpdateAllDisplays();
+            Debug.Log("Displays updated after refresh.");
+        }
+        else
+        {
+            Debug.Log("Not enough experience points to refresh.");
         }
     }
 
@@ -70,17 +93,19 @@ public class SelectionUI : MonoBehaviour
         nameLevelTexts[displayIndex].text = $"{itemData.itemName} - Lvl";
 
         purchaseButtons[displayIndex].onClick.RemoveAllListeners();
-        purchaseButtons[displayIndex].onClick.AddListener(() => PurchaseItem(itemPrefab));
+        purchaseButtons[displayIndex].onClick.AddListener(() => PurchaseItem(itemPrefab, itemData.cost));
     }
 
     // Handles item purchase logic
-    private void PurchaseItem(GameObject itemPrefab)
+    private void PurchaseItem(GameObject itemPrefab, int cost)
     {
-        if (Player.instance == null)
+        if (Player.instance == null || !ExperienceLevelController.instance.CanAfford(cost))
         {
-            Debug.LogError("Player.instance is null.");
+            Debug.LogError("Player.instance is null or not enough experience.");
             return;
         }
+
+        ExperienceLevelController.instance.SpendExperience(cost); // 消费经验值
 
         Item itemScript = itemPrefab.GetComponent<Item>();
         if (itemScript == null || itemScript.itemData == null)

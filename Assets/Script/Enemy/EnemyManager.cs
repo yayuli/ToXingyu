@@ -46,7 +46,7 @@ public class EnemyManager : MonoBehaviour
 
     void SpawnEnemy(string prefabName)
     {
-        Vector2? position = PositionManager.Instance.GetRandomPosition();
+        Vector2? position = PositionManager.Instance.GetRandomPosition(true);
         if (position != null && currentEnemies < maxEnemies)
         {
             GameObject enemy = ObjectPool.Instance.SpawnFromPool(prefabName, position.Value, Quaternion.identity);
@@ -54,16 +54,16 @@ public class EnemyManager : MonoBehaviour
             {
                 enemy.transform.SetParent(enemiesParent);
                 currentEnemies++;
-                Debug.Log($"Spawned enemy: {prefabName} at {position.Value}. Total enemies: {currentEnemies}");
+                //Debug.Log($"Spawned enemy: {prefabName} at {position.Value}. Total enemies: {currentEnemies}");
             }
             else
             {
-                Debug.LogWarning($"Failed to spawn enemy from pool: {prefabName}");
+                //Debug.LogWarning($"Failed to spawn enemy from pool: {prefabName}");
             }
         }
         else
         {
-            Debug.LogWarning($"Failed to find spawn position or reached max enemies: {maxEnemies}");
+            //Debug.LogWarning($"Failed to find spawn position or reached max enemies: {maxEnemies}");
         }
     }
 
@@ -85,19 +85,13 @@ public class EnemyManager : MonoBehaviour
             {
                 if (Random.Range(0f, 1f) <= spawnProbability && currentEnemies < maxEnemies)
                 {
-                    Debug.Log($"Attempting to spawn {prefabName}. Current count: {currentCount}, Max count: {maxCount}, Spawn probability: {spawnProbability}");
+                   // Debug.Log($"Attempting to spawn {prefabName}. Current count: {currentCount}, Max count: {maxCount}, Spawn probability: {spawnProbability}");
                     SpawnEnemy(prefabName);
                     nextSpawnTime[prefabName] = Time.time + enemyType.spawnDelay;
                 }
-                else
-                {
-                    Debug.Log($"Spawn probability check failed for {prefabName}. Random value: {Random.Range(0f, 1f)}, Spawn probability: {spawnProbability}");
-                }
+               
             }
-            else
-            {
-                Debug.Log($"Spawn condition not met for {prefabName}. Next spawn time: {nextSpawnTime[prefabName]}, Current time: {Time.time}, Current count: {currentCount}, Max count: {maxCount}");
-            }
+            
         }
     }
 
@@ -106,7 +100,7 @@ public class EnemyManager : MonoBehaviour
         string prefabName = enemy.name.Replace("(Clone)", "").Trim();
         ObjectPool.Instance.ReturnToPool(prefabName, enemy);
         currentEnemies--;
-        Debug.Log($"Destroyed enemy: {prefabName}. Total enemies: {currentEnemies}");
+        //Debug.Log($"Destroyed enemy: {prefabName}. Total enemies: {currentEnemies}");
     }
 
     private int GetCount(string prefabName)
@@ -130,7 +124,7 @@ public class EnemyManager : MonoBehaviour
             ObjectPool.Instance.ReturnToPool(prefabName, enemyGameObject);
         }
         currentEnemies = 0;  // 重置数量
-        Debug.Log("All enemies destroyed. Total enemies: 0");
+        //Debug.Log("All enemies destroyed. Total enemies: 0");
     }
 
     private int GetMaxCount(EnemyType enemyType, float elapsedTime)

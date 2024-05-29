@@ -126,6 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 438060947978296626}
   - component: {fileID: 7747313137224695818}
+  - component: {fileID: 6339278568605018722}
   m_Layer: 0
   m_Name: Weapon 2
   m_TagString: Untagged
@@ -161,11 +162,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2865608254a9249e18ebc19b8f541363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 2
+  fireRate: 4
   fireDistance: 3
   bulletPrefab: {fileID: 2802411436068020762, guid: db4b355f79b2441b2a75b04ee34781ac, type: 3}
   muzzlePosition: {fileID: 438060946992618147}
   muzzleEffectPrefab: {fileID: 3114759772219783079, guid: f2f1fe4f8686b470dac365be9e48ac13, type: 3}
+  weaponData: {fileID: 11400000, guid: b6094366ab632e5419dfdbababf4f66b, type: 2}
+--- !u!114 &6339278568605018722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438060947978296620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1be2e5063fec47bf8f9ac00d4fe868e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: b6094366ab632e5419dfdbababf4f66b, type: 2}
 --- !u!1001 &4150301600743952756
 PrefabInstance:
   m_ObjectHideFlags: 0

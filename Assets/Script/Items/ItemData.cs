@@ -17,6 +17,8 @@ public class ItemData : ScriptableObject
     public float speed;
     public float cooldown;
 
+    public int cost;
+
     public enum ItemType
     {
         HealthPotion,

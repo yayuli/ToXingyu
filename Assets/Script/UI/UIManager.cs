@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
 
     public Slider expSlider;
     public TMP_Text expLevelText;
+    public TMP_Text currentExpText;
 
     public GameObject levelUpPanel;
 
@@ -28,11 +29,13 @@ public class UIManager : MonoBehaviour
     {
         
     }
-    public void UpdateExperience(int currentExp,int levelExp, int currentLvl)
+    public void UpdateExperience(int totalExp, int currentExp, int levelExp, int currentLvl)
     {
         expSlider.maxValue = levelExp;
         expSlider.value = currentExp;
 
         expLevelText.text = "Level: " + currentLvl;
+        currentExpText.text = "Total Exp: " + totalExp;  // 显示总经验值
     }
+
 }

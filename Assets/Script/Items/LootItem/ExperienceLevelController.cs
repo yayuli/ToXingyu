@@ -6,11 +6,20 @@ public class ExperienceLevelController : MonoBehaviour
 {
     public static ExperienceLevelController instance;
 
+    [Header("Experience Settings")]
     public int currentExperience = 0;
+    public int totalExperience = 0;
     public int currentLevel = 1;
     public int levelCount = 100;
     public List<int> expLevels = new List<int> { 100 }; // 初始化第一个经验等级
 
+
+    [Header("Refresh cost settings")]
+    public int baseRefreshCost = 10;
+    [SerializeField] private int refreshIncrement= 10;
+    [SerializeField] private int levelCostIncrement = 6;
+    [SerializeField] private int refreshCount = 0;//记录
+    
     private void Awake()
     {
         if (instance == null)
@@ -30,13 +39,48 @@ public class ExperienceLevelController : MonoBehaviour
 
     public void AddExperience(int amount)
     {
+        totalExperience += amount;
         currentExperience += amount;
         // 使用循环处理可能多次升级的情况
         while (currentExperience >= expLevels[currentLevel])
         {
             LevelUp();
         }
-        UIManager.instance.UpdateExperience(currentExperience, expLevels[currentLevel], currentLevel);
+        // 更新UI，传递总经验值
+        UIManager.instance.UpdateExperience(totalExperience, currentExperience, expLevels[currentLevel], currentLevel);
+    }
+
+    public bool CanAfford(int cost)
+    {
+        bool canAfford = totalExperience >= cost;
+        Debug.Log($"Checking affordability: Total Experience: {totalExperience}, Cost: {cost}, Can Afford: {canAfford}");
+        return canAfford;
+    }
+
+    public void SpendExperience(int cost)
+    {
+        if (CanAfford(cost))
+        {
+            totalExperience -= cost;
+            UIManager.instance.UpdateExperience(totalExperience, currentExperience, expLevels[currentLevel], currentLevel);
+            Debug.Log($"Spent {cost} experience. Remaining Total Experience: {totalExperience}");
+        }
+        else
+        {
+            Debug.LogError("Not enough experience points to make this purchase.");
+        }
+    }
+
+    public int CalculateRefreshCost()
+    {
+        int cost = baseRefreshCost;
+        Debug.Log($"Base Cost: {baseRefreshCost}, Increment: {refreshIncrement}, Refresh Count: {refreshCount}, Level Cost Increment: {levelCostIncrement}, Current Level: {currentLevel}, Calculated Cost: {cost}");
+        return cost;
+    }
+
+    public void IncrementRefreshCount()
+    {
+        refreshCount++;
     }
 
     private void LevelUp()

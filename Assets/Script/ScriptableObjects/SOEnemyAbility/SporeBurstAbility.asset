@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SporeBurstAbility
   m_EditorClassIdentifier: 
   sporeCloudPrefab: {fileID: 6302389226827495237, guid: 5cb2f24ffae514de2b9472ed43727cc5, type: 3}
-  burstRadius: 3
-  cloudDuration: 5
+  burstRadius: 2
+  cloudDuration: 2
   burstDamage: 1

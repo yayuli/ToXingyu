@@ -7,19 +7,34 @@ public class ObjectPool : MonoBehaviour
     [System.Serializable]
     public class Pool
     {
-        public string name; // 池的名称
-        public GameObject prefab; // 池中物品的预制件
-        public int size; // 初始池大小
+        public string name;
+        public GameObject prefab;
+        public int size;
+        
     }
 
+    private const int ExpandAmount = 50;
     public List<Pool> pools;
     private Dictionary<string, Queue<GameObject>> poolDictionary;
 
-    public static ObjectPool Instance;
+    private static ObjectPool _instance;
+    public static ObjectPool Instance
+    {
+        get
+        {
+            if (_instance == null) Debug.LogError("ObjectPool instance not set");
+            return _instance;
+        }
+    }
 
     void Awake()
     {
-        Instance = this;
+        if (_instance != null)
+        {
+            //Debug.LogWarning("Multiple instances of ObjectPool found!");
+            return;
+        }
+        _instance = this;
         InitializePools();
     }
 
@@ -48,24 +63,21 @@ public class ObjectPool : MonoBehaviour
 
             poolDictionary.Add(poolName, objectQueue);
         }
-        else
-        {
-            Debug.LogWarning($"Pool with name {poolName} already exists.");
-        }
+        
     }
 
     public GameObject SpawnFromPool(string poolName, Vector3 position, Quaternion rotation)
     {
         if (!poolDictionary.ContainsKey(poolName))
         {
-            Debug.LogWarning("No pool with name: " + poolName);
+            //Debug.LogWarning("No pool with name: " + poolName);
             return null;
         }
 
         if (poolDictionary[poolName].Count == 0)
         {
-            Debug.Log("Expanding pool for: " + poolName);
-            ExpandPool(poolName, 20);
+            //Debug.Log("Expanding pool for: " + poolName);
+            ExpandPool(poolName, ExpandAmount);
         }
 
         GameObject objectToSpawn = poolDictionary[poolName].Dequeue();
@@ -81,7 +93,7 @@ public class ObjectPool : MonoBehaviour
         var pool = pools.Find(p => p.name == poolName);
         if (pool == null)
         {
-            Debug.LogError("No pool configuration found for prefab: " + poolName);
+            //Debug.LogError("No pool configuration found for prefab: " + poolName);
             return;
         }
 
@@ -97,7 +109,7 @@ public class ObjectPool : MonoBehaviour
     {
         if (!poolDictionary.ContainsKey(poolName))
         {
-            Debug.LogError("Invalid pool prefab name specified");
+            //Debug.LogError("Invalid pool prefab name specified");
             return;
         }
 
