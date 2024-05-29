@@ -12,6 +12,7 @@ public class SelectionUI : MonoBehaviour
     public TMP_Text[] nameLevelTexts = new TMP_Text[3];
     public Button[] purchaseButtons = new Button[3];
     public Button refreshButton;
+    public Button exitButton;
 
     [Header("Item and Weapon Data")]
     public List<GameObject> allItems; // Store all item prefabs including weapons and other items
@@ -32,6 +33,7 @@ public class SelectionUI : MonoBehaviour
         }
 
         refreshButton.onClick.AddListener(RefreshDisplays);//refresh button event
+        exitButton.onClick.AddListener(CloseSelectionUI);
     }
 
     private void RefreshDisplays()
@@ -123,6 +125,12 @@ public class SelectionUI : MonoBehaviour
             weaponManager.AddWeapon(itemPrefab);  // 这里添加武器到玩家
         }
         ContinueGame();
+    }
+
+    private void CloseSelectionUI()
+    {
+        gameObject.SetActive(false); // Hide selection UI
+        ExperienceLevelController.instance.ResumeGame(); // Resume game logic
     }
 
     // Continues the game after an item is purchased

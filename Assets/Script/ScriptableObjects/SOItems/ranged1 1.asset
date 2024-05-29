@@ -23,3 +23,4 @@ MonoBehaviour:
   damage: 0
   speed: 0
   cooldown: 0
+  cost: 10
