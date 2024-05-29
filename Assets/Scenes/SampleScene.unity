@@ -326,7 +326,7 @@ MonoBehaviour:
   totalExperience: 0
   currentLevel: 1
   levelCount: 100
-  expLevels: 00000000040000003c0000005000000064000000
+  expLevels: 000000000a0000003c0000005000000064000000
   baseRefreshCost: 4
   refreshIncrement: 5
   levelCostIncrement: 6
@@ -2892,6 +2892,7 @@ MonoBehaviour:
   - {fileID: 8342914702767776932, guid: 1fcfe9121879e468caa6982712abc7ca, type: 3}
   - {fileID: 8342914702767776932, guid: 31b1dde79ad754d17abf60ce9015f843, type: 3}
   - {fileID: 7633592565986485619, guid: 7e1d62e67fe8c2c47a94c3ee77722101, type: 3}
+  - {fileID: 6001860289020816291, guid: 4d630398bf2a04e15bb1395152599ee6, type: 3}
   rangedWeapons:
   - {fileID: 438060947978296620, guid: ee5b2e846f602457a96d332a37eb71e4, type: 3}
   - {fileID: 438060947978296620, guid: ee5b2e846f602457a96d332a37eb71e4, type: 3}

@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class BombItem : MonoBehaviour
 {
-    [SerializeField] private int bombsToAdd = 1;
+    public int bombsToAdd = 1;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {

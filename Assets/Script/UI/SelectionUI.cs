@@ -22,6 +22,7 @@ public class SelectionUI : MonoBehaviour
     public WeaponManager weaponManager;  // 在 Inspector 中设置这个引用
 
 
+
     void Start()
     {
         UpdateAllDisplays();
@@ -123,6 +124,19 @@ public class SelectionUI : MonoBehaviour
         if (itemData.itemType == ItemData.ItemType.MeleeWeapon || itemData.itemType == ItemData.ItemType.RangedWeapon)
         {
             weaponManager.AddWeapon(itemPrefab);  // 这里添加武器到玩家
+        }
+
+        else if (itemData.itemType == ItemData.ItemType.Bomb)
+        {
+            BombItem bombItem = itemPrefab.GetComponent<BombItem>();
+            if (bombItem != null)
+            {
+                Player.instance.AddItem(bombItem.bombsToAdd); // 增加炸弹数量
+            }
+            else
+            {
+                Debug.LogError("BombItem component is missing on the prefab.");
+            }
         }
         ContinueGame();
     }

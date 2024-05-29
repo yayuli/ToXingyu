@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8b867ce6f95481a8ae894531f64e81, type: 3}
+  m_Name: Boom
+  m_EditorClassIdentifier: 
+  itemName: Boom
+  description: booooooommmm
+  itemIcon: {fileID: -2413806693520163455, guid: 9e02e5013dddbfc42ba06bf2229db058, type: 3}
+  effectMagnitude: 0
+  duration: 0
+  itemType: 11
+  attackPower: 0
+  range: 0
+  damage: 0
+  speed: 0
+  cooldown: 0
+  cost: 5

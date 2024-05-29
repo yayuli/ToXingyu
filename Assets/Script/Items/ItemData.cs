@@ -31,6 +31,7 @@ public class ItemData : ScriptableObject
         RegenerationAmulet,
         ShieldPotion,
         RangedWeapon,
-        MeleeWeapon
+        MeleeWeapon,
+        Bomb
     }
 }

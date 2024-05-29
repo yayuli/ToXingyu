@@ -29,6 +29,27 @@ public class Bomb : MonoBehaviour
             {
                 Destroy(hit.gameObject); 
             }
+
+            if (hit.CompareTag("Enemy")) // Check if the object is an enemy
+            {
+                // Assume the enemy has a script component called 'Enemy' with a method 'TakeDamage'
+                Enemy enemy = hit.GetComponent<Enemy>();
+  
+                if (enemy != null)
+                {
+                    Destroy(gameObject);
+                    enemy.TakeDamage(50);
+                }
+            }
+            if (hit.CompareTag("Player"))
+            {
+                Player player = hit.GetComponent<Player>();
+                if (player != null)
+                {
+                    player.TakeDamage(1);
+                }
+                Destroy(gameObject);
+            }
         }
 
         // destroyed the particle effect after the particales have finished playing
