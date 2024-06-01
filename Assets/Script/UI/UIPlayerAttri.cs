@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class UIPlayerAttri : MonoBehaviour
 {
@@ -8,49 +10,58 @@ public class UIPlayerAttri : MonoBehaviour
     public Transform attributeContainer;
 
     // 定义属性显示顺序
-    private string[] attributeOrder = { "Health", "Energy", "Strength", "Dexterity", "Intelligence" };
+    private string[] attributeOrder = { "health", "healthRegenRate", "moveSpeedFactor", "armor", "attackSpeed" };
+    private List<GameObject> attributeDisplays = new List<GameObject>();
 
     private void OnEnable()
     {
         Debug.Log("Subscribing to events");
-        Player.instance.OnHealthChanged += UpdateAttributesDisplay;
-        Player.instance.OnStrengthChanged += UpdateAttributesDisplay;
-        Player.instance.OnEnergyChanged += UpdateAttributesDisplay;
+        Player.instance.OnHealthRangeChanged += UpdateAttributesDisplay;
+        Player.instance.OnMoveSpeedChanged += UpdateAttributesDisplay;
+        Player.instance.OnAromoChanged += UpdateAttributesDisplay;
+        Player.instance.OnAttackSpeedChanged += UpdateAttributesDisplay;
     }
 
     private void OnDisable()
     {
-        Player.instance.OnHealthChanged -= UpdateAttributesDisplay;
-        Player.instance.OnStrengthChanged -= UpdateAttributesDisplay;
-        Player.instance.OnEnergyChanged -= UpdateAttributesDisplay;
+        Debug.Log("Unsubscribing from events");
+        Player.instance.OnHealthRangeChanged -= UpdateAttributesDisplay;
+        Player.instance.OnMoveSpeedChanged -= UpdateAttributesDisplay;
+        Player.instance.OnAromoChanged -= UpdateAttributesDisplay;
+        Player.instance.OnAttackSpeedChanged += UpdateAttributesDisplay;
     }
-
 
     void Start()
     {
+        InitializeAttributeDisplays();
+    }
+
+    private void InitializeAttributeDisplays()
+    {
+        foreach (string attributeName in attributeOrder)
+        {
+            GameObject newAttribute = Instantiate(attributePrefab, attributeContainer);
+            newAttribute.SetActive(false);
+            attributeDisplays.Add(newAttribute);
+        }
         UpdateAttributesDisplay();
-        OnEnable();
     }
 
     public void UpdateAttributesDisplay()
     {
         Debug.Log("Updating attributes display");
-        foreach (Transform child in attributeContainer)
+        for (int i = 0; i < attributeOrder.Length; i++)
         {
-            Destroy(child.gameObject);
-        }
-
-        foreach (string attributeName in attributeOrder)
-        {
-            var field = Player.instance.attributes.GetType().GetField(attributeName);
+            var field = Player.instance.attributes.GetType().GetField(attributeOrder[i]);
             if (field == null)
             {
-                Debug.LogError("Field not found: " + attributeName);
+                Debug.LogError("Field not found: " + attributeOrder[i]);
                 continue;
             }
             int value = (int)field.GetValue(Player.instance.attributes);
-            GameObject newAttribute = Instantiate(attributePrefab, attributeContainer);
-            newAttribute.GetComponent<AttributeDisplay>().Setup(field.Name, value);
+            GameObject attributeDisplay = attributeDisplays[i];
+            attributeDisplay.SetActive(true);
+            attributeDisplay.GetComponent<AttributeDisplay>().Setup(field.Name, value);
         }
     }
 }

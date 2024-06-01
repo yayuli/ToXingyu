@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /// <summary>
 ///this is the base class for all weapon classes, defining the basic behaviors and properties of weapons
 ///所有武器共有的基类，定义了武器的基本行为和属性。可以在这里添加一些基础的属性和方法，如武器的公共方法和一些基本的属性（例如，所有武器共有的冷却逻辑）
@@ -16,11 +17,13 @@ public abstract class WeaponBase : MonoBehaviour
     protected float timeSinceLastShot;
 
     // 新添加的属性交互itemdata
+    protected string itemName;
     protected int attackPower;
     protected float range;
     protected int damage;
     protected float speed;
     protected float cooldown;
+    protected int level;
 
     //初始方法， 在派生类中可以被重写
     protected virtual void Start()
@@ -48,6 +51,29 @@ public abstract class WeaponBase : MonoBehaviour
             cooldown = data.cooldown;
         }
     }
+
+    public void UpdateWeaponInstance()
+    {
+        GetComponent<SpriteRenderer>().color = GetComponent<Item>().itemData.weaponColor;  // 更新颜色
+        Initialize(GetComponent<Item>().itemData);  // 重新初始化以应用新数据
+    }
+
+
+    public ItemData GetData()
+    {
+        return new ItemData
+        {
+            itemName = itemName,
+            attackPower = attackPower,
+            speed = speed,
+            effectMagnitude = damage,
+            cooldown = cooldown,
+            range = range,
+            level = level,
+            weaponColor = GetComponent<SpriteRenderer>().color
+        };
+    }
+
 
     //设置武器的位置偏移
     public void SetOffset(Vector2 o)

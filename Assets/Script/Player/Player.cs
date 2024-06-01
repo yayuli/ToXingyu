@@ -10,27 +10,28 @@ public class Player : MonoBehaviour
     [System.Serializable]
     public class PlayerAttributes
     {
-        public int Health;
-        public int MaxHealth = 100;
-        public int Energy;
-        public int Strength;
-        public int Dexterity;
-        public int Intelligence;
-        public int Luck;
-
-        // Special attributes
-        public int MemoryPoints;
-        public float RegenerationRate;
-        public int Willpower;
+        public int health = 20;
+        public int maxHealth = 20;      // 最大生命值
+        public int healthRegenRate = 0;  // 生命恢复速率
+        public int damageFactor = 0;    // 伤害加成比例
+        public int attackRangeFactor = 0;  // 攻击范围加成比例
+        public int armor = 0;           // 护甲值
+        public int criticalRate = 10;    // 暴击率
+        public int criticalDamage = 50; // 暴击伤害
+        public int attackSpeed = 0;     // 攻击速度加成比例
+        public int dodgeRate = 0;       // 闪避率
+        public int moveSpeedFactor = 0; // 移动速度加成比例
+        public int pickUpRangeFactor = 0; // 捡取范围加成比例
 
     }
 
     [Header("Attributes")]
     public PlayerAttributes attributes; // Player attributes instance
     public delegate void AttributeChanged();
-    public event AttributeChanged OnHealthChanged;
-    public event AttributeChanged OnStrengthChanged;
-    public event AttributeChanged OnEnergyChanged;
+    public event AttributeChanged OnHealthRangeChanged;
+    public event AttributeChanged OnMoveSpeedChanged;
+    public event AttributeChanged OnAromoChanged;
+    public event AttributeChanged OnAttackSpeedChanged;
 
     [Header("ItemData")]
     public ItemData equippedItem;
@@ -76,27 +77,19 @@ public class Player : MonoBehaviour
         MoveCharacter();
     }
 
-    
     #region Movement
-    void MoveCharacter()
-    {
-        rb.MovePosition(rb.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);
-    }
-
     void HandleInput()
     {
-
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
-        Vector2 input = new Vector2(movement.x, movement.y).normalized;
-        rb.velocity = input * moveSpeed;
-        if(input!= Vector2.zero)
+        movement = movement.normalized;
+
+        if (movement != Vector2.zero)
         {
             animator.SetBool("isMoving", true);
             stopX = movement.x;
             stopY = movement.y;
         }
-
         else
         {
             animator.SetBool("isMoving", false);
@@ -104,11 +97,17 @@ public class Player : MonoBehaviour
 
         animator.SetFloat("Horizontal", stopX);
         animator.SetFloat("Vertical", stopY);
-        
     }
+
     
-    
-#endregion
+    void MoveCharacter()
+    {
+        float speed = moveSpeed * (1 + attributes.moveSpeedFactor / 100.0f);
+        rb.velocity = movement * speed;
+    }
+
+
+    #endregion
 
     #region add bomb or can add other item which need pick up
     public void AddItem(int count)
@@ -149,84 +148,106 @@ public class Player : MonoBehaviour
 
     public void ApplyItemEffect(ItemData item)
     {
+        Debug.Log($"Applying effect from item: {item.itemName}");
         switch (item.itemType)
         {
             case ItemData.ItemType.HealthPotion:
-                ModifyHealth(item.effectMagnitude);
+                Debug.Log($"Before Health Potion: Health={attributes.health}");
+                ModifyHealth(item.healthRegeRate);
+                Debug.Log($"After Health Potion: Health={attributes.health}");
                 break;
-            case ItemData.ItemType.EnergyDrink:
-                ModifyEnergy(item.effectMagnitude);
+            case ItemData.ItemType.ArmorSet:
+                Debug.Log($"Before Armor Set: Armor={attributes.armor}");
+                ModifyArmor(item.armor);
+                Debug.Log($"After Armor Set: Armor={attributes.armor}");
                 break;
-            case ItemData.ItemType.StrengthElixir:
-                ModifyStrength(item.effectMagnitude);
+            case ItemData.ItemType.SpeedBoots:
+                Debug.Log($"Before Speed Boots: Move Speed Factor={attributes.moveSpeedFactor}");
+                ModifyMoveSpeed(item.moveSpeedFactor);
+                Debug.Log($"After Speed Boots: Move Speed Factor={attributes.moveSpeedFactor}");
                 break;
-            case ItemData.ItemType.AgilityBoots:
-                attributes.Dexterity += item.effectMagnitude;
+            case ItemData.ItemType.PrecisionAmulet:
+                Debug.Log($"Before Precision Amulet: Critical Rate={attributes.criticalRate}");
+                //ModifyCriticalRate(item.criticalRate); // Check if "item.criticalRate" should really be affecting critical rate
+                Debug.Log($"After Precision Amulet: Critical Rate={attributes.criticalRate}");
                 break;
-            case ItemData.ItemType.WisdomScroll:
-                attributes.Intelligence += item.effectMagnitude;
-                break;
-            case ItemData.ItemType.LuckCharm:
-                StartCoroutine(ApplyTempStatBoost(() => attributes.Luck += item.effectMagnitude,
-                                                         () => attributes.Luck -= item.effectMagnitude,
-                                                         item.duration));
-                break;
-            case ItemData.ItemType.MemoryCrystal:
-                attributes.MemoryPoints += item.effectMagnitude;
-                break;
-            case ItemData.ItemType.RegenerationAmulet:
-                StartCoroutine(ApplyTempStatBoost(() => attributes.RegenerationRate += item.effectMagnitude,
-                                                         () => attributes.RegenerationRate -= item.effectMagnitude,
-                                                         item.duration));
-                break;
-            case ItemData.ItemType.ShieldPotion:
-                StartCoroutine(ApplyTempStatBoost(() => attributes.Willpower += item.effectMagnitude,
-                                                         () => attributes.Willpower -= item.effectMagnitude,
-                                                         item.duration));
-                break;
+                // Add similar debug logs for other item types
         }
-       // ObjectPool.Instance.ReturnToPool(item prefabName, gameObject);
         UpdateHealthUI();
-
     }
+
+
     public void ModifyHealth(int amount)
     {
-        attributes.Health += amount;
-        attributes.Health = Mathf.Clamp(attributes.Health, 0, attributes.MaxHealth); // 确保健康值不会超出范围
+        attributes.health += amount;
+        attributes.health = Mathf.Clamp(attributes.health, 0, attributes.maxHealth); // 确保 health 不超过 maxHealth 也不小于0
+        OnHealthRangeChanged?.Invoke();
+        UpdateHealthUI();
 
-        // 触发健康改变事件
-        OnHealthChanged?.Invoke();
-
-        if (attributes.Health <= 0)
+        if (attributes.health <= 0)
         {
-            Debug.Log("Player has died.");  // 处理玩家死亡逻辑
+            Debug.Log("Player has died.");
         }
     }
 
-    public void ModifyStrength(int amount)
+    public void ModifyArmor(int amount)
     {
-        attributes.Strength += amount;
-        OnStrengthChanged?.Invoke();
+        attributes.armor += amount;
+        // 可以添加限制条件，例如护甲值不小于0
+        attributes.armor = Mathf.Max(attributes.armor, 0);
+        OnAromoChanged?.Invoke(); // 假设你有一个处理护甲变化的事件
+
+        Debug.Log($"Armor updated to: {attributes.armor}");
     }
 
-    public void ModifyEnergy(int amount)
+    public void ModifyAttackSpeed(int increment)
     {
-        attributes.Energy += amount;
-        OnEnergyChanged?.Invoke();
+        attributes.attackSpeed += increment;
+        attributes.attackSpeed = Mathf.Max(attributes.attackSpeed, 0);
+        OnAttackSpeedChanged?.Invoke();
+        Debug.Log($"Attack Speed updated to: {attributes.attackSpeed}");
     }
+
+
+    public void ModifyMoveSpeed(int increment)
+    {
+        Debug.Log($"Modifying Move Speed Factor: Current={attributes.moveSpeedFactor}, Increment={increment}");
+        attributes.moveSpeedFactor += increment;
+        Debug.Log($"New Move Speed Factor: {attributes.moveSpeedFactor}");
+        OnMoveSpeedChanged?.Invoke(); 
+    }
+
+    /*
+    public void ModifyDodgeRate(int increment)
+    {
+        attributes.dodgeRate += increment;
+        // 可以添加限制条件，例如闪避率的上下限
+        attributes.dodgeRate = Mathf.Clamp(attributes.dodgeRate, 0, 100);
+        //OnDodgeRateChanged?.Invoke(); // 假设你有一个处理闪避率变化的事件
+
+        Debug.Log($"Dodge Rate updated to: {attributes.dodgeRate}");
+    }
+    */
+
     #endregion
 
     #region UI
     private void UpdateHealthUI()
     {
-
-        healthBar.value = (float)attributes.Health / attributes.MaxHealth;
-        Debug.Log("Health updated to: " + attributes.Health);
+        if (healthBar != null)
+        {
+            healthBar.value = (float)attributes.health / attributes.maxHealth;
+           // Debug.Log("Health updated to: " + attributes.health + "/" + attributes.maxHealth);
+        }
+        
     }
+
 
     public void TakeDamage(int damage)
     {
+        int reducedDamage = Mathf.Max(damage - attributes.armor, 0); // 确保伤害值不会是负数
         ModifyHealth(-damage);
+        UpdateHealthUI();
     }
 
     #endregion

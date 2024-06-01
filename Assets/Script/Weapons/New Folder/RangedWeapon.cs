@@ -65,14 +65,18 @@ public class RangedWeapon : WeaponBase
             return;
 
         timeSinceLastShot += Time.deltaTime;
-        if (timeSinceLastShot >= weaponData.cooldown)
+        float modifiedCooldown = weaponData.cooldown / (1 + Player.instance.attributes.attackSpeed / 100.0f);
+        Debug.Log($"Modified Cooldown: {modifiedCooldown}, Attack Speed: {Player.instance.attributes.attackSpeed}");
+
+        if (timeSinceLastShot >= modifiedCooldown)
         {
-            FireBullet();  // 从这个方法分离出射击的具体逻辑
-            timeSinceLastShot = 0;  // Reset the shooting timer
+            FireBullet();
+            timeSinceLastShot = 0;
         }
     }
 
-    void FireBullet()
+
+    void FireBullet() 
     {
         var muzzleGO = Instantiate(muzzleEffectPrefab, muzzlePosition.position, transform.rotation);
         Destroy(muzzleGO, 0.05f);  // Destroy muzzle effect shortly after

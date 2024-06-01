@@ -8,30 +8,58 @@ public class ItemData : ScriptableObject
     public Sprite itemIcon;
     public int effectMagnitude;
     public float duration; // Use 0 for permanent effects
+
+    [Header("ItemType")]
     public ItemType itemType;
 
-    //weapon
+    [Header("player attri")]
+    public int maxHealth = 0;
+    public int healthRegeRate = 0;
+    public int damageFactor = 0;
+    public int attackRangeFactor = 0;
+    public int armor = 0;
+    public int criticalRate = 0;
+    public int criticalDamage = 0;
+    public int attackSpeed = 0;
+    public int dodgeRate = 0;
+    public int moveSpeedFactor = 0;
+    public int pickUpRangeFactor = 0;
+
+    [Header("Weapon")]
+    public GameObject prefab;
     public int attackPower;
-    public float range;
-    public int damage;
     public float speed;
+    public int damage;  // 可以对应于 damage
     public float cooldown;
+    public float range;
+    public int level = 1;  // 新增武器等级
+    public Color weaponColor = Color.white;  // 武器默认颜色
 
     public int cost;
 
     public enum ItemType
     {
         HealthPotion,
-        EnergyDrink,
+        ArmorSet,
+        SpeedBoots,
+        PrecisionAmulet,
         StrengthElixir,
-        AgilityBoots,
-        WisdomScroll,
-        LuckCharm,
-        MemoryCrystal,
+        RegenerationRing,
+        AgilityGloves,
         RegenerationAmulet,
-        ShieldPotion,
+        VisionTelescope,
+        EnergyDrink,
+        LuckyCharm,
+
+        //others
         RangedWeapon,
         MeleeWeapon,
         Bomb
+    }
+
+    [System.Serializable]
+    public class PlayerAttributes
+    {
+        
     }
 }
