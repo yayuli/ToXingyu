@@ -15,7 +15,6 @@ public class RangedWeapon : WeaponBase
 
     private Transform closestEnemy;
 
-
     protected override void Update()
     {
         base.Update();
