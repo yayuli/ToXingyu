@@ -19,6 +19,10 @@ public class SelectionUI : MonoBehaviour
     public List<GameObject> rangedWeapons; // List of ranged weapon prefabs
     public List<GameObject> meleeWeapons; // List of melee weapon prefabs
 
+    [Header("Weapon Display Panel")]
+    public GameObject weaponPanel; // 武器展示Panel
+    public Image[] weaponDisplaySlots = new Image[6]; // 武器槽数组，假设最多展示6个武器
+
     public WeaponManager weaponManager;  // 在 Inspector 中设置这个引用
 
 
@@ -138,13 +142,15 @@ public class SelectionUI : MonoBehaviour
                 Debug.LogError("BombItem component is missing on the prefab.");
             }
         }
-        ContinueGame();
+        //ContinueGame();
     }
+
 
     private void CloseSelectionUI()
     {
         gameObject.SetActive(false); // Hide selection UI
         ExperienceLevelController.instance.ResumeGame(); // Resume game logic
+        ContinueGame();
     }
 
     // Continues the game after an item is purchased

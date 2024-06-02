@@ -15,6 +15,7 @@ public class RangedWeapon : WeaponBase
 
     private Transform closestEnemy;
 
+
     protected override void Update()
     {
         base.Update();
@@ -66,7 +67,6 @@ public class RangedWeapon : WeaponBase
 
         timeSinceLastShot += Time.deltaTime;
         float modifiedCooldown = weaponData.cooldown / (1 + Player.instance.attributes.attackSpeed / 100.0f);
-        Debug.Log($"Modified Cooldown: {modifiedCooldown}, Attack Speed: {Player.instance.attributes.attackSpeed}");
 
         if (timeSinceLastShot >= modifiedCooldown)
         {
@@ -75,17 +75,13 @@ public class RangedWeapon : WeaponBase
         }
     }
 
-
-    void FireBullet() 
+    void FireBullet()
     {
         var muzzleGO = Instantiate(muzzleEffectPrefab, muzzlePosition.position, transform.rotation);
         Destroy(muzzleGO, 0.05f);  // Destroy muzzle effect shortly after
 
         var bulletGo = Instantiate(bulletPrefab, muzzlePosition.position, transform.rotation);
-        bulletGo.GetComponent<Bullet>().Initialize(weaponData.attackPower, weaponData.speed);  // Initialize bullet
+        bulletGo.GetComponent<Bullet>().Initialize(weaponData.attackPower, weaponData.speed);  // Use updated attack power and speed
         Destroy(bulletGo, 3);  // Destroy the bullet after some time
     }
-
-
 }
-

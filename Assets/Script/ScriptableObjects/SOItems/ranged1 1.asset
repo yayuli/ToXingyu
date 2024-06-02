@@ -22,16 +22,19 @@ MonoBehaviour:
   healthRegeRate: 40
   damageFactor: 50
   attackRangeFactor: 10
-  armor: 100
+  armor: 50
   criticalRate: 0
   criticalDamage: 0
-  attackSpeed: 0
+  attackSpeed: 50
   dodgeRate: 0
-  moveSpeedFactor: 0
+  moveSpeedFactor: 30
   pickUpRangeFactor: 0
+  prefab: {fileID: 0}
   attackPower: 0
-  range: 0
+  speed: 0
   damage: 0
-  speed: 30
   cooldown: 0
+  range: 0
+  level: 1
+  weaponColor: {r: 1, g: 1, b: 1, a: 1}
   cost: 0

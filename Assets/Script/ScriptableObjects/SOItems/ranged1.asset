@@ -13,14 +13,28 @@ MonoBehaviour:
   m_Name: ranged1
   m_EditorClassIdentifier: 
   itemName: ranged1
-  description: hujmii
+  description: weapon1
   itemIcon: {fileID: -474914952, guid: 7b12e176afe7a4fff87f1e84c45cc6d0, type: 3}
   effectMagnitude: 3
-  duration: 3
-  itemType: 9
+  duration: 0
+  itemType: 11
+  maxHealth: 0
+  healthRegeRate: 0
+  damageFactor: 0
+  attackRangeFactor: 0
+  armor: 0
+  criticalRate: 0
+  criticalDamage: 0
+  attackSpeed: 0
+  dodgeRate: 0
+  moveSpeedFactor: 0
+  pickUpRangeFactor: 0
+  prefab: {fileID: 438060947978296620, guid: 2e5a091306c584921a6abf180a00c659, type: 3}
   attackPower: 0
-  range: 6
-  damage: 10
   speed: 6
+  damage: 10
   cooldown: 1
+  range: 6
+  level: 1
+  weaponColor: {r: 1, g: 1, b: 1, a: 1}
   cost: 16
