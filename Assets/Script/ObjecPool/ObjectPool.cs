@@ -10,7 +10,6 @@ public class ObjectPool : MonoBehaviour
         public string name;
         public GameObject prefab;
         public int size;
-        
     }
 
     private const int ExpandAmount = 50;
@@ -22,7 +21,7 @@ public class ObjectPool : MonoBehaviour
     {
         get
         {
-            if (_instance == null) Debug.LogError("ObjectPool instance not set");
+           // if (_instance == null) Debug.LogError("ObjectPool instance not set");
             return _instance;
         }
     }
@@ -31,7 +30,7 @@ public class ObjectPool : MonoBehaviour
     {
         if (_instance != null)
         {
-            //Debug.LogWarning("Multiple instances of ObjectPool found!");
+           // Debug.LogWarning("Multiple instances of ObjectPool found!");
             return;
         }
         _instance = this;
@@ -63,21 +62,25 @@ public class ObjectPool : MonoBehaviour
 
             poolDictionary.Add(poolName, objectQueue);
         }
-        
     }
 
     public GameObject SpawnFromPool(string poolName, Vector3 position, Quaternion rotation)
     {
         if (!poolDictionary.ContainsKey(poolName))
         {
-            //Debug.LogWarning("No pool with name: " + poolName);
+            //Debug.LogWarning($"No pool with name: {poolName}");
             return null;
         }
 
         if (poolDictionary[poolName].Count == 0)
         {
-            //Debug.Log("Expanding pool for: " + poolName);
+           // Debug.Log($"Expanding pool for: {poolName}");
             ExpandPool(poolName, ExpandAmount);
+            if (poolDictionary[poolName].Count == 0)
+            {
+               // Debug.LogError($"Failed to expand pool for: {poolName}");
+                return null;
+            }
         }
 
         GameObject objectToSpawn = poolDictionary[poolName].Dequeue();
@@ -93,7 +96,7 @@ public class ObjectPool : MonoBehaviour
         var pool = pools.Find(p => p.name == poolName);
         if (pool == null)
         {
-            //Debug.LogError("No pool configuration found for prefab: " + poolName);
+           // Debug.LogError($"No pool configuration found for prefab: {poolName}");
             return;
         }
 
@@ -109,7 +112,7 @@ public class ObjectPool : MonoBehaviour
     {
         if (!poolDictionary.ContainsKey(poolName))
         {
-            //Debug.LogError("Invalid pool prefab name specified");
+            //sDebug.LogError($"Invalid pool prefab name specified for {poolName}");
             return;
         }
 

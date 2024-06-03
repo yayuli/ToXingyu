@@ -42,6 +42,11 @@ public class MazeGenerator : MonoBehaviour
 
     // Dictionary to hold and locate all cells in maze.
     private Dictionary<Vector2, Cell> allCells = new Dictionary<Vector2, Cell>();
+    public Dictionary<Vector2, Cell> AllCells
+    {
+        get { return allCells; }
+    }
+
     // List to hold unvisited cells.
     private List<Cell> unvisited = new List<Cell>();
     // List to store 'stack' cells, cells being checked during generation.

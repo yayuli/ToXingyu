@@ -87,7 +87,11 @@ public class WeaponManager : MonoBehaviour
         newWeapon.GetComponent<WeaponBase>().SetOffset(positionOffset);
         newWeapon.GetComponent<WeaponBase>().Initialize(weaponPrefab.GetComponent<Item>().itemData);
 
-        WeaponPanel.instance.UpdateWeaponSlotsDisplay();
+        WeaponPanel panel = FindObjectOfType<WeaponPanel>();
+        if (panel != null)
+        {
+            panel.UpdateWeaponSlotsDisplay();
+        }
     }
 
 

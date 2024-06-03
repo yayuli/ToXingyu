@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: ranged1
   description: weapon1
-  itemIcon: {fileID: 21300000, guid: 85594d74761824c97bf76f5f9a930ef1, type: 3}
+  itemIcon: {fileID: 21300000, guid: 4a13515e8498cf142b15b4f3387eb067, type: 3}
   effectMagnitude: 3
   duration: 0
   itemType: 11

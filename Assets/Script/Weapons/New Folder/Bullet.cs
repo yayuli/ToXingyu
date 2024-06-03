@@ -5,7 +5,7 @@ public class Bullet : MonoBehaviour
     public GameObject hitEffect;  // 可能用于显示击中效果的特效
 
     private float speed;  // 子弹的速度
-    private int damage;  // 子弹的伤害值
+    private int damage=10;  // 子弹的伤害值
 
     private void FixedUpdate()
     {
@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour
         if (enemy != null)
         {
             Destroy(gameObject);
-            enemy.TakeDamage(25);
+            enemy.TakeDamage(damage);
         }
 
         if (collision.gameObject.CompareTag("Wall"))

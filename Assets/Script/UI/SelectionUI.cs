@@ -108,7 +108,7 @@ public class SelectionUI : MonoBehaviour
     {
         if (Player.instance == null || !ExperienceLevelController.instance.CanAfford(cost))
         {
-            Debug.LogError("Player.instance is null or not enough experience.");
+           // Debug.LogError("Player.instance is null or not enough experience.");
             return;
         }
 
@@ -117,7 +117,7 @@ public class SelectionUI : MonoBehaviour
         Item itemScript = itemPrefab.GetComponent<Item>();
         if (itemScript == null || itemScript.itemData == null)
         {
-            Debug.LogError("Item prefab is missing Item component or Item Data.");
+          //  Debug.LogError("Item prefab is missing Item component or Item Data.");
             return;
         }
 
