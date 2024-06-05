@@ -49,13 +49,13 @@ public class UIPlayerAttri : MonoBehaviour
 
     public void UpdateAttributesDisplay()
     {
-        Debug.Log("Updating attributes display");
+        //Debug.Log("Updating attributes display");
         for (int i = 0; i < attributeOrder.Length; i++)
         {
             var field = Player.instance.attributes.GetType().GetField(attributeOrder[i]);
             if (field == null)
             {
-                Debug.LogError("Field not found: " + attributeOrder[i]);
+               // Debug.LogError("Field not found: " + attributeOrder[i]);
                 continue;
             }
             int value = (int)field.GetValue(Player.instance.attributes);

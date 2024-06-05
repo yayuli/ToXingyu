@@ -76,19 +76,52 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    public void GenerateEnemies()
+    {
+        Debug.Log("Starting to generate enemies.");
+        foreach (var enemyType in enemyTypes)
+        {
+            int maxPossibleEnemies = maxEnemies - currentEnemies;
+            if (maxPossibleEnemies > 0)
+            {
+                int enemiesToGenerate = Mathf.Min(maxPossibleEnemies, enemyType.baseMaxCount);
+                Debug.Log($"Attempting to generate {enemiesToGenerate} enemies of type {enemyType.prefab.name}.");
+
+                for (int i = 0; i < enemiesToGenerate; i++)
+                {
+                    if (Random.Range(0f, 1f) < enemyType.baseSpawnProbability)
+                    {
+                        SpawnEnemy(enemyType.prefab.name);
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Max enemy count reached, not generating more enemies.");
+            }
+        }
+    }
+
+
+
     void SpawnEnemy(string prefabName)
     {
-        Vector2? position = PositionManager.Instance.GetRandomPosition(true);
+        Vector3? position = PositionManager.Instance.GetRandomPosition(true);
         if (position != null)
         {
             GameObject enemy = ObjectPool.Instance.SpawnFromPool(prefabName, position.Value, Quaternion.identity);
             if (enemy != null)
             {
-                enemy.transform.SetParent(enemiesParent);
+                enemy.transform.SetParent(enemiesParent);  
                 currentEnemies++;
             }
         }
+        else
+        {
+            Debug.LogWarning("Failed to get a position for spawning enemy.");
+        }
     }
+
 
     private float GetSpawnProbability(EnemyType enemyType, float elapsedTime)
     {
@@ -104,10 +137,31 @@ public class EnemyManager : MonoBehaviour
 
     public void OnDestroyAllEnemies()
     {
-        foreach (Transform enemy in enemiesParent)
+        Debug.Log("Destroying all enemies, count: " + enemiesParent.childCount);
+        List<GameObject> children = new List<GameObject>();
+        foreach (Transform child in enemiesParent)
         {
-            DestroyEnemy(enemy.gameObject);
+            children.Add(child.gameObject);
         }
-        currentEnemies = 0;
+
+        foreach (GameObject child in children)
+        {
+            string prefabName = child.name.Replace("(Clone)", "").Trim();
+            ObjectPool.Instance.ReturnToPool(prefabName, child);
+        }
+        currentEnemies = 0;  // 此处重置当前敌人数量
+        Debug.Log("Completed destroying all enemies.");
     }
+
+
+    public void ResetSpawnTimes()
+    {
+        foreach (var enemyType in enemyTypes)
+        {
+            nextSpawnTime[enemyType.prefab.name] = Time.time + enemyType.spawnDelay;  // 确保重置时间
+        }
+        Debug.Log("Spawn times reset.");
+    }
+
+
 }
