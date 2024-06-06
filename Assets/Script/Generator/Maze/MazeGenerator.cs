@@ -91,6 +91,12 @@ public class MazeGenerator : MonoBehaviour
       
     }
 
+    public Vector3 GetStartPosition()
+    {
+        // 返回中心房间的其中一个单元格的位置作为起始点
+        // 这里假设 centreCells[0] 是中心房间的一个角落
+        return centreCells[0].cellObject.transform.position;
+    }
 
     // Creates the grid of cells.
     public void CreateLayout()

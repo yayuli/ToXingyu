@@ -14,12 +14,16 @@ public class CameraFollowPlayer : MonoBehaviour
 
     void Start()
     {
-        // 动态查找玩家对象
+        SetPlayerTransform();
+    }
+
+    public void SetPlayerTransform()
+    {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             playerTransform = player.transform;
-            // 计算并存储相机初始时相对于玩家的偏移量
+            // 重新计算偏移量，以防玩家初始位置有变
             cameraOffset = transform.position - playerTransform.position;
         }
         else

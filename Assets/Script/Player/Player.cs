@@ -57,7 +57,15 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // 使对象跨场景持续存在
+        }
+        else
+        {
+            Destroy(gameObject); // 确保不创建重复实例
+        }
     }
 
     void Start()
@@ -99,7 +107,7 @@ public class Player : MonoBehaviour
         animator.SetFloat("Vertical", stopY);
     }
 
-    
+
     void MoveCharacter()
     {
         float speed = moveSpeed * (1 + attributes.moveSpeedFactor / 100.0f);
@@ -108,6 +116,15 @@ public class Player : MonoBehaviour
 
 
     #endregion
+
+
+    public void ResetPlayerState()
+    {
+        // 重置玩家的生命值、位置等
+        attributes.health = attributes.maxHealth;
+        UpdateHealthUI();
+    }
+
 
     #region add bomb or can add other item which need pick up
     public void AddItem(int count)
@@ -214,7 +231,7 @@ public class Player : MonoBehaviour
         Debug.Log($"Modifying Move Speed Factor: Current={attributes.moveSpeedFactor}, Increment={increment}");
         attributes.moveSpeedFactor += increment;
         Debug.Log($"New Move Speed Factor: {attributes.moveSpeedFactor}");
-        OnMoveSpeedChanged?.Invoke(); 
+        OnMoveSpeedChanged?.Invoke();
     }
 
     /*
@@ -237,9 +254,9 @@ public class Player : MonoBehaviour
         if (healthBar != null)
         {
             healthBar.value = (float)attributes.health / attributes.maxHealth;
-           // Debug.Log("Health updated to: " + attributes.health + "/" + attributes.maxHealth);
+            // Debug.Log("Health updated to: " + attributes.health + "/" + attributes.maxHealth);
         }
-        
+
     }
 
 

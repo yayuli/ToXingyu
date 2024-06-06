@@ -4,22 +4,17 @@ using UnityEngine;
 
 public class MiniCamera : MonoBehaviour
 {
-    public Camera minimapCamera;
-    [SerializeField]
-    private float sizeIncrement = 10f;
-    // Start is called before the first frame update
-    void Start()
+    public static MiniCamera instance;
+    private void Awake()
     {
-        if (minimapCamera == null)
-            minimapCamera = GetComponent<Camera>();
-    }
-
-    public void IncreaseCameraSize()
-    {
-        if (minimapCamera != null)
+        if (instance == null)
         {
-            minimapCamera.orthographicSize += sizeIncrement;
+            instance = this;
+            DontDestroyOnLoad(gameObject); // 使对象跨场景持续存在
         }
-     
+        else
+        {
+            Destroy(gameObject); // 确保不创建重复实例
+        }
     }
 }

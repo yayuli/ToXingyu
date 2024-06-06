@@ -8,8 +8,7 @@ public class GameManager : MonoBehaviour
 {
     private IGenerator[] generators;
     [SerializeField] private MazeGenerator mazeGenerator;
-    public MiniCamera miniCamera; // Assign this in the Inspector
-
+ 
     [SerializeField] private int addRows = 2;
     [SerializeField] private int addCols = 2;
 
@@ -40,7 +39,6 @@ public class GameManager : MonoBehaviour
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         asyncLoad.allowSceneActivation = false;
 
-
         // 循环检查场景是否加载完毕
         while (!asyncLoad.isDone)
         {
@@ -57,7 +55,7 @@ public class GameManager : MonoBehaviour
 
             yield return null;
         }
-        miniCamera.IncreaseCameraSize();
+
         yield return new WaitForSeconds(2.0f);
         // 开始淡入
         yield return StartCoroutine(nextLevelUI.FadeIn());
@@ -71,6 +69,10 @@ public class GameManager : MonoBehaviour
         {
             GenerateLevel();
         }
+        else
+        {
+            Debug.LogError("MazeGenerator instance not found!");
+        }
     }
 
     // 生成关卡的逻辑
@@ -81,6 +83,10 @@ public class GameManager : MonoBehaviour
 
         // 生成迷宫
         mazeGenerator.GenerateMaze(MazeGenerator.mazeRows, MazeGenerator.mazeColumns);
+
+        // 设置玩家位置
+        Vector3 startPosition = mazeGenerator.GetStartPosition();
+        Player.instance.transform.position = startPosition;
 
         // 初始化和生成各种生成器的元素
         foreach (var generator in generators)
@@ -94,11 +100,8 @@ public class GameManager : MonoBehaviour
         {
             EnemyManager.Instance.GenerateEnemies();
         }
-        else
-        {
-            Debug.LogError("EnemyManager instance not found!");
-        }
     }
+
 
     // 当触发器被触发时调用
     private void OnTriggerEnter2D(Collider2D other) 
@@ -120,7 +123,11 @@ public class GameManager : MonoBehaviour
             EnemyManager.Instance.GenerateEnemies();
             Debug.Log("Attempted to regenerate enemies.");
         }
-       
+
+        // 重置玩家和武器而不是重新创建它们
+        Player.instance.ResetPlayerState();
+        //WeaponManager.instance.ResetWeapons();
+
         //GenerateLevel();
     }
 
