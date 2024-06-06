@@ -1,167 +1,130 @@
-
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class EnemyType
-    {
-        public GameObject prefab;  // 敌人预制体
-        public float spawnDelay;  // 产生间隔
-        public int baseMaxCount;  // 基础最大数量
-        public float baseSpawnProbability;  // 基础出现概率
-    }
-
-    public List<EnemyType> enemyTypes;
-    private Dictionary<string, float> nextSpawnTime;
-
-    [SerializeField] private int maxEnemies = 100; // 最大敌人数量
-    private int currentEnemies = 0;
-    private Transform enemiesParent;
-
-    private float gameStartTime; // 游戏开始时间
-
     public static EnemyManager Instance;
+    [Header("Enemy Spawn Settings")]
+    [SerializeField] Transform[] spawnPoints;
+    [SerializeField] GameObject[] enemyPrefabs;
+    [SerializeField] GameObject spawnWarning;
+    [SerializeField] float spawnTime = 3f;
+    [SerializeField] float spawnRadius = 1.5f;
 
-    private void Awake()
+    [Header("Boss")]
+    [SerializeField] GameObject bossPrefab;
+    [SerializeField] Transform bossSpawnPoint;
+
+    private List<Vector2> spawnPosList = new List<Vector2>();
+    private List<GameObject> enemyList = new List<GameObject>();
+    private WaitForSeconds waitSpawnTime;
+    private WaitForSeconds waitSpawnWarningTime = new WaitForSeconds(1f);
+    private WaitForSeconds waitSpawnInterval = new WaitForSeconds(0.04f);
+    private Coroutine spawnBossCoroutine;
+
+    public List<GameObject> allEnemies = new List<GameObject>();
+    Enemy curEnemy;
+
+    void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            enemiesParent = new GameObject("Enemies").transform;
-            nextSpawnTime = new Dictionary<string, float>();
-            gameStartTime = Time.time;
-        }
-        else
-        {
-            Destroy(gameObject); // 避免重复实例
-        }
+        Instance = this;
+        waitSpawnTime = new WaitForSeconds(spawnTime);
     }
 
-    void Start()
+    void OnEnable()
     {
-        foreach (var enemyType in enemyTypes)
+        StartCoroutine(SpawnEnemy());
+    }
+
+    void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
+    public IEnumerator SpawnEnemy()
+    {
+        if (enemyPrefabs == null || enemyPrefabs.Length == 0)
         {
-            nextSpawnTime[enemyType.prefab.name] = Time.time + enemyType.spawnDelay;
-            ObjectPool.Instance.CreatePool(enemyType.prefab.name, enemyType.prefab, enemyType.baseMaxCount);
+            Debug.LogError("Enemy prefabs array is null or empty.");
+            yield break;
         }
-    }
-
-    void Update()
-    {
-        float elapsedTime = Time.time - gameStartTime;
-        AdjustMaxEnemiesBasedOnTime(elapsedTime);
-
-        foreach (var enemyType in enemyTypes)
+        if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            AttemptToSpawnEnemy(enemyType, elapsedTime);
+            Debug.LogError("Spawn points array is null or empty.");
+            yield break;
         }
-    }
 
-    private void AdjustMaxEnemiesBasedOnTime(float elapsedTime)
-    {
-        maxEnemies = 100 + Mathf.FloorToInt(elapsedTime / 30f) * 10;
-    }
-
-    private void AttemptToSpawnEnemy(EnemyType enemyType, float elapsedTime)
-    {
-        if (Time.time >= nextSpawnTime[enemyType.prefab.name] && currentEnemies < maxEnemies)
+        yield return waitSpawnWarningTime;
+        while (true)
         {
-            if (Random.Range(0f, 1f) <= GetSpawnProbability(enemyType, elapsedTime))
+            if (WaveManager.Instance.WaveNum == 5 && spawnBossCoroutine == null)
             {
-                SpawnEnemy(enemyType.prefab.name);
-                nextSpawnTime[enemyType.prefab.name] = Time.time + enemyType.spawnDelay;
+                spawnBossCoroutine = StartCoroutine(SpawnBoss());
             }
+            StartCoroutine(SpawnEnemies(WaveManager.Instance.GetWaveEnemyCount()));
+            yield return waitSpawnTime;
         }
     }
 
-    public void GenerateEnemies()
+    public IEnumerator SpawnEnemies(int enemyNum)
     {
-        Debug.Log("Starting to generate enemies.");
-        foreach (var enemyType in enemyTypes)
+        spawnPosList.Clear();
+        enemyList.Clear();
+        for (int i = 0; i < enemyNum; i++)
         {
-            int maxPossibleEnemies = maxEnemies - currentEnemies;
-            if (maxPossibleEnemies > 0)
-            {
-                int enemiesToGenerate = Mathf.Min(maxPossibleEnemies, enemyType.baseMaxCount);
-                Debug.Log($"Attempting to generate {enemiesToGenerate} enemies of type {enemyType.prefab.name}.");
+            spawnPosList.Add(spawnPoints[Random.Range(0, spawnPoints.Length)].position + Random.insideUnitSphere * spawnRadius);
+            enemyList.Add(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)]);
+        }
 
-                for (int i = 0; i < enemiesToGenerate; i++)
-                {
-                    if (Random.Range(0f, 1f) < enemyType.baseSpawnProbability)
-                    {
-                        SpawnEnemy(enemyType.prefab.name);
-                    }
-                }
+        for (int i = 0; i < enemyNum; i++)
+        {
+            yield return waitSpawnInterval;
+            ObjectPool.Release(spawnWarning, spawnPosList[i], Quaternion.identity);
+            //AudioManager.Instance.PlayRandomSFX();
+        }
+
+        yield return waitSpawnWarningTime;
+
+        for (int i = 0; i < enemyNum; i++)
+        {
+            GameObject enemy = ObjectPool.Release(enemyList[i], spawnPosList[i], Quaternion.identity);
+            enemy.GetComponent<Enemy>().InitializeAttributes(WaveManager.Instance.GetWaveAttributes());
+            allEnemies.Add(enemy);
+        }
+    }
+
+    public IEnumerator SpawnBoss()
+    {
+        yield return waitSpawnWarningTime;
+        ObjectPool.Release(spawnWarning, bossSpawnPoint.position, Quaternion.identity, Vector3.one * 2);
+        yield return waitSpawnWarningTime;
+        GameObject boss = ObjectPool.Release(bossPrefab, bossSpawnPoint.position, Quaternion.identity);
+        allEnemies.Add(boss);
+        // Additional boss setup can go here
+    }
+
+    public void RemoveEnemy(GameObject enemy)
+    {
+        allEnemies.Remove(enemy);
+    }
+
+    public void ClearAllEnemies(bool dropLoot = false)
+    {
+        for (int i = allEnemies.Count - 1; i >= 0; i--)
+        {
+            Enemy enemy = allEnemies[i].GetComponent<Enemy>();
+            if (dropLoot)
+            {
+                enemy.DropLoot();
             }
             else
             {
-                Debug.Log("Max enemy count reached, not generating more enemies.");
+                enemy.Die();
             }
         }
+        StopAllCoroutines();
     }
 
-
-
-    void SpawnEnemy(string prefabName)
-    {
-        Vector3? position = PositionManager.Instance.GetRandomPosition(true);
-        if (position != null)
-        {
-            GameObject enemy = ObjectPool.Instance.SpawnFromPool(prefabName, position.Value, Quaternion.identity);
-            if (enemy != null)
-            {
-                enemy.transform.SetParent(enemiesParent);  
-                currentEnemies++;
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Failed to get a position for spawning enemy.");
-        }
-    }
-
-
-    private float GetSpawnProbability(EnemyType enemyType, float elapsedTime)
-    {
-        return Mathf.Clamp01(enemyType.baseSpawnProbability + (elapsedTime / 600f));  // 动态增加概率
-    }
-
-    public void DestroyEnemy(GameObject enemy)
-    {
-        string prefabName = enemy.name.Replace("(Clone)", "").Trim();
-        ObjectPool.Instance.ReturnToPool(prefabName, enemy);
-        currentEnemies--;
-    }
-
-    public void OnDestroyAllEnemies()
-    {
-        Debug.Log("Destroying all enemies, count: " + enemiesParent.childCount);
-        List<GameObject> children = new List<GameObject>();
-        foreach (Transform child in enemiesParent)
-        {
-            children.Add(child.gameObject);
-        }
-
-        foreach (GameObject child in children)
-        {
-            string prefabName = child.name.Replace("(Clone)", "").Trim();
-            ObjectPool.Instance.ReturnToPool(prefabName, child);
-        }
-        currentEnemies = 0;  // 此处重置当前敌人数量
-        Debug.Log("Completed destroying all enemies.");
-    }
-
-
-    public void ResetSpawnTimes()
-    {
-        foreach (var enemyType in enemyTypes)
-        {
-            nextSpawnTime[enemyType.prefab.name] = Time.time + enemyType.spawnDelay;  // 确保重置时间
-        }
-        Debug.Log("Spawn times reset.");
-    }
-
-
+    
 }

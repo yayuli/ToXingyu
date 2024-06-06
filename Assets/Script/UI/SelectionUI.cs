@@ -6,6 +6,8 @@ using TMPro;
 
 public class SelectionUI : MonoBehaviour
 {
+    public static SelectionUI instance;
+
     [Header("UI Components")]
     public TMP_Text[] upgradeDescTexts = new TMP_Text[3];
     public Image[] weaponIcons = new Image[3];
@@ -25,7 +27,18 @@ public class SelectionUI : MonoBehaviour
 
     public WeaponManager weaponManager;  // 在 Inspector 中设置这个引用
 
-
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // 使对象跨场景持续存在
+        }
+        else
+        {
+            Destroy(gameObject); // 确保不创建重复实例
+        }
+    }
 
     void Start()
     {

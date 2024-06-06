@@ -74,12 +74,7 @@ public class MazeGenerator : MonoBehaviour
     private List<Vector2> positions;
     #endregion
 
-    private void Start()
-    {
-        GenerateMaze(mazeRows, mazeColumns);
-
-    }
-
+  
     public void GenerateMaze(int rows, int columns)
     {
         if (mazeParent != null) DeleteMaze();

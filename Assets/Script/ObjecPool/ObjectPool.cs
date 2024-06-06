@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,155 +6,110 @@ public class ObjectPool : MonoBehaviour
     [System.Serializable]
     public class Pool
     {
-        public string name;
-        public GameObject prefab;
-        public int size;
-    }
+        public GameObject Prefab;
+        public int Size;
+        private Queue<GameObject> poolObjects;
+        public Transform PoolParent;
 
-    private const int ExpandAmount = 50;
-    public List<Pool> pools;
-    private Dictionary<string, Queue<GameObject>> poolDictionary;
-
-    // 在这里定义一个字典来存储预制体引用
-    private Dictionary<string, GameObject> prefabDictionary = new Dictionary<string, GameObject>();
-
-
-    private static ObjectPool _instance;
-    public static ObjectPool Instance
-    {
-        get
+        public void Initialize(Transform parent)
         {
-           // if (_instance == null) Debug.LogError("ObjectPool instance not set");
-            return _instance;
+            PoolParent = parent;
+            poolObjects = new Queue<GameObject>();
+
+            for (int i = 0; i < Size; i++)
+            {
+                GameObject obj = Instantiate(Prefab, PoolParent);
+                obj.SetActive(false);
+                poolObjects.Enqueue(obj);
+            }
+        }
+
+        public GameObject GetPreparedObject(Vector3 position, Quaternion rotation, Vector3? localScale = null)
+        {
+            if (poolObjects.Count == 0)
+            {
+                Debug.LogWarning($"Expanding pool for: {Prefab.name}");
+                ExpandPool(5);  // Expand pool by 5 additional objects
+            }
+
+            GameObject obj = poolObjects.Dequeue();
+            obj.transform.position = position;
+            obj.transform.rotation = rotation;
+            if (localScale.HasValue)
+            {
+                obj.transform.localScale = localScale.Value;
+            }
+            obj.SetActive(true);
+            return obj;
+        }
+
+        private void ExpandPool(int expandBy)
+        {
+            for (int i = 0; i < expandBy; i++)
+            {
+                GameObject obj = Instantiate(Prefab, PoolParent);
+                obj.SetActive(false);
+                poolObjects.Enqueue(obj);
+            }
+        }
+
+        public void ReturnObjectToPool(GameObject objectToReturn)
+        {
+            objectToReturn.SetActive(false);
+            poolObjects.Enqueue(objectToReturn);
         }
     }
+
+    public static ObjectPool Instance { get; private set; }
+    public List<Pool> Pools;
+    private Dictionary<GameObject, Pool> prefabToPoolMap;
 
     void Awake()
     {
-        if (_instance != null)
+        if (Instance == null)
         {
-           // Debug.LogWarning("Multiple instances of ObjectPool found!");
-            return;
-        }
-        _instance = this;
-        InitializePools();
-
-        LoadPrefabs();
-    }
-
-    void InitializePools()
-    {
-        poolDictionary = new Dictionary<string, Queue<GameObject>>();
-
-        foreach (Pool pool in pools)
-        {
-            CreatePool(pool.name, pool.prefab, pool.size);
-        }
-    }
-
-    public void CreatePool(string poolName, GameObject prefab, int size)
-    {
-        if (!poolDictionary.ContainsKey(poolName))
-        {
-            Queue<GameObject> objectQueue = new Queue<GameObject>();
-
-            for (int i = 0; i < size; i++)
-            {
-                GameObject obj = Instantiate(prefab);
-                obj.SetActive(false);
-                objectQueue.Enqueue(obj);
-            }
-
-            poolDictionary.Add(poolName, objectQueue);
-        }
-    }
-
-    // 加载所有预制体到字典
-    private void LoadPrefabs()
-    {
-        GameObject[] allPrefabs = Resources.LoadAll<GameObject>("Enemies");
-        foreach (GameObject prefab in allPrefabs)
-        {
-            if (!prefabDictionary.ContainsKey(prefab.name))
-            {
-                prefabDictionary.Add(prefab.name, prefab);
-            }
-        }
-    }
-
-    // 通过名称查找预制体
-    private GameObject FindPrefabByName(string prefabName)
-    {
-        if (prefabDictionary.TryGetValue(prefabName, out GameObject prefab))
-        {
-            return prefab;
-        }
-        Debug.LogWarning($"Prefab not found for name: {prefabName}");
-        return null;
-    }
-
-    public GameObject SpawnFromPool(string poolName, Vector3 position, Quaternion rotation)
-    {
-        if (!poolDictionary.ContainsKey(poolName))
-        {
-            Debug.LogWarning($"No pool with name: {poolName} found. Attempting to create one.");
-            var prefab = FindPrefabByName(poolName);
-            if (prefab != null)
-            {
-                CreatePool(poolName, prefab, ExpandAmount);
-            }
-            else
-            {
-                Debug.LogError($"Failed to create pool for: {poolName} because the prefab could not be found.");
-                return null;
-            }
-        }
-
-        if (poolDictionary[poolName].Count == 0)
-        {
-            Debug.Log($"Expanding pool for: {poolName}");
-            ExpandPool(poolName, ExpandAmount);
-        }
-
-        GameObject objectToSpawn = poolDictionary[poolName].Dequeue();
-        objectToSpawn.SetActive(true);
-        objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
-
-        return objectToSpawn;
-    }
-
-
-    private void ExpandPool(string poolName, int additionalCount)
-    {
-        var pool = pools.Find(p => p.name == poolName);
-        if (pool == null)
-        {
-           // Debug.LogError($"No pool configuration found for prefab: {poolName}");
-            return;
-        }
-
-        for (int i = 0; i < additionalCount; i++)
-        {
-            GameObject obj = Instantiate(pool.prefab);
-            obj.SetActive(false);
-            poolDictionary[poolName].Enqueue(obj);
-        }
-    }
-
-    public void ReturnToPool(string poolName, GameObject objectToReturn)
-    {
-        if (poolDictionary.ContainsKey(poolName))
-        {
-            objectToReturn.SetActive(false);
-            objectToReturn.transform.SetParent(null);  // 从父对象中移除
-            poolDictionary[poolName].Enqueue(objectToReturn);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Debug.LogError("No pool found for: " + poolName);
-            Destroy(objectToReturn);  // 如果没有相应的池，销毁对象
+            Destroy(gameObject);
+            return;
+        }
+
+        prefabToPoolMap = new Dictionary<GameObject, Pool>();
+        foreach (Pool pool in Pools)
+        {
+            Transform poolParent = new GameObject("Pool - " + pool.Prefab.name).transform;
+            poolParent.parent = transform;
+            pool.Initialize(poolParent);
+            prefabToPoolMap[pool.Prefab] = pool;
         }
     }
 
+    public static GameObject Release(GameObject prefab, Vector3 position, Quaternion rotation, Vector3? localScale = null)
+    {
+        if (Instance.prefabToPoolMap.TryGetValue(prefab, out Pool pool))
+        {
+            return pool.GetPreparedObject(position, rotation, localScale);
+        }
+        else
+        {
+            Debug.LogError($"No pool available for prefab: {prefab.name}");
+            return null;
+        }
+    }
+
+    public static void Return(GameObject prefab, GameObject objectToReturn)
+    {
+        if (Instance.prefabToPoolMap.TryGetValue(prefab, out Pool pool))
+        {
+            pool.ReturnObjectToPool(objectToReturn);
+        }
+        else
+        {
+            Debug.LogError($"No pool available for prefab: {prefab.name}");
+            Destroy(objectToReturn);
+        }
+    }
 }

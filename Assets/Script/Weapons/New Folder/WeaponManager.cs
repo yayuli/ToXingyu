@@ -21,6 +21,8 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private float radius = 1f;
     [SerializeField] private int maxWeapons = 6;
 
+    public WeaponPanel weaponPanel;
+
     private Transform player;
     private List<GameObject> weapons = new List<GameObject>();
 
@@ -40,6 +42,7 @@ public class WeaponManager : MonoBehaviour
     {
         player = GameObject.Find("Player").transform;
         AddInitialWeapon();  // 添加初始武器
+        weaponPanel = FindObjectOfType<WeaponPanel>();
     }
 
     void Update()
@@ -57,10 +60,7 @@ public class WeaponManager : MonoBehaviour
         {
             AddWeapon(initialWeaponPrefab);
         }
-        else
-        {
-            Debug.LogError("Initial weapon prefab is not assigned.");
-        }
+        
     }
 
     // Overload to handle weapon type
@@ -71,8 +71,7 @@ public class WeaponManager : MonoBehaviour
         {
             AddWeapon(weaponPrefab);
         }
-        // 在添加武器后更新UI
-        FindObjectOfType<WeaponPanel>().UpdateWeaponSlotsDisplay();
+        weaponPanel.UpdateWeaponSlotsDisplay();
     }
 
     // Overload to handle direct GameObject instantiation
@@ -95,11 +94,8 @@ public class WeaponManager : MonoBehaviour
         newWeapon.GetComponent<WeaponBase>().SetOffset(positionOffset);
         newWeapon.GetComponent<WeaponBase>().Initialize(weaponPrefab.GetComponent<Item>().itemData);
 
-        WeaponPanel panel = FindObjectOfType<WeaponPanel>();
-        if (panel != null)
-        {
-            panel.UpdateWeaponSlotsDisplay();
-        }
+        weaponPanel.UpdateWeaponSlotsDisplay();
+        
     }
 
 
@@ -138,7 +134,7 @@ public class WeaponManager : MonoBehaviour
         {
             Debug.Log("Not enough weapons of the same type to merge.");
         }
-        WeaponPanel.instance.UpdateWeaponSlotsDisplay();
+        weaponPanel.UpdateWeaponSlotsDisplay();
     }
 
     void UpgradeWeapon(GameObject weapon)

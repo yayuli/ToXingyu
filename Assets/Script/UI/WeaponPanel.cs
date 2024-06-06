@@ -18,7 +18,15 @@ public class WeaponPanel : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // 使对象跨场景持续存在
+        }
+        else
+        {
+            Destroy(gameObject); // 确保不创建重复实例
+        }
     }
 
     public void SelectWeapon(GameObject weaponPrefab)

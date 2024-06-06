@@ -25,9 +25,14 @@ public class ExperienceLevelController : MonoBehaviour
     private void Awake()
     {
         if (instance == null)
+        {
             instance = this;
+            DontDestroyOnLoad(gameObject); // 使对象跨场景持续存在
+        }
         else
-            Destroy(gameObject);
+        {
+            Destroy(gameObject); // 确保不创建重复实例
+        }
     }
 
     private void Start()
@@ -97,10 +102,11 @@ public class ExperienceLevelController : MonoBehaviour
         // 升级UI界面
         UIManager.instance.levelUpPanel.SetActive(true);
 
-        UIManager.instance.ShowLevelUpEffect();
-
         // 暂停所有游戏活动
         Time.timeScale = 0f;
+
+        UIManager.instance.ShowLevelUpEffect();
+
     }
 
     // 恢复时间方法
