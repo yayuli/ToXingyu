@@ -20,16 +20,16 @@ public class MazeGenerator : MonoBehaviour
     [Tooltip("How many cells tall is the maze. MUST be an even number. " +
         "If number is odd, it will be reduced by 1.\n\n" +
         "Minimum  value of 4.")]
-    public int mazeRows;
+    public static int mazeRows;
     [Tooltip("How many cells wide is the maze. Must be an even number. " +
         "If number is odd, it will be reduced by 1.\n\n" +
         "Minimum value of 4.")]
-    public int mazeColumns;
+    public static int mazeColumns;
 
     [Header("Maze object variables:")]
     [Tooltip("Cell prefab object.")]
     [SerializeField]
-    private GameObject cellPrefab;
+    private List<GameObject> cellPrefabs;
 
     [Tooltip("If you want to disable the main sprite so the cell has no background, set to TRUE. This will create a maze with only walls.")]
     public bool disableCellSprite;
@@ -100,6 +100,10 @@ public class MazeGenerator : MonoBehaviour
         // Initialize the positions list to ensure it's not null
         positions = new List<Vector2>();
 
+        // Select a random prefab at the start of maze generation
+        GameObject selectedPrefab = cellPrefabs[Random.Range(0, cellPrefabs.Count)];
+        cellSize = selectedPrefab.transform.localScale.x;
+
         // Set starting point, set spawn point to start.
         Vector2 startPos = new Vector2(-(cellSize * (mazeColumns / 2)) + (cellSize / 2), -(cellSize * (mazeRows / 2)) + (cellSize / 2));
         Vector2 spawnPos = startPos;
@@ -108,7 +112,7 @@ public class MazeGenerator : MonoBehaviour
         {
             for (int y = 1; y <= mazeRows; y++)
             {
-                GenerateCell(spawnPos, new Vector2(x, y));
+                GenerateCell(spawnPos, new Vector2(x, y), selectedPrefab);
 
                 // Store the position for use in other parts of the game
                 positions.Add(spawnPos);
@@ -309,22 +313,15 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
-    public void GenerateCell(Vector2 pos, Vector2 keyPos)
+    public void GenerateCell(Vector2 pos, Vector2 keyPos, GameObject prefab)
     {
-        //behaves correctly even if the prefab isn't set
-        if (cellPrefab==null)
-        {
-            Debug.LogError("Cell prefab is not assigned in the inspector");
-            return;
-        }
-
         // Create new Cell object.
         Cell newCell = new Cell();
 
         // Store reference to position in grid.
         newCell.gridPos = keyPos;
-        // Set and instantiate cell GameObject.
-        newCell.cellObject = Instantiate(cellPrefab, pos, cellPrefab.transform.rotation);
+        // Set and instantiate cell GameObject using the given prefab.
+        newCell.cellObject = Instantiate(prefab, pos, prefab.transform.rotation);
         // Child new cell to parent.
         if (mazeParent != null) newCell.cellObject.transform.parent = mazeParent.transform;
         // Set name of cellObject.
@@ -355,6 +352,7 @@ public class MazeGenerator : MonoBehaviour
         if (mazeRows <= 3) mazeRows = 4;
         if (mazeColumns <= 3) mazeColumns = 4;
 
+        GameObject cellPrefab = cellPrefabs[Random.Range(0, cellPrefabs.Count)];
         // Determine size of cell using localScale.
         cellSize = cellPrefab.transform.localScale.x;
 

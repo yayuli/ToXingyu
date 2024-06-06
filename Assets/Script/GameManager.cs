@@ -8,8 +8,15 @@ public class GameManager : MonoBehaviour
 {
     private IGenerator[] generators;
     [SerializeField] private MazeGenerator mazeGenerator;
+    public MiniCamera miniCamera; // Assign this in the Inspector
+
+    [SerializeField] private int addRows = 2;
+    [SerializeField] private int addCols = 2;
+
+    private int level = 1;
 
     public NextLevelUI nextLevelUI;
+
     //public AudioManager audioManager;
     //public LoadingScreen loadingScreen;
 
@@ -26,23 +33,36 @@ public class GameManager : MonoBehaviour
         //other...like audio and screen
     }
 
-    IEnumerator TransitionToLevel(string levelName)
+    IEnumerator TransitionToLevel(string sceneName)
     {
         yield return StartCoroutine(nextLevelUI.FadeOut());
 
-     
-        yield return new WaitForEndOfFrame();  // 确保场景加载完成
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        asyncLoad.allowSceneActivation = false;
 
-        //yield return new WaitForSeconds(1f);
+
+        // 循环检查场景是否加载完毕
+        while (!asyncLoad.isDone)
+        {
+            // 更新加载进度
+            float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);  // 因为加载进度在技术上永远到达不了1，所以除以0.9
+            nextLevelUI.SetProgress(progress);
+
+            // 如果加载完成，但未到100%，则手动设置为100%
+            if (asyncLoad.progress >= 0.9f)
+            {
+                nextLevelUI.SetProgress(1);
+                asyncLoad.allowSceneActivation = true;  // 允许场景激活
+            }
+
+            yield return null;
+        }
+        miniCamera.IncreaseCameraSize();
+        yield return new WaitForSeconds(2.0f);
         // 开始淡入
         yield return StartCoroutine(nextLevelUI.FadeIn());
 
         //yield return StartCoroutine(nextLevelUI.FadeOut());
-    }
-
-    public void LoadLevel(string levelName)
-    {
-        StartCoroutine(TransitionToLevel(levelName));
     }
 
     private void InitializeGenerators()
@@ -51,17 +71,16 @@ public class GameManager : MonoBehaviour
         {
             GenerateLevel();
         }
-        else
-        {
-            Debug.LogError("MazeGenerator instance not found!");
-        }
     }
 
     // 生成关卡的逻辑
     private void GenerateLevel()
     {
+        MazeGenerator.mazeRows += addRows;
+        MazeGenerator.mazeColumns += addCols;
+
         // 生成迷宫
-        mazeGenerator.GenerateMaze(mazeGenerator.mazeRows, mazeGenerator.mazeColumns);
+        mazeGenerator.GenerateMaze(MazeGenerator.mazeRows, MazeGenerator.mazeColumns);
 
         // 初始化和生成各种生成器的元素
         foreach (var generator in generators)
@@ -101,7 +120,8 @@ public class GameManager : MonoBehaviour
             EnemyManager.Instance.GenerateEnemies();
             Debug.Log("Attempted to regenerate enemies.");
         }
-        GenerateLevel();
+       
+        //GenerateLevel();
     }
 
 
