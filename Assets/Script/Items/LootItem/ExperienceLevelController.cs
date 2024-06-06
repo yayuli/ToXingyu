@@ -19,7 +19,9 @@ public class ExperienceLevelController : MonoBehaviour
     [SerializeField] private int refreshIncrement= 10;
     [SerializeField] private int levelCostIncrement = 6;
     [SerializeField] private int refreshCount = 0;//记录
+
     
+
     private void Awake()
     {
         if (instance == null)
@@ -94,6 +96,9 @@ public class ExperienceLevelController : MonoBehaviour
 
         // 升级UI界面
         UIManager.instance.levelUpPanel.SetActive(true);
+
+        UIManager.instance.ShowLevelUpEffect();
+
         // 暂停所有游戏活动
         Time.timeScale = 0f;
     }
@@ -102,6 +107,7 @@ public class ExperienceLevelController : MonoBehaviour
     public void ResumeGame()
     {
         UIManager.instance.levelUpPanel.SetActive(false);
+       
         Time.timeScale = 1f;
     }
 }
