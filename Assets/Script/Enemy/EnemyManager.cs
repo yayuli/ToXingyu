@@ -16,6 +16,10 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] GameObject bossPrefab;
     [SerializeField] Transform bossSpawnPoint;
 
+    //defining delegate a and events(for Weapen script)
+    public delegate void EnemyUpdateHandler();
+    public event EnemyUpdateHandler OnEnemyUpdated;
+
     private List<Vector2> spawnPosList = new List<Vector2>();
     private List<GameObject> enemyList = new List<GameObject>();
     private WaitForSeconds waitSpawnTime;

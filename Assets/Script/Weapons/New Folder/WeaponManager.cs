@@ -110,42 +110,80 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    public void TryMergeWeapons(GameObject weaponPrefab)
+    public void TryMergeWeapons()
     {
-        List<GameObject> sameTypeWeapons = weapons.FindAll(w => w.name == weaponPrefab.name);
+        Dictionary<string, List<GameObject>> weaponGroups = new Dictionary<string, List<GameObject>>();
 
-        if (sameTypeWeapons.Count >= 2)
+        // 分组同类型的武器
+        foreach (var weapon in weapons)
         {
-            // 假设合并只需要两个武器，您可以根据需要调整
-            GameObject weaponToUpgrade = sameTypeWeapons[0];
-            GameObject weaponToRemove = sameTypeWeapons[1];
+            Item item = weapon.GetComponent<Item>();
+            string weaponKey = $"{item.itemData.name}_{item.itemData.level}";
 
-            // 升级逻辑，例如增加攻击力，改变外观等
-            UpgradeWeapon(weaponToUpgrade);
-
-            // 从列表和场景中移除第二个武器
-            weapons.Remove(weaponToRemove);
-            Destroy(weaponToRemove);
-
-            Debug.Log("Weapons merged and upgraded.");
-
+            if (!weaponGroups.ContainsKey(weaponKey))
+            {
+                weaponGroups[weaponKey] = new List<GameObject>();
+            }
+            weaponGroups[weaponKey].Add(weapon);
         }
-        else
+
+        // 检查每组武器是否可以合并
+        foreach (var group in weaponGroups)
         {
-            Debug.Log("Not enough weapons of the same type to merge.");
+            if (group.Value.Count >= 2)  // 如果有两个以上同样的武器
+            {
+                // 合并武器，这里简化为只合并两个
+                GameObject weaponToUpgrade = group.Value[0];
+                GameObject weaponToRemove = group.Value[1];
+
+                // 执行升级逻辑
+                UpgradeWeapon(weaponToUpgrade);
+
+                // 从列表和场景中移除第二个武器
+                weapons.Remove(weaponToRemove);
+                Destroy(weaponToRemove);
+
+                Debug.Log("Weapons merged and upgraded.");
+                break;  // 每次只合并一对武器
+            }
         }
         weaponPanel.UpdateWeaponSlotsDisplay();
     }
 
     void UpgradeWeapon(GameObject weapon)
     {
-        // 这里添加具体的升级逻辑
         Item item = weapon.GetComponent<Item>();
         item.itemData.level++;  // 假设每个武器都有一个级别
         item.itemData.attackPower += 10;  // 增加攻击力，根据实际需求调整
 
-        // 可以添加其他效果，如改变武器颜色或动画
+        // 根据等级选择颜色
+        Color newColor = Color.white;  // 默认白色
+        if (item.itemData.level == 2)
+        {
+            newColor = Color.blue;
+        }
+        else if (item.itemData.level == 3)
+        {
+            newColor = Color.red;
+        }
+
+        // 更新颜色
+        UpdateColor(weapon, newColor);
     }
 
-  
+    void UpdateColor(GameObject weapon, Color newColor)
+    {
+        Renderer weaponRenderer = weapon.GetComponent<Renderer>();
+        if (weaponRenderer != null)
+        {
+            weaponRenderer.material.color = newColor;
+        }
+
+        // 递归更新子对象的颜色
+        foreach (Transform child in weapon.transform)
+        {
+            UpdateColor(child.gameObject, newColor);
+        }
+    }
+
 }

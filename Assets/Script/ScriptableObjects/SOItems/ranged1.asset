@@ -30,11 +30,12 @@ MonoBehaviour:
   moveSpeedFactor: 0
   pickUpRangeFactor: 0
   prefab: {fileID: 438060947978296620, guid: 2e5a091306c584921a6abf180a00c659, type: 3}
-  attackPower: 0
-  speed: 6
+  Weapondescription: this is weaponssss
+  attackPower: 31
+  speed: 10
   damage: 10
   cooldown: 1
   range: 6
-  level: 1
+  level: 10
   weaponColor: {r: 1, g: 1, b: 1, a: 1}
-  cost: 16
+  cost: 10

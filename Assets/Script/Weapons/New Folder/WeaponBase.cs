@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public abstract class WeaponBase : MonoBehaviour
 {
-    public static WeaponBase Instance;
+    //public static WeaponBase Instance;
     [Header("Config")]
     public float fireRate;//开火频率
     public float fireDistance;//射程
@@ -82,4 +82,6 @@ public abstract class WeaponBase : MonoBehaviour
     }
     //抽象方法，由具体的武器类实现具体的行为
     public abstract void Shoot();
+
+
 }

@@ -27,6 +27,7 @@ public class ItemData : ScriptableObject
 
     [Header("Weapon")]
     public GameObject prefab;
+    public string Weapondescription;
     public int attackPower;
     public float speed;
     public int damage;  // 可以对应于 damage

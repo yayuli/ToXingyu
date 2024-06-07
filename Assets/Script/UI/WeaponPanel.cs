@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using System.Collections.Generic;
 
 public class WeaponPanel : MonoBehaviour
 {
@@ -56,6 +56,8 @@ public class WeaponPanel : MonoBehaviour
 
     public void UpdateWeaponSlotsDisplay()
     {
+        Dictionary<string, int> weaponCounts = new Dictionary<string, int>();
+
         for (int i = 0; i < weaponSlots.Length; i++)
         {
             if (i < weaponManager.Weapons.Count && weaponManager.Weapons[i] != null)
@@ -65,15 +67,27 @@ public class WeaponPanel : MonoBehaviour
                 {
                     weaponSlots[i].sprite = item.itemData.itemIcon;
                     weaponSlots[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    weaponSlots[i].gameObject.SetActive(false);
+
+                    // 计数每种武器的数量
+                    if (!weaponCounts.ContainsKey(item.itemData.name))
+                    {
+                        weaponCounts[item.itemData.name] = 0;
+                    }
+                    weaponCounts[item.itemData.name]++;
                 }
             }
             else
             {
                 weaponSlots[i].gameObject.SetActive(false);
+            }
+        }
+
+        // 更新UI以显示是否有足够的武器可以合并
+        foreach (var count in weaponCounts)
+        {
+            if (count.Value >= 2)
+            {
+                Debug.Log($"You have {count.Value} weapons of type {count.Key} ready to merge.");
             }
         }
     }
@@ -110,7 +124,7 @@ public class WeaponPanel : MonoBehaviour
     {
         if (selectedWeaponPrefab != null)
         {
-            weaponManager.TryMergeWeapons(selectedWeaponPrefab);
+            weaponManager.TryMergeWeapons();
         }
         else
         {
