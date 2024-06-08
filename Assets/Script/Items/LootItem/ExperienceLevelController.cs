@@ -20,7 +20,10 @@ public class ExperienceLevelController : MonoBehaviour
     [SerializeField] private int levelCostIncrement = 6;
     [SerializeField] private int refreshCount = 0;//记录
 
-    
+
+    [Header("Level Up Effects")]
+    public ParticleSystem ExpUpEffect;
+
 
     private void Awake()
     {
@@ -103,9 +106,11 @@ public class ExperienceLevelController : MonoBehaviour
         UIManager.instance.levelUpPanel.SetActive(true);
 
         // 暂停所有游戏活动
-        Time.timeScale = 0f;
+        Time.timeScale = 0f;;
 
-        UIManager.instance.ShowLevelUpEffect();
+        // 确保每次都播放粒子效果
+        ExpUpEffect.Stop();
+        ExpUpEffect.Play();
 
     }
 
@@ -115,5 +120,6 @@ public class ExperienceLevelController : MonoBehaviour
         UIManager.instance.levelUpPanel.SetActive(false);
        
         Time.timeScale = 1f;
+       
     }
 }

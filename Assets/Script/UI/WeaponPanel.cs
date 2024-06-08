@@ -3,18 +3,23 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
-public class WeaponPanel : MonoBehaviour
+[System.Serializable]
+public class WeaponSlotUI
 {
-    public static WeaponPanel instance;
-    public GameObject detailPanel; // 详情面板
+    public GameObject detailPanel; // 每个slot的详情面板
     public TMP_Text detailText; // 显示详细信息的文本
     public Button upgradeButton; // 升级按钮
     public Button sellButton; // 卖出按钮
     public Button cancelButton; // 取消按钮
+}
+
+public class WeaponPanel : MonoBehaviour
+{
+    public static WeaponPanel instance;
     public Image[] weaponSlots; // 武器槽数组
+    public WeaponSlotUI[] weaponSlotsUI; // 每个武器槽的UI组件
 
     private WeaponManager weaponManager;
-    public GameObject selectedWeaponPrefab;  // 当前选中的武器预制体
 
     private void Awake()
     {
@@ -29,28 +34,29 @@ public class WeaponPanel : MonoBehaviour
         }
     }
 
-    public void SelectWeapon(GameObject weaponPrefab)
-    {
-        selectedWeaponPrefab = weaponPrefab;
-    }
-
     void Start()
     {
         weaponManager = WeaponManager.instance;
         InitializeWeaponSlots();
-        detailPanel.SetActive(false);//make sure the details panel is hidden initially
-        UpdateWeaponSlotsDisplay();//display statusof weapon slots during initialization
-        cancelButton.onClick.AddListener(() => detailPanel.SetActive(false));  // 只在Start中添加一次
+        UpdateWeaponSlotsDisplay(); // 更新武器槽的显示状态
     }
-  
-
+    
     void InitializeWeaponSlots()
     {
         for (int i = 0; i < weaponSlots.Length; i++)
         {
-            int index = i; // Important for capturing the correct loop variable in the lambda expression
-            weaponSlots[i].gameObject.AddComponent<Button>().onClick.AddListener(() => OnWeaponSelect(index));
-            //weaponSlots[i].gameObject.SetActive(true);
+            int index = i;  // Local copy of the loop variable for use in lambda expressions
+            weaponSlotsUI[index].detailPanel.SetActive(false); // 初始时隐藏所有详情面板
+            weaponSlotsUI[index].cancelButton.onClick.AddListener(() => weaponSlotsUI[index].detailPanel.SetActive(false));
+            weaponSlotsUI[index].upgradeButton.onClick.AddListener(() => UpgradeWeapon(weaponManager.Weapons[index]));
+            weaponSlotsUI[index].sellButton.onClick.AddListener(() => SellWeapon(weaponManager.Weapons[index]));
+
+            // 为每个武器槽添加点击事件来显示详情面板
+            if (weaponSlots[index].gameObject.GetComponent<Button>() == null)
+            {
+                weaponSlots[index].gameObject.AddComponent<Button>();
+            }
+            weaponSlots[index].gameObject.GetComponent<Button>().onClick.AddListener(() => OnWeaponSelect(index));
         }
     }
 
@@ -63,18 +69,14 @@ public class WeaponPanel : MonoBehaviour
             if (i < weaponManager.Weapons.Count && weaponManager.Weapons[i] != null)
             {
                 Item item = weaponManager.Weapons[i].GetComponent<Item>();
-                if (item != null && item.itemData != null)
-                {
-                    weaponSlots[i].sprite = item.itemData.itemIcon;
-                    weaponSlots[i].gameObject.SetActive(true);
+                weaponSlots[i].sprite = item.itemData.itemIcon;
+                weaponSlots[i].gameObject.SetActive(true);
 
-                    // 计数每种武器的数量
-                    if (!weaponCounts.ContainsKey(item.itemData.name))
-                    {
-                        weaponCounts[item.itemData.name] = 0;
-                    }
-                    weaponCounts[item.itemData.name]++;
+                if (!weaponCounts.ContainsKey(item.itemData.name))
+                {
+                    weaponCounts[item.itemData.name] = 0;
                 }
+                weaponCounts[item.itemData.name]++;
             }
             else
             {
@@ -82,7 +84,6 @@ public class WeaponPanel : MonoBehaviour
             }
         }
 
-        // 更新UI以显示是否有足够的武器可以合并
         foreach (var count in weaponCounts)
         {
             if (count.Value >= 2)
@@ -92,38 +93,26 @@ public class WeaponPanel : MonoBehaviour
         }
     }
 
-
     public void OnWeaponSelect(int index)
     {
+        foreach (var slotUI in weaponSlotsUI)
+        {
+            slotUI.detailPanel.SetActive(false); // 隐藏所有面板
+        }
+
         if (index < weaponManager.Weapons.Count && weaponManager.Weapons[index] != null)
         {
-            GameObject weapon = weaponManager.Weapons[index];
-            detailText.text = weapon.GetComponent<Item>().itemData.description;
-            detailPanel.SetActive(true);
-
-            upgradeButton.onClick.RemoveAllListeners();
-            upgradeButton.onClick.AddListener(() => UpgradeWeapon(weapon));
-            sellButton.onClick.RemoveAllListeners();
-            sellButton.onClick.AddListener(() => SellWeapon(weapon));
-        }
-        else
-        {
-            detailPanel.SetActive(false);
+            WeaponSlotUI selectedSlotUI = weaponSlotsUI[index];
+            selectedSlotUI.detailPanel.SetActive(true);
+            selectedSlotUI.detailText.text = weaponManager.Weapons[index].GetComponent<Item>().itemData.description;
         }
     }
-
-
-    public void HideDetailPanel()
-    {
-        detailPanel.SetActive(false);
-    }
-
-
 
     public void UpgradeWeapon(GameObject weapon)
     {
-        if (selectedWeaponPrefab != null)
+        if (weapon != null)
         {
+            Debug.Log("Upgrading weapon: " + weapon.name);
             weaponManager.TryMergeWeapons();
         }
         else
@@ -134,8 +123,14 @@ public class WeaponPanel : MonoBehaviour
 
     void SellWeapon(GameObject weapon)
     {
-        // Sell logic here
-        Debug.Log("Selling weapon...");
-        //weaponManager.RecycleWeapon(weapon);
+        if (weapon != null)
+        {
+            Debug.Log("Selling weapon: " + weapon.name);
+            // 实现卖出武器的逻辑
+        }
+        else
+        {
+            Debug.LogError("No weapon selected to sell.");
+        }
     }
 }

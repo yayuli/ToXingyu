@@ -14,9 +14,6 @@ public class UIManager : MonoBehaviour
 
     public GameObject levelUpPanel;
 
-    [Header("Level Up Effects")]
-    public ParticleSystem ExpUpEffect;
-
     private void Awake()
     {
         if (instance == null)
@@ -49,10 +46,5 @@ public class UIManager : MonoBehaviour
         currentExpText.text = "Total Exp: " + totalExp;  // 显示总经验值
     }
 
-    public void ShowLevelUpEffect()
-    {
-        ExpUpEffect.Play();
-
-    }
    
 }
