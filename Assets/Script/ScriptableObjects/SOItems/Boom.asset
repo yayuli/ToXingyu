@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8b867ce6f95481a8ae894531f64e81, type: 3}
   m_Name: Boom
   m_EditorClassIdentifier: 
-  itemName: Boom
-  description: booooooommmm
+  itemName: Bomb
+  description: Boom
   itemIcon: {fileID: -2413806693520163455, guid: 9e02e5013dddbfc42ba06bf2229db058, type: 3}
   effectMagnitude: 0
   duration: 0
@@ -30,6 +30,7 @@ MonoBehaviour:
   moveSpeedFactor: 0
   pickUpRangeFactor: 0
   prefab: {fileID: 0}
+  Weapondescription: 
   attackPower: 0
   speed: 0
   damage: 0

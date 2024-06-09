@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
+    [SerializeField] private MazeGenerator mazeGenerator;
+
     public Slider expSlider;
     public TMP_Text expLevelText;
     public TMP_Text currentExpText;
@@ -43,6 +45,23 @@ public class UIManager : MonoBehaviour
             PauseUnpause();
         }
     }
+    public void DestroyAllDontDestroyOnLoadObjects()
+    {
+        foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
+        {
+            if (go.hideFlags == HideFlags.None)
+            {
+                if (go.scene.buildIndex == -1)  // 检查是否属于 DontDestroyOnLoad 场景
+                {
+                    Destroy(go);
+                }
+            }
+        }
+
+
+    }
+
+
     public void UpdateExperience(int totalExp, int currentExp, int levelExp, int currentLvl)
     {
         expSlider.maxValue = levelExp;
@@ -51,16 +70,27 @@ public class UIManager : MonoBehaviour
         expLevelText.text = "Level: " + currentLvl;
         currentExpText.text = "Total Exp: " + totalExp;  // 显示总经验值
     }
+
     public void GoToMainMenu()
     {
         SceneManager.LoadScene("Main");
-        Time.timeScale = 1f;
+        pauseScreen.SetActive(false);
     }
+
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // 首先销毁所有 DontDestroyOnLoad 对象
+        DestroyAllDontDestroyOnLoadObjects();
+
+        // 重新加载游戏场景
+        SceneManager.LoadScene("GameScene");
+        mazeGenerator.ResetMazeSizeToDefault();
+
+        // 关闭暂停界面并恢复时间流逝
+        pauseScreen.SetActive(false);
         Time.timeScale = 1f;
     }
+
 
     public void QiutGame()
     {

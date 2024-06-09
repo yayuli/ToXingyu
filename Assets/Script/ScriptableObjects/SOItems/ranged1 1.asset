@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8b867ce6f95481a8ae894531f64e81, type: 3}
   m_Name: ranged1 1
   m_EditorClassIdentifier: 
-  itemName: rangedWeapon2
+  itemName: Staff
   description: weaponsss
   itemIcon: {fileID: 21300000, guid: 5f4e59de06fc230488998334b52127df, type: 3}
   effectMagnitude: 3

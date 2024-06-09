@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    public GameObject score;
+    //public GameObject score;
 
     protected virtual void Start()
     {
@@ -113,8 +113,8 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         Vector3 scorePosition = transform.position + new Vector3(0, 1.5f, 0);
-        GameObject ScoreText = Instantiate(score,scorePosition,Quaternion.identity);
-        Destroy(ScoreText, 1f);
+       // GameObject ScoreText = Instantiate(score,scorePosition,Quaternion.identity);
+       // Destroy(ScoreText, 1f);
         DropLoot();
         Destroy(gameObject);
         //anim.SetTrigger("Die");

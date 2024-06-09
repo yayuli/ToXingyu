@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8b867ce6f95481a8ae894531f64e81, type: 3}
   m_Name: ranged1
   m_EditorClassIdentifier: 
-  itemName: ranged1
+  itemName: MagicWand
   description: weapon1
   itemIcon: {fileID: 21300000, guid: 4a13515e8498cf142b15b4f3387eb067, type: 3}
   effectMagnitude: 3
@@ -31,11 +31,11 @@ MonoBehaviour:
   pickUpRangeFactor: 0
   prefab: {fileID: 438060947978296620, guid: 2e5a091306c584921a6abf180a00c659, type: 3}
   Weapondescription: this is weaponssss
-  attackPower: 31
+  attackPower: 51
   speed: 10
   damage: 10
   cooldown: 1
   range: 6
-  level: 10
+  level: 12
   weaponColor: {r: 1, g: 1, b: 1, a: 1}
   cost: 10

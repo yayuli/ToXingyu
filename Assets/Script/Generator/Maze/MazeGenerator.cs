@@ -74,7 +74,6 @@ public class MazeGenerator : MonoBehaviour
     private List<Vector2> positions;
     #endregion
 
-  
     public void GenerateMaze(int rows, int columns)
     {
         if (mazeParent != null) DeleteMaze();
@@ -86,6 +85,11 @@ public class MazeGenerator : MonoBehaviour
       
     }
 
+    public void ResetMazeSizeToDefault()
+    {
+        mazeRows = 2;
+        mazeColumns = 2;
+    }
     public Vector3 GetStartPosition()
     {
         // 返回中心房间的其中一个单元格的位置作为起始点

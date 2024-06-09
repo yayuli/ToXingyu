@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Rendering.DebugUI.Table;
+using UnityEngine.UIElements;
 
 
 public class GameManager : MonoBehaviour
@@ -11,7 +13,9 @@ public class GameManager : MonoBehaviour
         private IGenerator[] generators;
         [SerializeField] private MazeGenerator mazeGenerator;
 
-        [SerializeField] private int addRows = 2;
+    public int initialRows = 2;
+    public int initialColumns = 2;
+    [SerializeField] private int addRows = 2;
         [SerializeField] private int addCols = 2;
 
         private int level = 1;
@@ -37,7 +41,22 @@ public class GameManager : MonoBehaviour
             InitializeGenerators();
         }
 
-        private void Start()
+    public void StartGame(int rows, int columns)
+    {
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        SceneManager.sceneLoaded += OnSceneLoaded;  // 订阅场景加载完成事件
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "GameScene")
+        {
+            MazeGenerator mazeGenerator = FindObjectOfType<MazeGenerator>();
+            mazeGenerator.ResetMazeSizeToDefault();
+            SceneManager.sceneLoaded -= OnSceneLoaded;  // 取消订阅事件，避免多次调用
+        }
+    }
+
+    private void Start()
         {
             if (nextLevelUI == null)
                 nextLevelUI = FindObjectOfType<NextLevelUI>();
