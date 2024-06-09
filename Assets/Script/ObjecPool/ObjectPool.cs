@@ -40,6 +40,7 @@ public class ObjectPool : MonoBehaviour
                 obj.transform.localScale = localScale.Value;
             }
             obj.SetActive(true);
+            SFXManager.instance.PlaySFXPitched(1);
             return obj;
         }
 
@@ -95,7 +96,6 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"No pool available for prefab: {prefab.name}");
             return null;
         }
     }
@@ -108,7 +108,6 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"No pool available for prefab: {prefab.name}");
             Destroy(objectToReturn);
         }
     }

@@ -97,6 +97,7 @@ public class Enemy : MonoBehaviour
             Player player = collision.GetComponent<Player>();
             if (player != null)
             {
+                Debug.Log("take 1 damage");
                 player.TakeDamage(damage);
             }
         }

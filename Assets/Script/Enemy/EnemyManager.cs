@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance;
+
     [Header("Enemy Spawn Settings")]
     [SerializeField] Transform[] spawnPoints;
     [SerializeField] GameObject[] enemyPrefabs;
@@ -36,7 +37,11 @@ public class EnemyManager : MonoBehaviour
         waitSpawnTime = new WaitForSeconds(spawnTime);
     }
 
-    void OnEnable()
+    public void OnEnable()
+    {
+        Invoke("StartSpawning", 2f);
+    }
+    void StartSpawning()
     {
         StartCoroutine(SpawnEnemy());
     }
@@ -106,6 +111,21 @@ public class EnemyManager : MonoBehaviour
         GameObject boss = ObjectPool.Release(bossPrefab, bossSpawnPoint.position, Quaternion.identity);
         allEnemies.Add(boss);
         // Additional boss setup can go here
+    }
+
+    public void ResetAndSpawnEnemies()
+    {
+        ClearAllEnemies();
+        StartCoroutine(SpawnEnemy());
+    }
+
+    private void ClearAllEnemies()
+    {
+        foreach (GameObject enemy in allEnemies)
+        {
+            Destroy(enemy);
+        }
+        allEnemies.Clear();
     }
 
     public void RemoveEnemy(GameObject enemy)

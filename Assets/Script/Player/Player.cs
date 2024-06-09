@@ -264,6 +264,8 @@ public class Player : MonoBehaviour
     {
         int reducedDamage = Mathf.Max(damage - attributes.armor, 0); // 确保伤害值不会是负数
         ModifyHealth(-damage);
+        Debug.Log("-damage");
+        SFXManager.instance.PlaySFXPitched(0);
         UpdateHealthUI();
     }
 
