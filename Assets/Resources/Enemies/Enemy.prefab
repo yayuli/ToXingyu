@@ -85,13 +85,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability: {fileID: 11400000, guid: 006c1b74fc0cb7c4ba85c7fee028bc02, type: 2}
   target: {fileID: 0}
-  maxHealth: 30
+  health: 50
   speed: 3
+  damage: 1
+  attackPower: 0
   shootingRange: 10
   shootingCooldown: 2
   lootTable: {fileID: 11400000, guid: c4d9bf04318b3de439c37cbbe3a8acd6, type: 2}
-  damage: 1
-  score: {fileID: 7905193131117555943, guid: 156b99b4884dcc147a6e64383ec00083, type: 3}
 --- !u!50 &-5817755704176286302
 Rigidbody2D:
   serializedVersion: 4

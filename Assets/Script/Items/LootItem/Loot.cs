@@ -61,8 +61,9 @@ public class Loot : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            SFXManager.instance.PlaySFXPitched(2);
             ExperienceLevelController.instance.AddExperience(lootData.experienceValue);
-            Debug.Log($"Player picked up {lootData.itemName} and gained {lootData.experienceValue} experience.");
+            //Debug.Log($"Player picked up {lootData.itemName} and gained {lootData.experienceValue} experience.");
             Destroy(gameObject);
         }
     }

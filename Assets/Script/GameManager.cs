@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject); // Ensures only one instance of the GameManager exists
         }
-
+        //automatically find sll igenerator 
         generators = FindObjectsOfType<MonoBehaviour>().OfType<IGenerator>().ToArray();
         InitializeGenerators();
     }
@@ -112,6 +112,12 @@ public class GameManager : MonoBehaviour
         mazeGenerator.GenerateMaze(MazeGenerator.mazeRows, MazeGenerator.mazeColumns);
         Vector3 startPosition = mazeGenerator.GetStartPosition();
         Player.instance.transform.position = startPosition;
+
+        foreach(var generator in generators)
+        {
+            generator.Initialize(mazeGenerator);
+            generator.Generate();
+        }
 
     }
 

@@ -22,7 +22,7 @@ MonoBehaviour:
   healthRegeRate: 0
   damageFactor: 0
   attackRangeFactor: 0
-  armor: 0
+  armor: 30
   criticalRate: 0
   criticalDamage: 0
   attackSpeed: 0

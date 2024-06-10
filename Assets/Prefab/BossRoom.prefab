@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bc4ab48c09224dc68572263df2c73cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemName: BossLoot
 --- !u!61 &5292606385215360014
 BoxCollider2D:
   m_ObjectHideFlags: 0

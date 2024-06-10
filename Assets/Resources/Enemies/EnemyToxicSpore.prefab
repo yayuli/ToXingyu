@@ -133,13 +133,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability: {fileID: 11400000, guid: f5480c60abf74d541a5df872216b7402, type: 2}
   target: {fileID: 0}
-  maxHealth: 20
+  health: 50
   speed: 2
+  damage: 1
+  attackPower: 0
   shootingRange: 10
   shootingCooldown: 2
   lootTable: {fileID: 11400000, guid: c4d9bf04318b3de439c37cbbe3a8acd6, type: 2}
-  damage: 1
-  score: {fileID: 7905193131117555943, guid: 156b99b4884dcc147a6e64383ec00083, type: 3}
   burstAbility: {fileID: 11400000, guid: f5480c60abf74d541a5df872216b7402, type: 2}
 --- !u!61 &-3170972256662623464
 BoxCollider2D:

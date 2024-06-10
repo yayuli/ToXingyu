@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LevelTrigger : MonoBehaviour
 {
+    public string itemName;
     private GameManager gameManager;
 
     void Start()
@@ -24,6 +25,7 @@ public class LevelTrigger : MonoBehaviour
             if (gameManager != null)
             {
                 gameManager.RefreshCurrentLevel();
+                Destroy(gameObject);
             }
             else
             {

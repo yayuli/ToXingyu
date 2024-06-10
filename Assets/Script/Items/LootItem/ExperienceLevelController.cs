@@ -104,6 +104,7 @@ public class ExperienceLevelController : MonoBehaviour
 
         // 升级UI界面
         UIManager.instance.levelUpPanel.SetActive(true);
+        SFXManager.instance.PlaySFXPitched(3);
 
         // 暂停所有游戏活动
         Time.timeScale = 0f;;

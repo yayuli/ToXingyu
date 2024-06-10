@@ -254,7 +254,7 @@ public class Player : MonoBehaviour
         if (healthBar != null)
         {
             healthBar.value = (float)attributes.health / attributes.maxHealth;
-            // Debug.Log("Health updated to: " + attributes.health + "/" + attributes.maxHealth);
+            Debug.Log("Health updated to: " + attributes.health + "/" + attributes.maxHealth);
         }
 
     }

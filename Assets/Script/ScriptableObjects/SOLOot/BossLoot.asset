@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f29050455abecf49b33edb0ce2e719d, type: 3}
-  m_Name: LootItem1
+  m_Name: BossLoot
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 9066507349277064626, guid: 01cfc260208ff194a807e02f733d51f8, type: 3}
-  itemName: LootItem1
-  itemIcon: {fileID: 21300000, guid: 5dfd30284b9ed44b79aa97776b27c68f, type: 3}
-  experienceValue: 3
+  itemPrefab: {fileID: 811092841773392260, guid: eea1cffccc8d847788734e948b0a2187, type: 3}
+  itemName: BossLoot
+  itemIcon: {fileID: 21300038, guid: 34ecf51bcd3f4424eafda7dafd885bd0, type: 3}
+  experienceValue: 10

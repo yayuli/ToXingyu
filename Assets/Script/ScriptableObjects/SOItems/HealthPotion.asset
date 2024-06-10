@@ -19,7 +19,7 @@ MonoBehaviour:
   duration: 0
   itemType: 0
   maxHealth: 0
-  healthRegeRate: 0
+  healthRegeRate: 10
   damageFactor: 0
   attackRangeFactor: 0
   armor: 0

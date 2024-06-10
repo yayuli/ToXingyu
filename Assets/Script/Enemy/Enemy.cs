@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
-        //currentHealth = maxHealth;
+        //currentHealth = (int)health;
         target = GameObject.Find("Player").transform;
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -82,9 +82,9 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         anim.SetTrigger("Hit");
-        currentHealth -= damage;
+        health -= damage;
 
-        if (currentHealth <= 0)
+        if (health <= 0)
         {
             Die();
         }
@@ -97,7 +97,6 @@ public class Enemy : MonoBehaviour
             Player player = collision.GetComponent<Player>();
             if (player != null)
             {
-                Debug.Log("take 1 damage");
                 player.TakeDamage(damage);
             }
         }
@@ -114,10 +113,11 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         Vector3 scorePosition = transform.position + new Vector3(0, 1.5f, 0);
-       // GameObject ScoreText = Instantiate(score,scorePosition,Quaternion.identity);
-       // Destroy(ScoreText, 1f);
-        DropLoot();
+        // GameObject ScoreText = Instantiate(score,scorePosition,Quaternion.identity);
+        // Destroy(ScoreText, 1f);
         Destroy(gameObject);
+        DropLoot();
+        //Destroy(gameObject);
         //anim.SetTrigger("Die");
         // 可能需要等待死亡动画播放完成后再销毁
         //EnemyManager.Instance.DestroyEnemy(gameObject);

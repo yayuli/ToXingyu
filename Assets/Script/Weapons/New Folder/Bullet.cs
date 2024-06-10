@@ -5,7 +5,8 @@ public class Bullet : MonoBehaviour
     public GameObject hitEffect;  // 可能用于显示击中效果的特效
 
     private float speed;  // 子弹的速度
-    private int damage=10;  // 子弹的伤害值
+    private int damage=25;  // 子弹的伤害值
+    private Vector2 direction;
 
     private void FixedUpdate()
     {
@@ -14,10 +15,13 @@ public class Bullet : MonoBehaviour
     }
 
     // 初始化子弹的属性
-    public void Initialize(int newDamage, float newSpeed)
+    public void Initialize(int newDamage, float newSpeed, Vector2 newDirection)
     {
         damage = newDamage;
         speed = newSpeed;
+        direction = newDirection.normalized;
+
+         GetComponent<Rigidbody2D>().velocity = direction * speed;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -26,7 +30,7 @@ public class Bullet : MonoBehaviour
         if (enemy != null)
         {
             Destroy(gameObject);
-            enemy.TakeDamage(10);
+            enemy.TakeDamage(25);
         }
 
         if (collision.gameObject.CompareTag("Wall"))

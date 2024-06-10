@@ -63,6 +63,7 @@ public class MazeGenerator : MonoBehaviour
     // Array of all possible neighbour positions.
     private Vector2[] neighbourPositions = new Vector2[] { new Vector2(-1, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(0, -1) };
 
+   // public Vector2 bossPosition;
     public Vector2 exitPosition;  // Public so you can access it from other scripts if needed.
     [SerializeField]
     private GameObject exitPrefab;  // Reference to the exit prefab
@@ -82,7 +83,6 @@ public class MazeGenerator : MonoBehaviour
         mazeColumns = columns;
         CreateLayout();
 
-      
     }
 
     public void ResetMazeSizeToDefault()
@@ -194,28 +194,32 @@ public class MazeGenerator : MonoBehaviour
     exitPosition = exitCell.gridPos;  // Store the exit position.
     exitCell.isExit = true;  // Mark this cell as the exit
 
-    WallDirection wallToRemove;
-    if (exitCell.gridPos.x == 0) { wallToRemove = WallDirection.Left; }
-    else if (exitCell.gridPos.x == mazeColumns) { wallToRemove = WallDirection.Right; }
-    else if (exitCell.gridPos.y == mazeRows) { wallToRemove = WallDirection.Up; }
-    else { wallToRemove = WallDirection.Down; }
+        WallDirection wallToRemove = DetermineExitWallDirection(exitCell);
+        RemoveWall(exitCell.cScript, wallToRemove);
 
-    RemoveWall(exitCell.cScript, wallToRemove);
-
-        // Instantiate the exit prefab if needed and if assigned
         if (exitPrefab != null && exitCell.isExit)
         {
-            // Adjust the prefab position to match the maze grid positioning
-            Vector3 prefabPosition = new Vector3(exitCell.gridPos.x * cellSize, exitCell.gridPos.y * cellSize, 0);
-            prefabPosition -= new Vector3((mazeColumns * cellSize) / 2, (mazeRows * cellSize) / 2, 0); // Center the maze
-            Instantiate(exitPrefab, prefabPosition, Quaternion.identity, mazeParent.transform);  // Parent to maze for organization
+            Vector3 prefabPosition = CalculatePrefabPosition(exitCell);
+            Instantiate(exitPrefab, prefabPosition, Quaternion.identity, mazeParent.transform);
         }
 
+        Debug.Log("Exit created at: " + exitPosition);
+    }
 
-        Debug.Log("Maze generation finished. Exit created at: " + exitPosition);
-}
+    private WallDirection DetermineExitWallDirection(Cell exitCell)
+    {
+        if (exitCell.gridPos.x == 0) return WallDirection.Left;
+        else if (exitCell.gridPos.x == mazeColumns) return WallDirection.Right;
+        else if (exitCell.gridPos.y == mazeRows) return WallDirection.Up;
+        else return WallDirection.Down;
+    }
 
-
+    private Vector3 CalculatePrefabPosition(Cell exitCell)
+    {
+        float x = exitCell.gridPos.x * cellSize - (mazeColumns * cellSize) / 2;
+        float y = exitCell.gridPos.y * cellSize - (mazeRows * cellSize) / 2;
+        return new Vector3(x, y, 0);  // Adjust Z if necessary
+    }
 
     public List<Cell> GetUnvisitedNeighbours(Cell curCell)
     {

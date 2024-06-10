@@ -13,6 +13,9 @@ public class RangedWeapon : WeaponBase
     public GameObject muzzleEffectPrefab;
     public ItemData weaponData;//ussed itemdata
 
+    [Header("stoot")]
+    private bool isAutoShootingEnable = true;
+
     private Transform closestEnemy;
 
     protected override void Update()
@@ -21,8 +24,14 @@ public class RangedWeapon : WeaponBase
         transform.position = (Vector2)player.position + offset;
 
         FindClosestEnemy();
-        AimAtEnemy();
-        Shoot();
+        //AimAtEnemy();
+        HandleInput();
+        if (isAutoShootingEnable)
+        {
+            AimAtEnemy();
+            Shoot();
+        }
+        
     }
 
     void FindClosestEnemy()
@@ -61,7 +70,7 @@ public class RangedWeapon : WeaponBase
 
     public override void Shoot()
     {
-        if (closestEnemy == null)
+        if (closestEnemy == null || !isAutoShootingEnable)
             return;
 
         timeSinceLastShot += Time.deltaTime;
@@ -69,18 +78,62 @@ public class RangedWeapon : WeaponBase
 
         if (timeSinceLastShot >= modifiedCooldown)
         {
-            FireBullet();
+            Vector2 direction = (closestEnemy.position - muzzlePosition.position).normalized;
+            FireBullet(direction);
             timeSinceLastShot = 0;
         }
     }
 
-    void FireBullet()
+    void HandleInput()
     {
-        var muzzleGO = Instantiate(muzzleEffectPrefab, muzzlePosition.position, transform.rotation);
-        Destroy(muzzleGO, 0.05f);  // Destroy muzzle effect shortly after
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            isAutoShootingEnable = !isAutoShootingEnable;
+            Debug.Log("Shooting mode changed: " + (isAutoShootingEnable ? "Auto" : "Manual"));
+        }
 
-        var bulletGo = Instantiate(bulletPrefab, muzzlePosition.position, transform.rotation);
-        bulletGo.GetComponent<Bullet>().Initialize(weaponData.attackPower, weaponData.speed);  // Use updated attack power and speed
-        Destroy(bulletGo, 3);  // Destroy the bullet after some time
+        // 手动射击时，根据按键决定射击方向
+        if (!isAutoShootingEnable)
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                ManualShoot(Vector2.right);
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                ManualShoot(Vector2.left);
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                ManualShoot(Vector2.up);
+            }
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                ManualShoot(Vector2.down);
+            }
+        }
+    }
+
+    void ManualShoot(Vector2 direction)
+    {
+        FireBullet(direction);
+        RotateWeapon(direction);
+    }
+
+    void RotateWeapon(Vector2 direction)
+    {
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+    }
+
+    void FireBullet(Vector2 direction)
+    {
+        var muzzleGO = Instantiate(muzzleEffectPrefab, muzzlePosition.position, Quaternion.identity);
+        Destroy(muzzleGO, 0.05f);
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        var bulletGo = Instantiate(bulletPrefab, muzzlePosition.position, Quaternion.Euler(0, 0, angle));
+        bulletGo.GetComponent<Bullet>().Initialize(weaponData.attackPower, weaponData.speed, direction);
+        Destroy(bulletGo, 3);
     }
 }

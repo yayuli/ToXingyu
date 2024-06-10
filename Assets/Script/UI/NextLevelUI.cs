@@ -16,6 +16,8 @@ public class NextLevelUI : MonoBehaviour
     void Start()
     {
         loadingScreenObj.SetActive(false);  // 确保开始时加载屏幕不可见
+       // SFXManager.instance.PlaySFX(2);
+
     }
 
     public IEnumerator FadeIn()
@@ -27,6 +29,7 @@ public class NextLevelUI : MonoBehaviour
             time += Time.unscaledDeltaTime;
             fadePanel.alpha = 1 - time / fadeDuration;
             yield return null;
+            //SFXManager.instance.PlaySFX(2);
         }
         fadePanel.gameObject.SetActive(false);
         loadingScreenObj.SetActive(false);  // 确保加载屏幕隐藏
