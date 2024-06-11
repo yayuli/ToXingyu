@@ -5,7 +5,7 @@ using UnityEngine;
 public class MeleeWeapon : WeaponBase
 {
     [Header("Config")]
-    public int damage;  // 近战武器的伤害值
+    //public int damage;  // 近战武器的伤害值
     public float attackRange;  // 攻击范围
     public float attackDuration;  // 攻击持续时间
 

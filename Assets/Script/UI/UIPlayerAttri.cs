@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class UIPlayerAttri : MonoBehaviour
 {

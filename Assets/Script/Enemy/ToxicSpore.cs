@@ -19,7 +19,7 @@ public class ToxicSpore : Enemy
         }
     }
 
-    public void Die()
+    public new void Die()
     {
         if (!hasBurstOccurred)
         {

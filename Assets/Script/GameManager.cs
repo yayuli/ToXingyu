@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int addRows = 2;
     [SerializeField] private int addCols = 2;
 
-    private int level = 1;
+    //private int level = 1;
 
     public NextLevelUI nextLevelUI;
 
