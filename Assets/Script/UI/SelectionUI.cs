@@ -25,6 +25,11 @@ public class SelectionUI : MonoBehaviour
     public GameObject weaponPanel; // 武器展示Panel
     public Image[] weaponDisplaySlots = new Image[6]; // 武器槽数组，假设最多展示6个武器
 
+    [Header("Items display panel")]
+    [SerializeField] private GameObject itemUIPanel; // 预先绑定的UI面板
+    [SerializeField] private Image[] itemImage;        // 物品图标
+    private int currentItemIndex = 0;
+
     public WeaponManager weaponManager;  // 在 Inspector 中设置这个引用
 
     private void Awake()
@@ -95,6 +100,24 @@ public class SelectionUI : MonoBehaviour
         }
     }
 
+    //handler items display panel ui
+    private void UpdateItemUI(ItemData itemData)
+    {
+        if (itemData.itemType == ItemData.ItemType.MeleeWeapon || itemData.itemType == ItemData.ItemType.RangedWeapon)
+        {
+            return;
+        }
+
+        if (itemData != null && currentItemIndex < itemImage.Length)
+        {
+            itemImage[currentItemIndex].sprite = itemData.itemIcon;
+            itemImage[currentItemIndex].gameObject.SetActive(true);
+            currentItemIndex++;
+        }
+
+        itemUIPanel.SetActive(currentItemIndex > 0);
+    }
+
     // Updates the display for a single selection slot
     private void UpdateButtonDisplay(GameObject itemPrefab, int displayIndex)
     {
@@ -136,6 +159,7 @@ public class SelectionUI : MonoBehaviour
 
         ItemData itemData = itemScript.itemData;
         Player.instance.ApplyItemEffect(itemData);
+        UpdateItemUI(itemData);//update item display ui
 
         // 如果物品是武器，添加到玩家
         if (itemData.itemType == ItemData.ItemType.MeleeWeapon || itemData.itemType == ItemData.ItemType.RangedWeapon)
