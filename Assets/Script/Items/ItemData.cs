@@ -32,11 +32,11 @@ public class ItemData : ScriptableObject
     public int baseDamage = 25;  // 初始伤害值
     public float baseSpeed = 5.0f;  // 初始速度
     public float baseRange = 5.0f;  // 初始射程
+    public int level = 1;  // 当前等级
 
     public int damageIncreasePerLevel = 5;  // 每级升级增加的伤害值
     public float speedIncreasePerLevel = 0.5f;  // 每级升级增加的速度
     public float rangeIncreasePerLevel = 1.0f;  // 每级升级增加的射程
-    public int level = 1;  // 当前等级
 
     public int CurrentDamage => baseDamage + (level - 1) * damageIncreasePerLevel;
     public float CurrentSpeed => baseSpeed + (level - 1) * speedIncreasePerLevel;
@@ -44,6 +44,19 @@ public class ItemData : ScriptableObject
 
     public int cost;
 
+
+    public Color baseColor = Color.white;
+    public Vector3 baseSize = new Vector3(0.17f, 0.17f, 1);
+    public Color CurrentColor => baseColor * (1 + (level - 1) * 0.1f); // 计算当前颜色
+    public Vector3 CurrentSize
+    {
+        get
+        {
+            // 使用对数函数来平滑增长
+            float growthFactor = Mathf.Log(level + 1);
+            return baseSize * growthFactor;
+        }
+    }
     public enum ItemType
     {
         HealthPotion,

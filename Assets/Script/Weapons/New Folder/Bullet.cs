@@ -21,7 +21,17 @@ public class Bullet : MonoBehaviour
         range = weaponData.CurrentRange;
         direction = newDirection.normalized;
 
+        Renderer renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.material.color = weaponData.CurrentColor;
+        }
+
+        // 设置子弹大小
+        transform.localScale = weaponData.CurrentSize;
+
         GetComponent<Rigidbody2D>().velocity = direction * speed;
+
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -30,13 +40,13 @@ public class Bullet : MonoBehaviour
         if (enemy != null)
         {
             Debug.Log($"Bullet hit enemy: {enemy.name} with Damage = {damage}");
-            Destroy(gameObject);
+            ObjectPool.Return(gameObject, gameObject);
             enemy.TakeDamage(damage);
         }
 
         if (collision.gameObject.CompareTag("Wall"))
         {
-            Destroy(gameObject);
+            ObjectPool.Return(gameObject, gameObject);
         }
     }
 }
