@@ -40,7 +40,7 @@ public class ObjectPool : MonoBehaviour
                 obj.transform.localScale = localScale.Value;
             }
             obj.SetActive(true);
-            SFXManager.instance.PlaySFXPitched(1);
+            SFXManager.instance.PlaySFX(1);
             return obj;
         }
 

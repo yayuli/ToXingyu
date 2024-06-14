@@ -12,6 +12,7 @@ public class SelectionUI : MonoBehaviour
     public TMP_Text[] upgradeDescTexts = new TMP_Text[3];
     public Image[] weaponIcons = new Image[3];
     public TMP_Text[] nameLevelTexts = new TMP_Text[3];
+    public TMP_Text[] priceTexts = new TMP_Text[3];
     public Button[] purchaseButtons = new Button[3];
     public Button refreshButton;
     public Button exitButton;
@@ -134,6 +135,7 @@ public class SelectionUI : MonoBehaviour
         upgradeDescTexts[displayIndex].text = itemData.description;
         weaponIcons[displayIndex].sprite = itemData.itemIcon;
         nameLevelTexts[displayIndex].text = $"{itemData.itemName} - Lvl";
+        priceTexts[displayIndex].text = $"{itemData.cost}XP";
 
         purchaseButtons[displayIndex].onClick.RemoveAllListeners();
         purchaseButtons[displayIndex].onClick.AddListener(() => PurchaseItem(itemPrefab, itemData.cost));
@@ -179,6 +181,7 @@ public class SelectionUI : MonoBehaviour
                 Debug.LogError("BombItem component is missing on the prefab.");
             }
         }
+        SFXManager.instance.PlaySFXPitched(9);
         //ContinueGame();
     }
 

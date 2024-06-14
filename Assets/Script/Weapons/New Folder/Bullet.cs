@@ -41,6 +41,7 @@ public class Bullet : MonoBehaviour
         {
             Debug.Log($"Bullet hit enemy: {enemy.name} with Damage = {damage}");
             ObjectPool.Return(gameObject, gameObject);
+            SFXManager.instance.PlaySFXPitched(5);
             enemy.TakeDamage(damage);
         }
 

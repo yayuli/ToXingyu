@@ -71,6 +71,7 @@ public class WeaponPanel : MonoBehaviour
                 Item item = weaponManager.Weapons[i].GetComponent<Item>();
                 weaponSlots[i].sprite = item.itemData.itemIcon;
                 weaponSlots[i].gameObject.SetActive(true);
+                SFXManager.instance.PlaySFXPitched(9);
 
                 if (!weaponCounts.ContainsKey(item.itemData.name))
                 {

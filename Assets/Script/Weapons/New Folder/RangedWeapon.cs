@@ -134,6 +134,7 @@ public class RangedWeapon : WeaponBase
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         var bulletGo = ObjectPool.Release(bulletPrefab, muzzlePosition.position, Quaternion.Euler(0, 0, angle));//used object pool
         bulletGo.GetComponent<Bullet>().Initialize(weaponData, direction);
+        //SFXManager.instance.PlaySFXPitched(8);
         //Destroy(bulletGo, 3);
     }
 }

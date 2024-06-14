@@ -52,6 +52,8 @@ public class Bomb : MonoBehaviour
             }
         }
 
+        SFXManager.instance.PlaySFXPitched(10);
+
         // destroyed the particle effect after the particales have finished playing
         if (explosionParticles != null)
         {
