@@ -134,7 +134,7 @@ MonoBehaviour:
   ability: {fileID: 11400000, guid: f5480c60abf74d541a5df872216b7402, type: 2}
   target: {fileID: 0}
   health: 50
-  speed: 2
+  speed: 0
   damage: 1
   attackPower: 0
   shootingRange: 10

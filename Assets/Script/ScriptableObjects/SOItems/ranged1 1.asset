@@ -31,11 +31,12 @@ MonoBehaviour:
   pickUpRangeFactor: 0
   prefab: {fileID: 438060947978296620, guid: 3ba38b8f0a54a484f95f8f539146a504, type: 3}
   Weapondescription: you get weapon 1
-  attackPower: 5
-  speed: 10
-  damage: 5
   cooldown: 1
-  range: 4
+  baseDamage: 25
+  baseSpeed: 5
+  baseRange: 5
+  damageIncreasePerLevel: 20
+  speedIncreasePerLevel: 0.5
+  rangeIncreasePerLevel: 1
   level: 1
-  weaponColor: {r: 1, g: 1, b: 1, a: 1}
-  cost: 0
+  cost: 10

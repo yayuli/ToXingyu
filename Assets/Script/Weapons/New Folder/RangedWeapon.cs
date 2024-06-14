@@ -31,7 +31,7 @@ public class RangedWeapon : WeaponBase
             AimAtEnemy();
             Shoot();
         }
-        
+
     }
 
     void FindClosestEnemy()
@@ -44,7 +44,7 @@ public class RangedWeapon : WeaponBase
         foreach (Enemy enemy in enemies)
         {
             float distance = Vector2.Distance(transform.position, enemy.transform.position);
-            if (distance < closestDistance && distance <= weaponData.range) // 使用 weaponData.range 替换 fireDistance
+            if (distance < closestDistance && distance <= weaponData.baseRange) // 使用 weaponData.range 替换 fireDistance
             {
                 closestDistance = distance;
                 closestEnemy = enemy.transform;
@@ -133,7 +133,7 @@ public class RangedWeapon : WeaponBase
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         var bulletGo = Instantiate(bulletPrefab, muzzlePosition.position, Quaternion.Euler(0, 0, angle));
-        bulletGo.GetComponent<Bullet>().Initialize(weaponData.attackPower, weaponData.speed, direction);
+        bulletGo.GetComponent<Bullet>().Initialize(weaponData, direction);
         Destroy(bulletGo, 3);
     }
 }

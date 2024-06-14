@@ -92,7 +92,6 @@ public class WeaponManager : MonoBehaviour
 
         // Ensure the weapon is correctly offset and initialized
         newWeapon.GetComponent<WeaponBase>().SetOffset(positionOffset);
-        newWeapon.GetComponent<WeaponBase>().Initialize(weaponPrefab.GetComponent<Item>().itemData);
 
         weaponPanel.UpdateWeaponSlotsDisplay();
         
@@ -150,25 +149,20 @@ public class WeaponManager : MonoBehaviour
         weaponPanel.UpdateWeaponSlotsDisplay();
     }
 
-    void UpgradeWeapon(GameObject weapon)
+    public void UpgradeWeapon(GameObject weapon)
     {
         Item item = weapon.GetComponent<Item>();
-        item.itemData.level++;  // 假设每个武器都有一个级别
-        item.itemData.attackPower += 10;  // 增加攻击力，根据实际需求调整
-
-        // 根据等级选择颜色
-        Color newColor = Color.white;  // 默认白色
-        if (item.itemData.level == 2)
+        if (item != null && item.itemData != null)
         {
-            newColor = Color.blue;
-        }
-        else if (item.itemData.level == 3)
-        {
-            newColor = Color.red;
-        }
+            item.itemData.UpgradeWeapon();
 
-        // 更新颜色
-        UpdateColor(weapon, newColor);
+            Color newColor = item.itemData.GetWeaponColorByLevel();
+
+            // 更新武器的显示颜色
+            UpdateColor(weapon, newColor);
+
+            Debug.Log($"Weapon {item.itemData.itemName} upgraded to level {item.itemData.level}.");
+        }
     }
 
     void UpdateColor(GameObject weapon, Color newColor)
@@ -178,11 +172,17 @@ public class WeaponManager : MonoBehaviour
         {
             weaponRenderer.material.color = newColor;
         }
-
-        // 递归更新子对象的颜色
-        foreach (Transform child in weapon.transform)
+        else
         {
-            UpdateColor(child.gameObject, newColor);
+            // 检查是否有子对象的Renderer需要更新颜色
+            foreach (Transform child in weapon.transform)
+            {
+                Renderer childRenderer = child.GetComponent<Renderer>();
+                if (childRenderer != null)
+                {
+                    childRenderer.material.color = newColor;
+                }
+            }
         }
     }
 

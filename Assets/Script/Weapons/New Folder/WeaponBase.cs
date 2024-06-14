@@ -39,42 +39,6 @@ public abstract class WeaponBase : MonoBehaviour
         transform.position = (Vector2)player.position + offset;//更新武器的位置
     }
 
-    // 添加虚的 Initialize 方法接受 ItemData
-    public virtual void Initialize(ItemData data)
-    {
-        if (data != null)
-        {
-            attackPower = data.attackPower;
-            range = data.range;
-            damage = data.effectMagnitude;  // 假设 damage 对应于 ItemData 的 effectMagnitude
-            speed = data.speed;
-            cooldown = data.cooldown;
-        }
-    }
-
-    public void UpdateWeaponInstance()
-    {
-        GetComponent<SpriteRenderer>().color = GetComponent<Item>().itemData.weaponColor;  // 更新颜色
-        Initialize(GetComponent<Item>().itemData);  // 重新初始化以应用新数据
-    }
-
-
-    public ItemData GetData()
-    {
-        return new ItemData
-        {
-            itemName = itemName,
-            attackPower = attackPower,
-            speed = speed,
-            effectMagnitude = damage,
-            cooldown = cooldown,
-            range = range,
-            level = level,
-            weaponColor = GetComponent<SpriteRenderer>().color
-        };
-    }
-
-
     //设置武器的位置偏移
     public void SetOffset(Vector2 o)
     {

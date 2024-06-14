@@ -85,8 +85,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability: {fileID: 11400000, guid: 006c1b74fc0cb7c4ba85c7fee028bc02, type: 2}
   target: {fileID: 0}
-  health: 50
-  speed: 3
+  health: 10
+  speed: 5
   damage: 1
   attackPower: 0
   shootingRange: 10

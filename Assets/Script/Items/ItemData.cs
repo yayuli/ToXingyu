@@ -28,13 +28,19 @@ public class ItemData : ScriptableObject
     [Header("Weapon")]
     public GameObject prefab;
     public string Weapondescription;
-    public int attackPower;
-    public float speed;
-    public int damage;  // 可以对应于 damage
-    public float cooldown;
-    public float range;
-    public int level = 1;  // 新增武器等级
-    public Color weaponColor = Color.white;  // 武器默认颜色
+    public float cooldown = 0.5f;
+    public int baseDamage = 25;  // 初始伤害值
+    public float baseSpeed = 5.0f;  // 初始速度
+    public float baseRange = 5.0f;  // 初始射程
+
+    public int damageIncreasePerLevel = 5;  // 每级升级增加的伤害值
+    public float speedIncreasePerLevel = 0.5f;  // 每级升级增加的速度
+    public float rangeIncreasePerLevel = 1.0f;  // 每级升级增加的射程
+    public int level = 1;  // 当前等级
+
+    public int CurrentDamage => baseDamage + (level - 1) * damageIncreasePerLevel;
+    public float CurrentSpeed => baseSpeed + (level - 1) * speedIncreasePerLevel;
+    public float CurrentRange => baseRange + (level - 1) * rangeIncreasePerLevel;
 
     public int cost;
 
@@ -56,6 +62,31 @@ public class ItemData : ScriptableObject
         RangedWeapon,
         MeleeWeapon,
         Bomb
+    }
+
+    public void UpgradeWeapon()
+    {
+        level++;
+        Debug.Log($"{itemName} upgraded to level {level}: Damage = {CurrentDamage}, Speed = {CurrentSpeed}, Range = {CurrentRange}");
+    }
+
+    public Color GetWeaponColorByLevel()
+    {
+        switch (level)
+        {
+            case 1:
+                return Color.white;
+            case 2:
+                return Color.blue;
+            case 3:
+                return Color.green;
+            case 4:
+                return Color.yellow;
+            case 5:
+                return Color.red;
+            default:
+                return Color.magenta; // 超过5级使用此颜色
+        }
     }
 
     [System.Serializable]
