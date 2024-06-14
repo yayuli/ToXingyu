@@ -44,7 +44,7 @@ public class ItemData : ScriptableObject
 
     public int cost;
 
-
+    [Header("bullet")]
     public Color baseColor = Color.white;
     public Vector3 baseSize = new Vector3(0.17f, 0.17f, 1);
     public Color CurrentColor => baseColor * (1 + (level - 1) * 0.1f); // 计算当前颜色
