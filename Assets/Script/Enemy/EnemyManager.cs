@@ -98,7 +98,7 @@ public class EnemyManager : MonoBehaviour
         for (int i = 0; i < enemyNum; i++)
         {
             GameObject enemy = ObjectPool.Release(enemyList[i], spawnPosList[i], Quaternion.identity);
-            enemy.GetComponent<Enemy>().InitializeAttributes(WaveManager.Instance.GetWaveAttributes());
+            enemy.GetComponent<Enemy>().InitializeAttributes();
             allEnemies.Add(enemy);
         }
     }

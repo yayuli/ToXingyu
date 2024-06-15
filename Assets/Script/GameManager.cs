@@ -134,7 +134,10 @@ public class GameManager : MonoBehaviour
     public void RefreshCurrentLevel()
     {
         StartCoroutine(TransitionToLevel(SceneManager.GetActiveScene().name));
+
         Player.instance.ResetPlayerState();
+        WaveManager.Instance.NextWave();
+
         if (EnemyManager.Instance != null)
         {
             EnemyManager.Instance.ResetAndSpawnEnemies();

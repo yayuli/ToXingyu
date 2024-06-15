@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Speed Boots
   description: addsssss
-  itemIcon: {fileID: -474914952, guid: 7b12e176afe7a4fff87f1e84c45cc6d0, type: 3}
+  itemIcon: {fileID: 21300000, guid: e9096c8157fb04e3fa924a2ae9bc7f48, type: 3}
   effectMagnitude: 3
   duration: 1
   itemType: 2
@@ -30,11 +30,15 @@ MonoBehaviour:
   moveSpeedFactor: 30
   pickUpRangeFactor: 0
   prefab: {fileID: 0}
-  attackPower: 0
-  speed: 0
-  damage: 0
+  Weapondescription: 
   cooldown: 0
-  range: 0
+  baseDamage: 25
+  baseSpeed: 5
+  baseRange: 5
   level: 1
-  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  damageIncreasePerLevel: 5
+  speedIncreasePerLevel: 0.5
+  rangeIncreasePerLevel: 1
   cost: 0
+  baseColor: {r: 1, g: 1, b: 1, a: 1}
+  baseSize: {x: 0.17, y: 0.17, z: 1}

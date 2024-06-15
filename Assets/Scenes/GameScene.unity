@@ -970,7 +970,6 @@ MonoBehaviour:
   expLevels: 00000000280000005000000078000000a0000000
   baseRefreshCost: 4
   refreshIncrement: 5
-  levelCostIncrement: 6
   refreshCount: 0
   ExpUpEffect: {fileID: 228481438}
 --- !u!4 &187236416
@@ -10129,7 +10128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1718244991
 MonoBehaviour:
   m_ObjectHideFlags: 0

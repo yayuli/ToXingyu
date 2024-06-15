@@ -102,9 +102,4 @@ public class ItemData : ScriptableObject
         }
     }
 
-    [System.Serializable]
-    public class PlayerAttributes
-    {
-        
-    }
 }

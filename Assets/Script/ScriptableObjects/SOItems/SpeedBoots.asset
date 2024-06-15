@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: SpeedBoots
   description: + speed 30%
-  itemIcon: {fileID: -474914952, guid: 7b12e176afe7a4fff87f1e84c45cc6d0, type: 3}
+  itemIcon: {fileID: 21300000, guid: e9096c8157fb04e3fa924a2ae9bc7f48, type: 3}
   effectMagnitude: 3
   duration: 3
   itemType: 2
@@ -27,7 +27,7 @@ MonoBehaviour:
   criticalDamage: 0
   attackSpeed: 0
   dodgeRate: 0
-  moveSpeedFactor: 0
+  moveSpeedFactor: 20
   pickUpRangeFactor: 0
   prefab: {fileID: 0}
   Weapondescription: 

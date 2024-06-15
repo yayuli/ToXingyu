@@ -1,7 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NoAbility", menuName = "Enemy Abilities/No Ability")]
-public class NoAbility : EnemyAbility
+[CreateAssetMenu(fileName = "EnemyConfig", menuName = "Config/EnemyConfig")]
+public class EnemyConfig : ScriptableObject
 {
     public string enemyType;
     public float baseHealth;
@@ -10,9 +12,5 @@ public class NoAbility : EnemyAbility
     public float speedIncrementPerWave;
     public float baseDamage;
     public float damageIncrementPerWave;
-
-    public override void Execute(GameObject enemy)
-    {
-        // noooo ability
-    }
+    //public EnemyAbility ability;  // Reference to ability
 }

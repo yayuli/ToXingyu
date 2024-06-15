@@ -25,19 +25,28 @@ public class WaveManager : MonoBehaviour
     public void NextWave()
     {
         WaveNum++;
+        UpdateAllEnemies();  // 
     }
 
     // Get the count of enemies for the current wave
     public int GetWaveEnemyCount()
     {
         // Implement logic to determine number based on WaveNum
-        return 5; // Default value for demo purposes
+        return 5 + (WaveNum - 1) * 10; 
     }
 
-    // Get the attributes for enemies based on current wave
-    public float[] GetWaveAttributes()
+    //not need
+    public float GetWaveMultiplier()
     {
-        // Return attributes like health, speed, etc.
-        return new float[] { 100, 2, 10 }; // Health, speed, damage
+        // 返回一个基于当前波次计算的乘数，可能用于调整游戏难度等
+        return 1.0f + (WaveNum - 1) * 0.1f;  // 每波增加10%的难度或奖励
+    }
+
+    private void UpdateAllEnemies()
+    {
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            enemy.InitializeAttributes();  // 强制每个敌人根据新波数重新计算属性
+        }
     }
 }

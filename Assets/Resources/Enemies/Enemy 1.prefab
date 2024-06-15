@@ -110,12 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 742802d40831f40f98413f932e018b2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: 18cdb3755b9f04d9f8f13ea812e5d42f, type: 2}
   ability: {fileID: 11400000, guid: ebb2e7504590e48e79ceef73c23aba4b, type: 2}
   target: {fileID: 0}
-  health: 50
-  speed: 2
   damage: 1
-  attackPower: 0
   shootingRange: 10
   shootingCooldown: 2
   lootTable: {fileID: 11400000, guid: c4d9bf04318b3de439c37cbbe3a8acd6, type: 2}

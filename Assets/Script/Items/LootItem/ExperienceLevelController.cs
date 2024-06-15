@@ -17,7 +17,7 @@ public class ExperienceLevelController : MonoBehaviour
     [Header("Refresh cost settings")]
     public int baseRefreshCost = 10;
     [SerializeField] private int refreshIncrement= 10;
-    [SerializeField] private int levelCostIncrement = 6;
+//    [SerializeField] private int levelCostIncrement = 6;
     [SerializeField] private int refreshCount = 0;//记录
 
 

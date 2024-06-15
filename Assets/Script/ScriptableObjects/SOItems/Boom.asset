@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Bomb
   description: Boom
-  itemIcon: {fileID: -2413806693520163455, guid: 9e02e5013dddbfc42ba06bf2229db058, type: 3}
+  itemIcon: {fileID: 21300000, guid: 59839c5dd93324b798ae15727ccfabe9, type: 3}
   effectMagnitude: 0
   duration: 0
   itemType: 13
@@ -31,11 +31,14 @@ MonoBehaviour:
   pickUpRangeFactor: 0
   prefab: {fileID: 0}
   Weapondescription: 
-  attackPower: 0
-  speed: 0
-  damage: 0
   cooldown: 0
-  range: 0
+  baseDamage: 25
+  baseSpeed: 5
+  baseRange: 5
   level: 1
-  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  damageIncreasePerLevel: 5
+  speedIncreasePerLevel: 0.5
+  rangeIncreasePerLevel: 1
   cost: 5
+  baseColor: {r: 1, g: 1, b: 1, a: 1}
+  baseSize: {x: 0.17, y: 0.17, z: 1}

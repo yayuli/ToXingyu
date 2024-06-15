@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public EnemyConfig config;
     [SerializeField] protected EnemyAbility ability;
 
     [SerializeField] protected Transform target; // player's Transform
-    [SerializeField] public float health;
-    [SerializeField] public float speed;// enemy speed
-    [SerializeField] private int damage = 1; //attack damage to player
-    public float attackPower;
 
+    private float currentHealth;
+    private float currentSpeed;
+    private float currentDamage;
+
+    public int damage = 1;
     [SerializeField] private float shootingRange = 10f;
     [SerializeField] private float shootingCooldown = 2f;
     private float lastShootTime = 0;
 
     [SerializeField] private LootTable lootTable;//reference to the loot Table
 
-
-    protected int currentHealth;
     protected Animator anim;
 
     private Rigidbody2D rb;
@@ -28,11 +28,14 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
+        InitializeAttributes();
+        //currentHealth = maxHealth;
         //currentHealth = (int)health;
         target = GameObject.Find("Player").transform;
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-       
+
+        //Debug.Log($"Start - Health is: {health} set in {this.gameObject.name}");
     }
 
     void Update()
@@ -43,14 +46,13 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void InitializeAttributes(float[] attributes)
+    public void InitializeAttributes()
     {
-        if (attributes.Length >= 3)
-        {
-            health = attributes[0];
-            speed = attributes[1];
-            attackPower = attributes[2];
-        }
+        int waveNum = WaveManager.Instance.WaveNum;
+        currentHealth = config.baseHealth + (waveNum - 1) * config.healthIncrementPerWave;
+        currentSpeed = config.baseSpeed + (waveNum - 1) * config.speedIncrementPerWave;
+        currentDamage = config.baseDamage + (waveNum - 1) * config.damageIncrementPerWave;
+        Debug.Log($"Wave {waveNum}: Health {currentHealth}, Speed {currentSpeed}, Damage {currentDamage}");
     }
 
     protected void MoveTowardsTarget()
@@ -58,7 +60,7 @@ public class Enemy : MonoBehaviour
         if (target != null)
         {
             Vector2 direction = (target.position - transform.position).normalized;
-            rb.MovePosition(rb.position + direction * speed * Time.deltaTime); // 使用Rigidbody2D移动
+            rb.velocity = direction * currentSpeed;
 
             bool playerToTheRight = target.position.x > transform.position.x;
             transform.localScale = new Vector2(playerToTheRight ? 1 : -1, 1); // 根据玩家位置翻转敌人
@@ -82,11 +84,11 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         anim.SetTrigger("Hit");
-        health -= damage;
-
-        if (health <= 0)
+        currentHealth -= damage;
+       
+        if (currentHealth <= 0)
         {
-            Die();
+             Die();
         }
     }
 
@@ -97,6 +99,7 @@ public class Enemy : MonoBehaviour
             Player player = collision.GetComponent<Player>();
             if (player != null)
             {
+                Debug.Log("take 1 damage");
                 player.TakeDamage(damage);
             }
         }
@@ -114,9 +117,10 @@ public class Enemy : MonoBehaviour
     {
         Vector3 scorePosition = transform.position + new Vector3(0, 1.5f, 0);
         // GameObject ScoreText = Instantiate(score,scorePosition,Quaternion.identity);
-        // Destroy(ScoreText, 1f);
+        // Destroy(ScoreText, 1f)
         Destroy(gameObject);
         DropLoot();
+        Destroy(gameObject);
         //Destroy(gameObject);
         //anim.SetTrigger("Die");
         // 可能需要等待死亡动画播放完成后再销毁

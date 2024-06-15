@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f257c2b7963f44648903edd3e526da6f, type: 3}
+  m_Name: EnemyConfig1 2
+  m_EditorClassIdentifier: 
+  enemyType: Boss
+  baseHealth: 200
+  healthIncrementPerWave: 100
+  baseSpeed: 0
+  speedIncrementPerWave: 1
+  baseDamage: 2
+  damageIncrementPerWave: 1
