@@ -9,7 +9,7 @@ public class UIPlayerAttri : MonoBehaviour
     public Transform attributeContainer;
 
     // 定义属性显示顺序
-    private string[] attributeOrder = { "health", "healthRegenRate", "moveSpeedFactor", "armor", "attackSpeed" };
+    private string[] attributeOrder = { "health", "moveSpeedFactor", "armor", "attackSpeed" };
     private List<GameObject> attributeDisplays = new List<GameObject>();
 
     private void OnEnable()

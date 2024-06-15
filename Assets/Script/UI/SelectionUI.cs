@@ -15,6 +15,7 @@ public class SelectionUI : MonoBehaviour
     public TMP_Text[] priceTexts = new TMP_Text[3];
     public Button[] purchaseButtons = new Button[3];
     public Button refreshButton;
+    public TMP_Text refreshCostText;
     public Button exitButton;
 
     [Header("Item and Weapon Data")]
@@ -58,6 +59,7 @@ public class SelectionUI : MonoBehaviour
 
         refreshButton.onClick.AddListener(RefreshDisplays);//refresh button event
         exitButton.onClick.AddListener(CloseSelectionUI);
+        UpdateRefreshCostDisplay();
     }
 
     private void RefreshDisplays()
@@ -72,12 +74,20 @@ public class SelectionUI : MonoBehaviour
             ExperienceLevelController.instance.SpendExperience(refreshCost);
             ExperienceLevelController.instance.IncrementRefreshCount();
             UpdateAllDisplays();
+            UpdateRefreshCostDisplay();
             Debug.Log("Displays updated after refresh.");
         }
         else
         {
             Debug.Log("Not enough experience points to refresh.");
         }
+    }
+
+    // refresh cost+++
+    private void UpdateRefreshCostDisplay()
+    {
+        int refreshCost = ExperienceLevelController.instance.CalculateRefreshCost();
+        refreshCostText.text = $"Cost: {refreshCost} XP";
     }
 
     // Update display for all selection slots

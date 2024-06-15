@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MiniCamera : MonoBehaviour
+public class DontDestory : MonoBehaviour
 {
-    public static MiniCamera instance;
+    public static DontDestory instance;
     private void Awake()
     {
         if (instance == null)

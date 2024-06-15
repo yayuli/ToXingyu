@@ -18,9 +18,27 @@ MonoBehaviour:
   effectMagnitude: 5
   duration: 10
   itemType: 1
-  attackPower: 0
-  range: 0
-  damage: 0
-  speed: 0
+  maxHealth: 0
+  healthRegeRate: 0
+  damageFactor: 0
+  attackRangeFactor: 0
+  armor: 0
+  criticalRate: 0
+  criticalDamage: 0
+  attackSpeed: 0
+  dodgeRate: 0
+  moveSpeedFactor: 0
+  pickUpRangeFactor: 0
+  prefab: {fileID: 0}
+  Weapondescription: 
   cooldown: 0
+  baseDamage: 25
+  baseSpeed: 5
+  baseRange: 5
+  level: 1
+  damageIncreasePerLevel: 5
+  speedIncreasePerLevel: 0.5
+  rangeIncreasePerLevel: 1
   cost: 5
+  baseColor: {r: 1, g: 1, b: 1, a: 1}
+  baseSize: {x: 0.17, y: 0.17, z: 1}

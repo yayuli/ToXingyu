@@ -83,9 +83,7 @@ public class ExperienceLevelController : MonoBehaviour
 
     public int CalculateRefreshCost()
     {
-        int cost = baseRefreshCost;
-        Debug.Log($"Base Cost: {baseRefreshCost}, Increment: {refreshIncrement}, Refresh Count: {refreshCount}, Level Cost Increment: {levelCostIncrement}, Current Level: {currentLevel}, Calculated Cost: {cost}");
-        return cost;
+        return baseRefreshCost * (refreshIncrement + refreshCount);
     }
 
     public void IncrementRefreshCount()

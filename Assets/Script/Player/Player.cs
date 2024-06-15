@@ -171,7 +171,6 @@ public class Player : MonoBehaviour
             case ItemData.ItemType.HealthPotion:
                 Debug.Log($"Before Health Potion: Health={attributes.health}");
                 ModifyHealth(item.healthRegeRate);
-                SFXManager.instance.PlaySFXPitched(6);
                 Debug.Log($"After Health Potion: Health={attributes.health}");
                 break;
             case ItemData.ItemType.ArmorSet:
