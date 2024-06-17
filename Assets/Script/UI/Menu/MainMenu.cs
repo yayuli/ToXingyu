@@ -3,6 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public void OnAutoButtonClicked()
+    {
+        GameSettingsManager.Instance.SetShootingMode(true);
+    }
+
+    public void OnManualButtonClicked()
+    {
+        GameSettingsManager.Instance.SetShootingMode(false);
+    }
+
+
     public void StartGame()
     {
         // 首先销毁所有 DontDestroyOnLoad 对象
@@ -16,6 +27,8 @@ public class MainMenu : MonoBehaviour
         // 游戏速度重置为正常速度
         Time.timeScale = 1f;
     }
+
+  
 
     public void DestroyAllDontDestroyOnLoadObjects()
     {
