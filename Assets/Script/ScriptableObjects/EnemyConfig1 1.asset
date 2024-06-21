@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: EnemyConfig1 1
   m_EditorClassIdentifier: 
   enemyType: enemy1
-  baseHealth: 50
-  healthIncrementPerWave: 10
+  baseHealth: 25
+  healthIncrementPerWave: 5
   baseSpeed: 1
-  speedIncrementPerWave: 1
+  speedIncrementPerWave: 0.1
   baseDamage: 1
   damageIncrementPerWave: 0.1

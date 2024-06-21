@@ -16,6 +16,6 @@ MonoBehaviour:
   baseHealth: 20
   healthIncrementPerWave: 10
   baseSpeed: 2
-  speedIncrementPerWave: 1
+  speedIncrementPerWave: 0.1
   baseDamage: 1
   damageIncrementPerWave: 0.1

@@ -18,13 +18,14 @@ public class RangedWeapon : WeaponBase
 
     private Transform closestEnemy;
 
+    protected Animator anim;
     protected override void Update()
     {
         base.Update();
         transform.position = (Vector2)player.position + offset;
-
+        anim = GetComponent<Animator>();
         FindClosestEnemy();
-        //AimAtEnemy();
+
         HandleInput();
         if (isAutoShootingEnable)
         {
@@ -72,7 +73,7 @@ public class RangedWeapon : WeaponBase
     {
         if (closestEnemy == null || !isAutoShootingEnable)
             return;
-
+        AimAtEnemy();
         timeSinceLastShot += Time.deltaTime;
         float modifiedCooldown = weaponData.cooldown / (1 + Player.instance.attributes.attackSpeed / 100.0f);
 
@@ -130,6 +131,7 @@ public class RangedWeapon : WeaponBase
     {
         var muzzleGO = Instantiate(muzzleEffectPrefab, muzzlePosition.position, Quaternion.identity);
         Destroy(muzzleGO, 0.05f);
+        anim.SetTrigger("Hit");
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         var bulletGo = ObjectPool.Release(bulletPrefab, muzzlePosition.position, Quaternion.Euler(0, 0, angle));//used object pool

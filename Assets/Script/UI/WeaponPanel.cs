@@ -8,6 +8,7 @@ public class WeaponSlotUI
 {
     public GameObject detailPanel; // 每个slot的详情面板
     public TMP_Text detailText; // 显示详细信息的文本
+    public TMP_Text upgradeDetailText;
     public Button upgradeButton; // 升级按钮
     public Button sellButton; // 卖出按钮
     public Button cancelButton; // 取消按钮
@@ -40,7 +41,10 @@ public class WeaponPanel : MonoBehaviour
         InitializeWeaponSlots();
         UpdateWeaponSlotsDisplay(); // 更新武器槽的显示状态
     }
-    
+    private void Update()
+    {
+        UpdateWeaponSlotsDisplay();
+    }
     void InitializeWeaponSlots()
     {
         for (int i = 0; i < weaponSlots.Length; i++)
@@ -105,7 +109,18 @@ public class WeaponPanel : MonoBehaviour
         {
             WeaponSlotUI selectedSlotUI = weaponSlotsUI[index];
             selectedSlotUI.detailPanel.SetActive(true);
-            selectedSlotUI.detailText.text = weaponManager.Weapons[index].GetComponent<Item>().itemData.description;
+            Item item = weaponManager.Weapons[index].GetComponent<Item>();
+            selectedSlotUI.detailText.text = item.itemData.description;
+
+            // 更新升级信息
+            string upgradeInfo = $"<color=#000000>Damage:</color> <color=#33900E>{item.itemData.CurrentDamage} " +
+                             $"(<color=#900D46>+{item.itemData.damageIncreasePerLevel}</color>)\n" +
+                             $"<color=#000000>Speed:</color> <color=#33900E>{item.itemData.CurrentSpeed:F1}" +
+                             $"(<color=#900D46>+{item.itemData.speedIncreasePerLevel:F1}</color>)\n" +
+                             $"<color=#000000>Range:</color> <color=#33900E>{item.itemData.CurrentRange:F1} " +
+                             $"(<color=#900D46>+{item.itemData.rangeIncreasePerLevel:F1}</color>)";
+
+            selectedSlotUI.upgradeDetailText.text = upgradeInfo;
         }
     }
 
@@ -126,12 +141,17 @@ public class WeaponPanel : MonoBehaviour
     {
         if (weapon != null)
         {
-            Debug.Log("Selling weapon: " + weapon.name);
-            // 实现卖出武器的逻辑
-        }
-        else
-        {
-            Debug.LogError("No weapon selected to sell.");
+            Item item = weapon.GetComponent<Item>();
+
+            ExperienceLevelController.instance.AddExperience(item.itemData.cost);
+
+            weaponManager.RemoveWeapon(weapon);
+
+            // 销毁武器对象
+            Destroy(weapon);
+
+            // 更新UI或其他逻辑
+            UpdateWeaponSlotsDisplay();
         }
     }
 }

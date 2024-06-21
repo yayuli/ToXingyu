@@ -51,6 +51,7 @@ public class WeaponManager : MonoBehaviour
         {
             AddWeapon(WeaponType.Ranged);  // Optionally trigger this via UI instead
         }
+
     }
 
     // Handles adding the initial weapon
@@ -185,5 +186,11 @@ public class WeaponManager : MonoBehaviour
             }
         }
     }
-
+    public void RemoveWeapon(GameObject weapon)
+    {
+        if (Weapons.Contains(weapon))
+        {
+            Weapons.Remove(weapon);
+        }
+    }
 }

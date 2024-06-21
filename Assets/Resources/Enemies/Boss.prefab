@@ -256,8 +256,8 @@ MonoBehaviour:
   ability: {fileID: 11400000, guid: 5265fabbc8944784db3d54974c0f349a, type: 2}
   target: {fileID: 0}
   damage: 2
-  shootingRange: 10
-  shootingCooldown: 1
+  shootingRange: 15
+  shootingCooldown: 0.5
   lootTable: {fileID: 11400000, guid: db22df4f198c3401eb8f864606d81517, type: 2}
 --- !u!50 &-5817755704176286302
 Rigidbody2D:
