@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     public EnemyConfig config;
     [SerializeField] protected EnemyAbility ability;
-
+    public GameObject damageEffectPrefab;
     [SerializeField] protected Transform target; // player's Transform
 
     private float currentHealth;
@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private LootTable lootTable;//reference to the loot Table
 
+   
     protected Animator anim;
 
     private Rigidbody2D rb;
@@ -85,13 +86,20 @@ public class Enemy : MonoBehaviour
     {
         anim.SetTrigger("Hit");
         currentHealth -= damage;
-       
+        TriggerDamageEffect();
         if (currentHealth <= 0)
         {
-             Die();
+           
+            Die();
         }
+        
     }
 
+    void TriggerDamageEffect()
+    {
+        GameObject effect = Instantiate(damageEffectPrefab, transform.position, Quaternion.identity);
+        Destroy(effect, 1f); // 假设特效持续1秒
+    }
     protected void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -121,8 +129,6 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
         DropLoot();
         Destroy(gameObject);
-        //Destroy(gameObject);
-        //anim.SetTrigger("Die");
         // 可能需要等待死亡动画播放完成后再销毁
         //EnemyManager.Instance.DestroyEnemy(gameObject);
 

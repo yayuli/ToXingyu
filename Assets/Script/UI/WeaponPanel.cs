@@ -41,10 +41,7 @@ public class WeaponPanel : MonoBehaviour
         InitializeWeaponSlots();
         UpdateWeaponSlotsDisplay(); // 更新武器槽的显示状态
     }
-    private void Update()
-    {
-        UpdateWeaponSlotsDisplay();
-    }
+   
     void InitializeWeaponSlots()
     {
         for (int i = 0; i < weaponSlots.Length; i++)
@@ -93,7 +90,7 @@ public class WeaponPanel : MonoBehaviour
         {
             if (count.Value >= 2)
             {
-                Debug.Log($"You have {count.Value} weapons of type {count.Key} ready to merge.");
+                //Debug.Log($"You have {count.Value} weapons of type {count.Key} ready to merge.");
             }
         }
     }

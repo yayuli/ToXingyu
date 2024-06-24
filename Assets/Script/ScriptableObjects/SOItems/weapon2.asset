@@ -32,7 +32,7 @@ MonoBehaviour:
   prefab: {fileID: 438060947978296620, guid: 3ba38b8f0a54a484f95f8f539146a504, type: 3}
   Weapondescription: you get weapon 1
   cooldown: 1
-  baseDamage: 30
+  baseDamage: 25
   baseSpeed: 5
   baseRange: 5
   level: 1
@@ -41,4 +41,4 @@ MonoBehaviour:
   rangeIncreasePerLevel: 1
   cost: 10
   baseColor: {r: 1, g: 1, b: 1, a: 1}
-  baseSize: {x: 0.17, y: 0.17, z: 1}
+  baseSize: {x: 1, y: 1, z: 1}

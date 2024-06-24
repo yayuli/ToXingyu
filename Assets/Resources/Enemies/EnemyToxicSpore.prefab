@@ -133,6 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 18cdb3755b9f04d9f8f13ea812e5d42f, type: 2}
   ability: {fileID: 11400000, guid: f5480c60abf74d541a5df872216b7402, type: 2}
+  damageEffectPrefab: {fileID: 5443019208157382844, guid: a21b2323b54e54c87b1db4dc16ae3950, type: 3}
   target: {fileID: 0}
   damage: 1
   shootingRange: 10

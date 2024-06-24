@@ -8,6 +8,12 @@ public class Bullet : MonoBehaviour
     private float range;
     private Vector2 direction;
    
+    private Animator anim;
+   
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
 
     private void FixedUpdate()
     {
@@ -39,15 +45,28 @@ public class Bullet : MonoBehaviour
         var enemy = collision.gameObject.GetComponent<Enemy>();
         if (enemy != null)
         {
+            anim.SetTrigger("Hit");
+
             Debug.Log($"Bullet hit enemy: {enemy.name} with Damage = {damage}");
             ObjectPool.Return(gameObject, gameObject);
+            
             SFXManager.instance.PlaySFXPitched(5);
             enemy.TakeDamage(damage);
+            //can add effect
         }
 
         if (collision.gameObject.CompareTag("Wall"))
         {
+            anim.SetTrigger("Hit");
+            TriggerHitEffect(transform.position);
             ObjectPool.Return(gameObject, gameObject);
+        }
+    }
+    void TriggerHitEffect(Vector3 position)
+    {
+        if (hitEffect !=null)
+        {
+            Instantiate(hitEffect, position, Quaternion.identity);
         }
     }
 }

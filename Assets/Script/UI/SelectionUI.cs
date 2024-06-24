@@ -191,8 +191,8 @@ public class SelectionUI : MonoBehaviour
                 Debug.LogError("BombItem component is missing on the prefab.");
             }
         }
-        SFXManager.instance.PlaySFXPitched(9);
-        //ContinueGame();
+        SFXManager.instance.PlaySFXPitched(9); // 播放声效
+        Debug.Log("SFX Played");
     }
 
 

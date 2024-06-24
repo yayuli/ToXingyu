@@ -32,13 +32,13 @@ MonoBehaviour:
   prefab: {fileID: 0}
   Weapondescription: 
   cooldown: 0
-  baseDamage: 25
-  baseSpeed: 5
-  baseRange: 5
-  level: 1
-  damageIncreasePerLevel: 5
-  speedIncreasePerLevel: 0.5
-  rangeIncreasePerLevel: 1
-  cost: 4
+  baseDamage: 0
+  baseSpeed: 0
+  baseRange: 0
+  level: 0
+  damageIncreasePerLevel: 0
+  speedIncreasePerLevel: 0
+  rangeIncreasePerLevel: 0
+  cost: 5
   baseColor: {r: 1, g: 1, b: 1, a: 1}
   baseSize: {x: 0.17, y: 0.17, z: 1}

@@ -204,7 +204,7 @@ public class Player : MonoBehaviour
 
         if (attributes.health <= 0)
         {
-            Debug.Log("Player has died.");
+            UIManager.instance.GameOverMenu();
         }
     }
 

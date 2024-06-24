@@ -165,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireRate: 4
   fireDistance: 0
-  bulletPrefab: {fileID: 2802411436068020762, guid: db4b355f79b2441b2a75b04ee34781ac, type: 3}
+  bulletPrefab: {fileID: 2802411436068020762, guid: aa36b01f4d2b24c55bc68e1333931d76, type: 3}
   muzzlePosition: {fileID: 438060946992618147}
   muzzleEffectPrefab: {fileID: 3114759772219783079, guid: f2f1fe4f8686b470dac365be9e48ac13, type: 3}
   weaponData: {fileID: 11400000, guid: b6094366ab632e5419dfdbababf4f66b, type: 2}

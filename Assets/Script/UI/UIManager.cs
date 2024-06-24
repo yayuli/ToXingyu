@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text currentExpText;
 
     public GameObject levelUpPanel;
-
+    public GameObject gameOverScreen;
     public GameObject pauseScreen;
 
     private void Awake()
@@ -93,6 +93,18 @@ public class UIManager : MonoBehaviour
     public void QiutGame()
     {
         Application.Quit();
+    }
+
+    public void GameOverMenu()
+    {
+        gameOverScreen.SetActive(true);
+        Time.timeScale = 0f;  // 暂停游戏
+    }
+
+    public void HideGameOverScreen()
+    {
+        gameOverScreen.SetActive(false);
+        Time.timeScale = 1f;  // 恢复游戏时间流逝
     }
 
     public void PauseUnpause()
