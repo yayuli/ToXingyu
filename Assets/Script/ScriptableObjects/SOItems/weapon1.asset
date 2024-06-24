@@ -36,8 +36,8 @@ MonoBehaviour:
   baseSpeed: 5
   baseRange: 5
   level: 1
-  damageIncreasePerLevel: 10
-  speedIncreasePerLevel: 0.5
+  damageIncreasePerLevel: 5
+  speedIncreasePerLevel: 1.1
   rangeIncreasePerLevel: 1
   cost: 10
   baseColor: {r: 1, g: 1, b: 1, a: 1}
