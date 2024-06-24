@@ -171,6 +171,7 @@ MonoBehaviour:
   cellPrefabs:
   - {fileID: 1888358115106478186, guid: 6733bc1e0170a422a9ba3c69f4358f46, type: 3}
   - {fileID: 1888358115106478186, guid: 61df7bb3a04534bbdbed6f3905785b75, type: 3}
+  - {fileID: 1888358115106478186, guid: 3d2c9c5d2a317413994f8cf4965585ad, type: 3}
   disableCellSprite: 1
   availablePositions: []
   exitPosition: {x: 0, y: 0}
