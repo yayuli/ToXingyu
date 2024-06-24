@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class AutoDeactivate : MonoBehaviour
 {
+    
     [SerializeField] bool destroyGameObject;
     [SerializeField] float lifetime = 3f;
 
