@@ -5,7 +5,12 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [Header("invincible")]
     public static Player instance;
+    private bool isInvincible = false;
+    [SerializeField]private float invincibilityDuration = 3.0f;
+    [SerializeField] private GameObject invincibilityEffectPrefab;
+    private GameObject currentEffect;
 
     [System.Serializable]
     public class PlayerAttributes
@@ -263,12 +268,47 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        int reducedDamage = Mathf.Max(damage - attributes.armor, 0); // 确保伤害值不会是负数
-        ModifyHealth(-damage);
-        Debug.Log("-damage");
-        SFXManager.instance.PlaySFXPitched(0);
-        UpdateHealthUI();
+
+        if(!isInvincible)
+        {
+            int reducedDamage = Mathf.Max(damage - attributes.armor, 0); // 确保伤害值不会是负数
+            ModifyHealth(-damage);
+            Debug.Log("-damage");
+            SFXManager.instance.PlaySFXPitched(0);
+            UpdateHealthUI();
+        }
     }
 
     #endregion
+
+    public void SetInvincibility(bool state)
+    {
+        isInvincible = state;
+        HandleInvincibilityEffect(state);
+        StartCoroutine(InvincibilityCountdown());
+    }
+
+    private void HandleInvincibilityEffect(bool state)
+    {
+        if (state)
+        {
+            if (invincibilityEffectPrefab != null)
+            {
+                currentEffect = Instantiate(invincibilityEffectPrefab, transform.position, Quaternion.identity, transform);
+            }
+        }
+        else
+        {
+            if (currentEffect != null)
+            {
+                Destroy(currentEffect);
+                currentEffect = null;
+            }
+        }
+    }
+    private IEnumerator InvincibilityCountdown()
+    {
+        yield return new WaitForSeconds(invincibilityDuration);
+        SetInvincibility(false);
+    }
 }

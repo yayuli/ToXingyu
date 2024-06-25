@@ -33,6 +33,7 @@ public class WeaponPanel : MonoBehaviour
         {
             Destroy(gameObject); // 确保不创建重复实例
         }
+        
     }
 
     void Start()
@@ -41,18 +42,26 @@ public class WeaponPanel : MonoBehaviour
         InitializeWeaponSlots();
         UpdateWeaponSlotsDisplay(); // 更新武器槽的显示状态
     }
-   
+
     void InitializeWeaponSlots()
     {
         for (int i = 0; i < weaponSlots.Length; i++)
         {
-            int index = i;  // Local copy of the loop variable for use in lambda expressions
+            int index = i;  // 本地复制循环变量，避免闭包中的问题
             weaponSlotsUI[index].detailPanel.SetActive(false); // 初始时隐藏所有详情面板
             weaponSlotsUI[index].cancelButton.onClick.AddListener(() => weaponSlotsUI[index].detailPanel.SetActive(false));
-            weaponSlotsUI[index].upgradeButton.onClick.AddListener(() => UpgradeWeapon(weaponManager.Weapons[index]));
-            weaponSlotsUI[index].sellButton.onClick.AddListener(() => SellWeapon(weaponManager.Weapons[index]));
+            weaponSlotsUI[index].sellButton.onClick.AddListener(() => {
+                SellWeapon(weaponManager.Weapons[index]);  // 出售武器
+                weaponSlotsUI[index].detailPanel.SetActive(false);  // 隐藏详情面板
+            });
 
-            // 为每个武器槽添加点击事件来显示详情面板
+            // 确保升级按钮也隐藏详情面板
+            weaponSlotsUI[index].upgradeButton.onClick.AddListener(() => {
+                UpgradeWeapon(weaponManager.Weapons[index]);  // 升级武器
+                weaponSlotsUI[index].detailPanel.SetActive(false);  // 隐藏详情面板
+            });
+
+            // 添加点击事件来显示详情面板
             if (weaponSlots[index].gameObject.GetComponent<Button>() == null)
             {
                 weaponSlots[index].gameObject.AddComponent<Button>();
@@ -60,6 +69,7 @@ public class WeaponPanel : MonoBehaviour
             weaponSlots[index].gameObject.GetComponent<Button>().onClick.AddListener(() => OnWeaponSelect(index));
         }
     }
+
 
     public void UpdateWeaponSlotsDisplay()
     {

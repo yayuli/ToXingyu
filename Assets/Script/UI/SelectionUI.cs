@@ -206,6 +206,7 @@ public class SelectionUI : MonoBehaviour
     // Continues the game after an item is purchased
     private void ContinueGame()
     {
+        Player.instance.SetInvincibility(true);
         gameObject.SetActive(false); // Hide selection UI
         ExperienceLevelController.instance.ResumeGame(); // Resume game logic
     }
