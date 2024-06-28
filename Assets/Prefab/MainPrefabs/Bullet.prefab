@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 5443019208157382844, guid: fd509d0d17988449a8737ba46c5edd31, type: 3}
+  shouldKnockBack: 1
 --- !u!50 &-3988716024541663241
 Rigidbody2D:
   serializedVersion: 4

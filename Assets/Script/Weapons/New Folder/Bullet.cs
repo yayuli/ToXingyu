@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
     private int damage;
     private float range;
     private Vector2 direction;
-   
+    public bool shouldKnockBack = false;
     private Animator anim;
    
     private void Start()
@@ -51,7 +51,7 @@ public class Bullet : MonoBehaviour
             ObjectPool.Return(gameObject, gameObject);
             
             SFXManager.instance.PlaySFXPitched(5);
-            enemy.TakeDamage(damage);
+            enemy.TakeDamage(damage, shouldKnockBack);
             //can add effect
         }
 

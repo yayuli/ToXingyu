@@ -20,6 +20,9 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private LootTable lootTable;//reference to the loot Table
 
+    [SerializeField] private float knockBackTime = 0.5f;
+    private float knockBackCounter;
+   
    
     protected Animator anim;
 
@@ -45,6 +48,21 @@ public class Enemy : MonoBehaviour
 
         AbilityShoot();
 
+        if(knockBackCounter > 0)
+        {
+            knockBackCounter-= Time.deltaTime;
+
+            if (currentSpeed > 0)
+            {
+                currentSpeed = -currentSpeed * 2f;
+            }
+
+            if (knockBackCounter <= 0) 
+            {
+                currentSpeed= Mathf.Abs(currentSpeed * 0.5f);
+            
+            }
+        }
     }
 
     public void InitializeAttributes()
@@ -89,12 +107,20 @@ public class Enemy : MonoBehaviour
         TriggerDamageEffect();
         if (currentHealth <= 0)
         {
-           
             Die();
         }
-        
+        DamageNumberController.instance.SpawnDamage(damage, transform.position);
     }
 
+    public void TakeDamage(int damage, bool shouldKnockBack)
+    {
+        TakeDamage(damage);
+
+        if(shouldKnockBack== true) 
+        {
+            knockBackCounter = knockBackTime;
+        }
+    }
     void TriggerDamageEffect()
     {
         GameObject effect = Instantiate(damageEffectPrefab, transform.position, Quaternion.identity);
