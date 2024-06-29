@@ -91,6 +91,9 @@ MonoBehaviour:
   shootingRange: 10
   shootingCooldown: 2
   lootTable: {fileID: 11400000, guid: c4d9bf04318b3de439c37cbbe3a8acd6, type: 2}
+  knockBackTime: 0.5
+  healthBarPrefab: {fileID: 8057845575857476848, guid: c00ddaef91e5b4dfcaf627f72f57d38d, type: 3}
+  maxHealth: 0
 --- !u!50 &-5817755704176286302
 Rigidbody2D:
   serializedVersion: 4

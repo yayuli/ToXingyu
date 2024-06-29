@@ -9,6 +9,8 @@ public class Bullet : MonoBehaviour
     private Vector2 direction;
     public bool shouldKnockBack = false;
     private Animator anim;
+
+    public float SplashRange = 2;
    
     private void Start()
     {
@@ -42,26 +44,42 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        var enemy = collision.gameObject.GetComponent<Enemy>();
-        if (enemy != null)
+        if (SplashRange > 0)
         {
-            anim.SetTrigger("Hit");
-
-            Debug.Log($"Bullet hit enemy: {enemy.name} with Damage = {damage}");
-            ObjectPool.Return(gameObject, gameObject);
-            
-            SFXManager.instance.PlaySFXPitched(5);
-            enemy.TakeDamage(damage, shouldKnockBack);
-            //can add effect
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, SplashRange);
+            foreach (Collider2D hitCollider in hitColliders)
+            {
+                Enemy enemy = hitCollider.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    anim.SetTrigger("Hit");
+                    Debug.Log($"Splash Damage to {enemy.name} with Damage = {damage}");
+                    enemy.TakeDamage(damage, shouldKnockBack);
+                }
+            }
+        }
+        else
+        {
+            var enemy = collision.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                anim.SetTrigger("Hit");
+                Debug.Log($"Bullet hit enemy: {enemy.name} with Damage = {damage}");
+                enemy.TakeDamage(damage, shouldKnockBack);
+            }
         }
 
-        if (collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.GetComponent<Enemy>() != null)
         {
             anim.SetTrigger("Hit");
             TriggerHitEffect(transform.position);
-            ObjectPool.Return(gameObject, gameObject);
         }
+
+        // 传递正确的 prefab 和 gameObject 到对象池回收方法
+        ObjectPool.Return(this.gameObject, gameObject); // 确保传递正确的参数
     }
+
+
     void TriggerHitEffect(Vector3 position)
     {
         if (hitEffect !=null)

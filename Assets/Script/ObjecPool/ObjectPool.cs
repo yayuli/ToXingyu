@@ -108,6 +108,7 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
+            Debug.LogWarning("No pool found for prefab: " + prefab.name + ", destroying object.");
             Destroy(objectToReturn);
         }
     }
