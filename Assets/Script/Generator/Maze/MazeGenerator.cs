@@ -89,6 +89,7 @@ public class MazeGenerator : MonoBehaviour
     {
         mazeRows = 2;
         mazeColumns = 2;
+        Debug.Log("Maze size reset to default: Rows = " + mazeRows + ", Columns = " + mazeColumns);
     }
     public Vector3 GetStartPosition()
     {

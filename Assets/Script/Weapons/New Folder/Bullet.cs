@@ -53,6 +53,7 @@ public class Bullet : MonoBehaviour
                 if (enemy != null)
                 {
                     anim.SetTrigger("Hit");
+                    SFXManager.instance.PlaySFXPitched(5);
                     Debug.Log($"Splash Damage to {enemy.name} with Damage = {damage}");
                     enemy.TakeDamage(damage, shouldKnockBack);
                 }
