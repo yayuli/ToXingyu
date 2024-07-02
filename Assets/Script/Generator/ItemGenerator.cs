@@ -10,6 +10,7 @@ public class ItemGenerator : MonoBehaviour, IGenerator
         public Item prefab;
         public int count;
         public float spawnDelay;
+        public int incrementPerLevel;
     }
 
     [SerializeField]
@@ -56,15 +57,21 @@ public class ItemGenerator : MonoBehaviour, IGenerator
 
     private void PlaceItemsRandomly(ItemConfig config)
     {
-        for (int i = 0; i < config.count; i++)
+        // 获取当前波次编号
+        int currentWave = WaveManager.Instance.WaveNum;
+
+        // 根据波次增加物品数量
+        int itemCount = config.count + (currentWave - 1) * config.incrementPerLevel; 
+
+        for (int i = 0; i < itemCount; i++)
         {
-            Vector2? position = PositionManager.Instance.GetRandomPosition(false);//dont not allow the reuse position
+            Vector2? position = PositionManager.Instance.GetRandomPosition(false); // 不允许重用位置
             if (position != null)
             {
                 Item newItem = Instantiate(config.prefab, position.Value, Quaternion.identity);
-
             }
         }
     }
+
 }
 

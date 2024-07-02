@@ -142,6 +142,14 @@ public class GameManager : MonoBehaviour
         {
             EnemyManager.Instance.ResetAndSpawnEnemies();
         }
+
+        //update the item generator
+        foreach (var generator in generators)
+        {
+            generator.Initialize(mazeGenerator);
+            generator.Generate();
+        }
+
         WeaponPanel.instance.UpdateWeaponSlotsDisplay();
     }
 }

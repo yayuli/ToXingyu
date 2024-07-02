@@ -179,11 +179,27 @@ public class Player : MonoBehaviour
                 SFXManager.instance.PlaySFXPitched(6);
                 Debug.Log($"After Health Potion: Health={attributes.health}");
                 break;
+
             case ItemData.ItemType.ArmorSet:
-                Debug.Log($"Before Armor Set: Armor={attributes.armor}");
-                ModifyArmor(item.armor);
-                Debug.Log($"After Armor Set: Armor={attributes.armor}");
+                Debug.Log("Applying Shield effects");
+                ModifyArmor(item.armor);  // Add armor
+                SetInvincibility(true);  // Set invincibility
+                StartCoroutine(ApplyTempStatBoost(
+                    () => {
+                        currentEffect = Instantiate(invincibilityEffectPrefab, transform.position, Quaternion.identity, transform);
+                    },
+                    () => {
+                        ModifyArmor(-item.armor);  // Remove the added armor after duration
+                        if (currentEffect != null)
+                        {
+                            Destroy(currentEffect);
+                            currentEffect = null;
+                        }
+                    },
+                    item.duration
+                ));
                 break;
+
             case ItemData.ItemType.SpeedBoots:
                 Debug.Log($"Before Speed Boots: Move Speed Factor={attributes.moveSpeedFactor}");
                 ModifyMoveSpeed(item.moveSpeedFactor);
@@ -216,12 +232,11 @@ public class Player : MonoBehaviour
     public void ModifyArmor(int amount)
     {
         attributes.armor += amount;
-        // 可以添加限制条件，例如护甲值不小于0
         attributes.armor = Mathf.Max(attributes.armor, 0);
-        OnAromoChanged?.Invoke(); // 假设你有一个处理护甲变化的事件
-
+        OnAromoChanged?.Invoke();
         Debug.Log($"Armor updated to: {attributes.armor}");
     }
+
 
     public void ModifyAttackSpeed(int increment)
     {
@@ -254,7 +269,7 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    # region UI
+    # region UI and hea
     private void UpdateHealthUI()
     {
         if (healthBar != null)
@@ -268,13 +283,13 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-
-        if(!isInvincible)
+        SFXManager.instance.PlaySFXPitched(0);
+        if (!isInvincible)
         {
             int reducedDamage = Mathf.Max(damage - attributes.armor, 0); // 确保伤害值不会是负数
             ModifyHealth(-damage);
             Debug.Log("-damage");
-            SFXManager.instance.PlaySFXPitched(0);
+            
             UpdateHealthUI();
         }
     }
@@ -283,16 +298,31 @@ public class Player : MonoBehaviour
 
     public void SetInvincibility(bool state)
     {
+        if (isInvincible == state)
+        {
+            return; // 如果已经处于相同状态，则不进行任何操作
+        }
         isInvincible = state;
         HandleInvincibilityEffect(state);
-        StartCoroutine(InvincibilityCountdown());
+        if (state)
+        {
+            StartCoroutine(InvincibilityCountdown());
+        }
+        else
+        {
+            if (currentEffect != null)
+            {
+                Destroy(currentEffect);
+                currentEffect = null;
+            }
+        }
     }
 
     private void HandleInvincibilityEffect(bool state)
     {
         if (state)
         {
-            if (invincibilityEffectPrefab != null)
+            if (invincibilityEffectPrefab != null && currentEffect == null)
             {
                 currentEffect = Instantiate(invincibilityEffectPrefab, transform.position, Quaternion.identity, transform);
             }
@@ -310,5 +340,6 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(invincibilityDuration);
         SetInvincibility(false);
+
     }
 }

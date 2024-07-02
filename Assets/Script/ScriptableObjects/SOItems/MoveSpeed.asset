@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MoveSpeed
   m_EditorClassIdentifier: 
   itemName: Speed Boots
-  description: addsssss
-  itemIcon: {fileID: 21300000, guid: e9096c8157fb04e3fa924a2ae9bc7f48, type: 3}
+  description: Boosts player speed. Ideal for quick escapes
+  itemIcon: {fileID: 21300000, guid: aa3144fb056c1421a879f6e08e935667, type: 3}
   effectMagnitude: 3
   duration: 1
   itemType: 2

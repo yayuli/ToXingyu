@@ -121,17 +121,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00b03ecc3c234b39ade409ae41b00b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  invincibilityDuration: 3
+  invincibilityEffectPrefab: {fileID: 3545133192682414301, guid: 33ed432f296ee485a9e0e98129958ad4, type: 3}
   attributes:
-    Health: 0
-    MaxHealth: 100
-    Energy: 0
-    Strength: 0
-    Dexterity: 0
-    Intelligence: 0
-    Luck: 0
-    MemoryPoints: 0
-    RegenerationRate: 0
-    Willpower: 0
+    health: 20
+    maxHealth: 20
+    healthRegenRate: 0
+    damageFactor: 0
+    attackRangeFactor: 0
+    armor: 0
+    criticalRate: 10
+    criticalDamage: 50
+    attackSpeed: 0
+    dodgeRate: 0
+    moveSpeedFactor: 0
+    pickUpRangeFactor: 0
   equippedItem: {fileID: 0}
   moveSpeed: 5
   animator: {fileID: 0}

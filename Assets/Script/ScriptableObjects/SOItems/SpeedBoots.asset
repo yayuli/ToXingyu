@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: SpeedBoots
   description: + speed 30%
-  itemIcon: {fileID: 21300000, guid: e9096c8157fb04e3fa924a2ae9bc7f48, type: 3}
+  itemIcon: {fileID: 21300000, guid: aa3144fb056c1421a879f6e08e935667, type: 3}
   effectMagnitude: 3
   duration: 3
   itemType: 2

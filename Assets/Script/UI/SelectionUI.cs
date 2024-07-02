@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class SelectionUI : MonoBehaviour
 {
@@ -51,10 +52,10 @@ public class SelectionUI : MonoBehaviour
     {
         UpdateAllDisplays();
         weaponManager = FindObjectOfType<WeaponManager>();
-    
-        if (weaponManager == null)
+     
+        foreach (var text in upgradeDescTexts)
         {
-        Debug.LogError("WeaponManager is not found in the scene.");
+            text.enabled = false;  // 初始时隐藏所有升级描述文本
         }
 
         refreshButton.onClick.AddListener(RefreshDisplays);//refresh button event
@@ -149,6 +150,46 @@ public class SelectionUI : MonoBehaviour
 
         purchaseButtons[displayIndex].onClick.RemoveAllListeners();
         purchaseButtons[displayIndex].onClick.AddListener(() => PurchaseItem(itemPrefab, itemData.cost));
+
+        // 添加鼠标悬停显示描述文本的事件监听器
+        // 确保添加新的 EventTrigger 前清除所有旧的事件监听器
+        EventTrigger trigger = purchaseButtons[displayIndex].gameObject.GetComponent<EventTrigger>();
+        if (trigger == null)
+        {
+            trigger = purchaseButtons[displayIndex].gameObject.AddComponent<EventTrigger>();
+        }
+        else
+        {
+            trigger.triggers.Clear();
+        }
+
+        SetupEventTriggers(purchaseButtons[displayIndex], displayIndex);
+    }
+
+    private void SetupEventTriggers(Button button, int index)
+    {
+        EventTrigger trigger = button.GetComponent<EventTrigger>() ?? button.gameObject.AddComponent<EventTrigger>();
+        trigger.triggers.Clear();
+
+        EventTrigger.Entry entryEnter = new EventTrigger.Entry();
+        entryEnter.eventID = EventTriggerType.PointerEnter;
+        entryEnter.callback.AddListener((data) => { ShowDescription(index); });
+        trigger.triggers.Add(entryEnter);
+
+        EventTrigger.Entry entryExit = new EventTrigger.Entry();
+        entryExit.eventID = EventTriggerType.PointerExit;
+        entryExit.callback.AddListener((data) => { HideDescription(index); });
+        trigger.triggers.Add(entryExit);
+    }
+
+    public void ShowDescription(int index)
+    {
+        upgradeDescTexts[index].enabled = true;
+    }
+
+    public void HideDescription(int index)
+    {
+        upgradeDescTexts[index].enabled = false;
     }
 
     // Handles item purchase logic

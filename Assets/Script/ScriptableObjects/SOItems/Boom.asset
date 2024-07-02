@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Boom
   m_EditorClassIdentifier: 
   itemName: Bomb
-  description: Boom
+  description: Demolition bomb, causing significant area damage. Use with caution.
   itemIcon: {fileID: 21300000, guid: 59839c5dd93324b798ae15727ccfabe9, type: 3}
   effectMagnitude: 0
   duration: 0
