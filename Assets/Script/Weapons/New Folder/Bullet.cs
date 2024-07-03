@@ -77,7 +77,7 @@ public class Bullet : MonoBehaviour
         }
 
         // 传递正确的 prefab 和 gameObject 到对象池回收方法
-        ObjectPool.Return(this.gameObject, gameObject); // 确保传递正确的参数
+        ObjectPool.Return(this.gameObject, this. gameObject); // 确保传递正确的参数
     }
 
 

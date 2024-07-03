@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: weapon2
   m_EditorClassIdentifier: 
   itemName: Staff
-  description: Channels magical energies to cast spells. Ideal for long-range attacks.
+  description: Staff
   itemIcon: {fileID: 21300000, guid: 5f4e59de06fc230488998334b52127df, type: 3}
   effectMagnitude: 3
   duration: 1

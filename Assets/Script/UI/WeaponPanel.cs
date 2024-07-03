@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System;
 
 [System.Serializable]
 public class WeaponSlotUI
@@ -16,11 +17,26 @@ public class WeaponSlotUI
 
 public class WeaponPanel : MonoBehaviour
 {
+    public static event Action<WeaponPanel> OnWeaponPanelUpdated;
+
     public static WeaponPanel instance;
     public Image[] weaponSlots; // 武器槽数组
     public WeaponSlotUI[] weaponSlotsUI; // 每个武器槽的UI组件
 
     private WeaponManager weaponManager;
+
+    void OnEnable()
+    {
+        // 当 WeaponPanel 被激活时，触发事件
+        OnWeaponPanelUpdated?.Invoke(this);
+    }
+
+    void OnDisable()
+    {
+        // 也可以在被禁用时通知，根据需要选择
+        OnWeaponPanelUpdated?.Invoke(null);
+    }
+
 
     private void Awake()
     {
