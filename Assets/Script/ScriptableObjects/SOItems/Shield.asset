@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shield
   m_EditorClassIdentifier: 
   itemName: Shield
-  description: ijhhnnji
+  description: Grants invincibility for 5s. Perfect for critical moments.
   itemIcon: {fileID: 21300000, guid: 668569650d9aa481da892bff9f4d6b9d, type: 3}
   effectMagnitude: 5
   duration: 5
