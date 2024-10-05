@@ -36,7 +36,7 @@ MonoBehaviour:
   baseDamage: 25
   baseSpeed: 5
   baseRange: 5
-  level: 4
+  level: 1
   damageIncreasePerLevel: 15
   speedIncreasePerLevel: 1.5
   rangeIncreasePerLevel: 1

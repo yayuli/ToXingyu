@@ -41,17 +41,10 @@ public class WeaponManager : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player").transform;
+        ResetWeaponLevels();
         AddInitialWeapon();  // 添加初始武器
         weaponPanel = FindObjectOfType<WeaponPanel>();
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G) && weapons.Count < maxWeapons)
-        {
-            AddWeapon(WeaponType.Ranged);  // Optionally trigger this via UI instead
-        }
-
+       
     }
 
     // Handles adding the initial weapon
@@ -63,6 +56,17 @@ public class WeaponManager : MonoBehaviour
         }
         
     }
+
+    public void ResetWeaponLevels()
+    {
+        foreach (GameObject weapon in weapons)
+        {
+            Item item = weapon.GetComponent<Item>();
+            item.itemData.ResetLevel();
+            
+        }
+    }
+
 
     // Overload to handle weapon type
     public void AddWeapon(WeaponType type)

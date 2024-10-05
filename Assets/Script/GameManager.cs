@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
         //automatically find sll igenerator 
         generators = FindObjectsOfType<MonoBehaviour>().OfType<IGenerator>().ToArray();
         InitializeGenerators();
+       
     }
 
     // Starts the game by loading the specified "GameScene"
@@ -62,6 +63,7 @@ public class GameManager : MonoBehaviour
     {
         if (nextLevelUI == null)
             nextLevelUI = FindObjectOfType<NextLevelUI>();
+        WeaponManager.instance.ResetWeaponLevels();
         //SFX
     }
 

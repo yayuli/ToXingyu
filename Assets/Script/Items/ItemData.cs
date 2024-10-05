@@ -34,6 +34,12 @@ public class ItemData : ScriptableObject
     public float baseRange = 5.0f;  // 初始射程
     public int level = 1;  // 当前等级
 
+    public void ResetLevel()
+    {
+        level = 1;
+        Debug.Log($"{itemName} reset to level 1.");
+    }
+
     public int damageIncreasePerLevel = 5;  // 每级升级增加的伤害值
     public float speedIncreasePerLevel = 0.5f;  // 每级升级增加的速度
     public float rangeIncreasePerLevel = 1.0f;  // 每级升级增加的射程
